@@ -157,14 +157,11 @@
                                 <rect key="frame" x="20" y="410" width="374" height="34"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <action selector="didEditUniversityField:" destination="iaM-NP-nk4" eventType="editingChanged" id="EJC-MJ-8Wl"/>
+                                    <action selector="didEditUniversityField:" destination="iaM-NP-nk4" eventType="editingDidBegin" id="acN-C9-oT7"/>
+                                </connections>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BlG-3a-H9L">
-                                <rect key="frame" x="20" y="469" width="374" height="30"/>
-                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <state key="normal" title="Register">
-                                    <color key="titleColor" systemColor="systemBackgroundColor"/>
-                                </state>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7kU-mm-6Yc">
                                 <rect key="frame" x="260" y="790" width="68" height="28"/>
                                 <fontDescription key="fontDescription" name="Galvji" family="Galvji" pointSize="13"/>
@@ -179,6 +176,39 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BlG-3a-H9L">
+                                <rect key="frame" x="20" y="469" width="374" height="30"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="Register">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="didTapRegister:" destination="iaM-NP-nk4" eventType="touchUpInside" id="9su-7B-SQT"/>
+                                </connections>
+                            </button>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="MU9-CA-fpk">
+                                <rect key="frame" x="20" y="452" width="374" height="124"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="collegeCell" rowHeight="38" id="rSo-pW-7ti" customClass="CollegeCell">
+                                        <rect key="frame" x="0.0" y="24.5" width="374" height="38"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="rSo-pW-7ti" id="nOP-Ne-FLt">
+                                            <rect key="frame" x="0.0" y="0.0" width="374" height="38"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZeP-Dm-GT5">
+                                                    <rect key="frame" x="20" y="0.0" width="334" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </button>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="collegeNameButton" destination="ZeP-Dm-GT5" id="b3B-Py-aJM"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="VTI-kz-2bJ"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -191,6 +221,7 @@
                             <constraint firstItem="7kU-mm-6Yc" firstAttribute="centerY" secondItem="fvs-qH-2cM" secondAttribute="centerY" id="9C5-Nc-t0J"/>
                             <constraint firstItem="kSl-Rg-mJV" firstAttribute="leading" secondItem="dY6-uf-eF5" secondAttribute="leading" id="Cs0-r5-Tag"/>
                             <constraint firstItem="fvs-qH-2cM" firstAttribute="leading" secondItem="VTI-kz-2bJ" secondAttribute="leading" constant="87" id="ERS-hN-ksb"/>
+                            <constraint firstItem="fvs-qH-2cM" firstAttribute="top" secondItem="MU9-CA-fpk" secondAttribute="bottom" constant="220" id="Fw3-7H-4uO"/>
                             <constraint firstItem="1o6-eE-KJ8" firstAttribute="top" secondItem="8gD-8M-n7f" secondAttribute="bottom" constant="8" symbolic="YES" id="KB1-Qx-83M"/>
                             <constraint firstItem="BlG-3a-H9L" firstAttribute="leading" secondItem="VTI-kz-2bJ" secondAttribute="leading" constant="20" id="Swr-4w-ysS"/>
                             <constraint firstItem="kSl-Rg-mJV" firstAttribute="top" secondItem="1o6-eE-KJ8" secondAttribute="bottom" constant="8" symbolic="YES" id="TS4-Lm-epR"/>
@@ -199,15 +230,18 @@
                             <constraint firstItem="7kU-mm-6Yc" firstAttribute="leading" secondItem="fvs-qH-2cM" secondAttribute="trailing" constant="8" symbolic="YES" id="XnB-uq-fHD"/>
                             <constraint firstItem="BlG-3a-H9L" firstAttribute="top" secondItem="kSl-Rg-mJV" secondAttribute="bottom" constant="25" id="Z3G-fa-aY1"/>
                             <constraint firstItem="VTI-kz-2bJ" firstAttribute="trailing" secondItem="dY6-uf-eF5" secondAttribute="trailing" constant="20" id="bF4-wi-Gha"/>
+                            <constraint firstItem="MU9-CA-fpk" firstAttribute="leading" secondItem="VTI-kz-2bJ" secondAttribute="leading" constant="20" id="e0O-PE-HTr"/>
                             <constraint firstItem="8gD-8M-n7f" firstAttribute="top" secondItem="dY6-uf-eF5" secondAttribute="bottom" constant="8" symbolic="YES" id="fPD-Fc-jFo"/>
                             <constraint firstItem="VTI-kz-2bJ" firstAttribute="trailing" secondItem="BlG-3a-H9L" secondAttribute="trailing" constant="20" id="gZM-9G-K8Y"/>
                             <constraint firstItem="uYl-L4-DxM" firstAttribute="leading" secondItem="VTI-kz-2bJ" secondAttribute="leading" constant="48" id="hed-D1-16u"/>
                             <constraint firstItem="BlG-3a-H9L" firstAttribute="leading" secondItem="kSl-Rg-mJV" secondAttribute="leading" id="jQY-qO-jD8"/>
+                            <constraint firstItem="VTI-kz-2bJ" firstAttribute="trailing" secondItem="MU9-CA-fpk" secondAttribute="trailing" constant="20" id="lbw-RS-OCZ"/>
                             <constraint firstItem="fvs-qH-2cM" firstAttribute="top" relation="lessThanOrEqual" secondItem="BlG-3a-H9L" secondAttribute="bottom" constant="318" id="mah-gr-0GL"/>
                             <constraint firstItem="8gD-8M-n7f" firstAttribute="leading" secondItem="dY6-uf-eF5" secondAttribute="leading" id="nHK-t8-yEX"/>
                             <constraint firstItem="1o6-eE-KJ8" firstAttribute="leading" secondItem="dY6-uf-eF5" secondAttribute="leading" id="ojz-TE-DJ1"/>
                             <constraint firstItem="VTI-kz-2bJ" firstAttribute="trailing" secondItem="kSl-Rg-mJV" secondAttribute="trailing" constant="20" id="pT3-7B-Gn7"/>
                             <constraint firstItem="VTI-kz-2bJ" firstAttribute="trailing" secondItem="uYl-L4-DxM" secondAttribute="trailing" constant="39" id="xTi-or-llH"/>
+                            <constraint firstItem="MU9-CA-fpk" firstAttribute="top" secondItem="kSl-Rg-mJV" secondAttribute="bottom" constant="8" symbolic="YES" id="yVT-UN-q0o"/>
                         </constraints>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="WYE-oR-2jG" appends="YES" id="38v-YQ-FYY"/>
@@ -215,6 +249,8 @@
                     </view>
                     <navigationItem key="navigationItem" id="v8e-Yy-Wwc"/>
                     <connections>
+                        <outlet property="collegeTextField" destination="kSl-Rg-mJV" id="2el-5C-Mdo"/>
+                        <outlet property="collegesTableView" destination="MU9-CA-fpk" id="LyO-gN-hwM"/>
                         <outlet property="passwordField" destination="1o6-eE-KJ8" id="K4l-Vc-Jmr"/>
                         <outlet property="schoolEmailField" destination="dY6-uf-eF5" id="lc2-gC-njf"/>
                         <outlet property="usernameField" destination="8gD-8M-n7f" id="lE9-Ko-2qJ"/>
