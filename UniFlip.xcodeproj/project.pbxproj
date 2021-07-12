@@ -16,6 +16,7 @@
 		D09FFDC0269C2176008B33B5 /* UniFlipTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D09FFDBF269C2176008B33B5 /* UniFlipTests.m */; };
 		D09FFDCB269C2176008B33B5 /* UniFlipUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = D09FFDCA269C2176008B33B5 /* UniFlipUITests.m */; };
 		D09FFDDB269C2322008B33B5 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D09FFDDA269C2322008B33B5 /* LoginViewController.m */; };
+		D09FFDE1269CAF50008B33B5 /* NewAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D09FFDE0269CAF50008B33B5 /* NewAccountViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +55,8 @@
 		D09FFDCC269C2176008B33B5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D09FFDD9269C2322008B33B5 /* LoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		D09FFDDA269C2322008B33B5 /* LoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		D09FFDDF269CAF50008B33B5 /* NewAccountViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NewAccountViewController.h; sourceTree = "<group>"; };
+		D09FFDE0269CAF50008B33B5 /* NewAccountViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NewAccountViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,6 +144,8 @@
 			children = (
 				D09FFDD9269C2322008B33B5 /* LoginViewController.h */,
 				D09FFDDA269C2322008B33B5 /* LoginViewController.m */,
+				D09FFDDF269CAF50008B33B5 /* NewAccountViewController.h */,
+				D09FFDE0269CAF50008B33B5 /* NewAccountViewController.m */,
 			);
 			path = "View Contollers";
 			sourceTree = "<group>";
@@ -274,6 +279,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D09FFDE1269CAF50008B33B5 /* NewAccountViewController.m in Sources */,
 				D09FFDDB269C2322008B33B5 /* LoginViewController.m in Sources */,
 				D09FFDA5269C2174008B33B5 /* AppDelegate.m in Sources */,
 				D09FFDB6269C2176008B33B5 /* main.m in Sources */,
