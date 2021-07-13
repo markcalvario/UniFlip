@@ -165,21 +165,50 @@
             </objects>
             <point key="canvasLocation" x="113" y="913"/>
         </scene>
-        <!--View Controller-->
+        <!--Sell-->
         <scene sceneID="K7y-Ie-smk">
             <objects>
-                <viewController id="To8-2H-q8L" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SellViewController" id="To8-2H-q8L" customClass="SellViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="JQW-gU-2KQ">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ekr-MB-Og1">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="813"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yg5-Hh-Nd3">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="725"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="t1a-sY-TRZ">
+                                                <rect key="frame" x="8" y="22" width="90" height="90"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <state key="normal" image="image_placeholder"/>
+                                                <connections>
+                                                    <action selector="didTapSelectPhotos:" destination="To8-2H-q8L" eventType="touchUpInside" id="FuZ-Yx-0y2"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <gestureRecognizers/>
+                                    </view>
+                                </subviews>
+                                <viewLayoutGuide key="contentLayoutGuide" id="GZU-Fh-5Et"/>
+                                <viewLayoutGuide key="frameLayoutGuide" id="I7L-O2-d1u"/>
+                            </scrollView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="vpR-wF-rIX"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <navigationItem key="navigationItem" id="nWb-Xa-xAh"/>
+                    <navigationItem key="navigationItem" title="Sell" id="nWb-Xa-xAh"/>
+                    <connections>
+                        <outlet property="imageOfProductButton" destination="t1a-sY-TRZ" id="vTP-yX-mwy"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VmE-dX-3ha" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1945" y="907"/>
+            <point key="canvasLocation" x="1944.9275362318842" y="906.69642857142856"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="RnB-kT-ldm">
@@ -430,6 +459,7 @@
     </inferredMetricsTieBreakers>
     <resources>
         <image name="home_icon" width="72" height="77.666664123535156"/>
+        <image name="image_placeholder" width="375" height="375"/>
         <image name="profile_tab" width="25" height="25"/>
         <image name="sell_icon" width="42.666667938232422" height="42.666667938232422"/>
         <systemColor name="systemBackgroundColor">

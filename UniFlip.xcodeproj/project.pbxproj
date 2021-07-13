@@ -21,6 +21,7 @@
 		D09FFDE5269CDE66008B33B5 /* CollegeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D09FFDE4269CDE66008B33B5 /* CollegeCell.m */; };
 		D0B7A624269D0EFE0029D204 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = D0B7A623269D0EFE0029D204 /* Keys.plist */; };
 		D0B7A627269D5A6D0029D204 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B7A626269D5A6D0029D204 /* HomeViewController.m */; };
+		D0B7A62A269DEE470029D204 /* SellViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B7A629269DEE470029D204 /* SellViewController.m */; };
 		D56325CDB651DCF1D6E74995 /* Pods_UniFlip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 896002A9551245D6FC5C1603 /* Pods_UniFlip.framework */; };
 		EEF5230230B5B4982AA7A2F1 /* Pods_UniFlipTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E75917EC6DEA44684821653 /* Pods_UniFlipTests.framework */; };
 /* End PBXBuildFile section */
@@ -77,6 +78,8 @@
 		D0B7A623269D0EFE0029D204 /* Keys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Keys.plist; sourceTree = "<group>"; };
 		D0B7A625269D5A6D0029D204 /* HomeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
 		D0B7A626269D5A6D0029D204 /* HomeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
+		D0B7A628269DEE470029D204 /* SellViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SellViewController.h; sourceTree = "<group>"; };
+		D0B7A629269DEE470029D204 /* SellViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SellViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -198,6 +201,8 @@
 				D09FFDE0269CAF50008B33B5 /* NewAccountViewController.m */,
 				D0B7A625269D5A6D0029D204 /* HomeViewController.h */,
 				D0B7A626269D5A6D0029D204 /* HomeViewController.m */,
+				D0B7A628269DEE470029D204 /* SellViewController.h */,
+				D0B7A629269DEE470029D204 /* SellViewController.m */,
 			);
 			path = "View Contollers";
 			sourceTree = "<group>";
@@ -455,6 +460,7 @@
 				D09FFDB6269C2176008B33B5 /* main.m in Sources */,
 				D09FFDA8269C2174008B33B5 /* SceneDelegate.m in Sources */,
 				D0B7A627269D5A6D0029D204 /* HomeViewController.m in Sources */,
+				D0B7A62A269DEE470029D204 /* SellViewController.m in Sources */,
 				D09FFDE5269CDE66008B33B5 /* CollegeCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
