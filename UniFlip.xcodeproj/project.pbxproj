@@ -3,10 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BCD0F66F1D33992042698236 /* Pods_UniFlip_UniFlipUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12E62F05025D37B8BE7A4EA6 /* Pods_UniFlip_UniFlipUITests.framework */; };
 		D09FFDA5269C2174008B33B5 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D09FFDA4269C2174008B33B5 /* AppDelegate.m */; };
 		D09FFDA8269C2174008B33B5 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D09FFDA7269C2174008B33B5 /* SceneDelegate.m */; };
 		D09FFDAE269C2174008B33B5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D09FFDAC269C2174008B33B5 /* Main.storyboard */; };
@@ -17,6 +18,10 @@
 		D09FFDCB269C2176008B33B5 /* UniFlipUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = D09FFDCA269C2176008B33B5 /* UniFlipUITests.m */; };
 		D09FFDDB269C2322008B33B5 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D09FFDDA269C2322008B33B5 /* LoginViewController.m */; };
 		D09FFDE1269CAF50008B33B5 /* NewAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D09FFDE0269CAF50008B33B5 /* NewAccountViewController.m */; };
+		D09FFDE5269CDE66008B33B5 /* CollegeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D09FFDE4269CDE66008B33B5 /* CollegeCell.m */; };
+		D0B7A624269D0EFE0029D204 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = D0B7A623269D0EFE0029D204 /* Keys.plist */; };
+		D56325CDB651DCF1D6E74995 /* Pods_UniFlip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 896002A9551245D6FC5C1603 /* Pods_UniFlip.framework */; };
+		EEF5230230B5B4982AA7A2F1 /* Pods_UniFlipTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E75917EC6DEA44684821653 /* Pods_UniFlipTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +42,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0251D112866DDE40B3076057 /* Pods-UniFlip.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UniFlip.release.xcconfig"; path = "Target Support Files/Pods-UniFlip/Pods-UniFlip.release.xcconfig"; sourceTree = "<group>"; };
+		0E75917EC6DEA44684821653 /* Pods_UniFlipTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UniFlipTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		12E62F05025D37B8BE7A4EA6 /* Pods_UniFlip_UniFlipUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UniFlip_UniFlipUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3152BFBE0ABEDBF2F22D7215 /* Pods-UniFlip.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UniFlip.debug.xcconfig"; path = "Target Support Files/Pods-UniFlip/Pods-UniFlip.debug.xcconfig"; sourceTree = "<group>"; };
+		3AE5F59DAC6CE47A878CBE4D /* Pods-UniFlip-UniFlipUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UniFlip-UniFlipUITests.release.xcconfig"; path = "Target Support Files/Pods-UniFlip-UniFlipUITests/Pods-UniFlip-UniFlipUITests.release.xcconfig"; sourceTree = "<group>"; };
+		896002A9551245D6FC5C1603 /* Pods_UniFlip.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UniFlip.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		93DD376268BA64498F545A48 /* Pods-UniFlip-UniFlipUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UniFlip-UniFlipUITests.debug.xcconfig"; path = "Target Support Files/Pods-UniFlip-UniFlipUITests/Pods-UniFlip-UniFlipUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		9FFB65567518D5633E345DA3 /* Pods-UniFlipTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UniFlipTests.release.xcconfig"; path = "Target Support Files/Pods-UniFlipTests/Pods-UniFlipTests.release.xcconfig"; sourceTree = "<group>"; };
+		A2FCF7C2A13E6F96EDEF3697 /* Pods-UniFlipTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UniFlipTests.debug.xcconfig"; path = "Target Support Files/Pods-UniFlipTests/Pods-UniFlipTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D09FFDA0269C2174008B33B5 /* UniFlip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UniFlip.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D09FFDA3269C2174008B33B5 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		D09FFDA4269C2174008B33B5 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -57,6 +71,9 @@
 		D09FFDDA269C2322008B33B5 /* LoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		D09FFDDF269CAF50008B33B5 /* NewAccountViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NewAccountViewController.h; sourceTree = "<group>"; };
 		D09FFDE0269CAF50008B33B5 /* NewAccountViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NewAccountViewController.m; sourceTree = "<group>"; };
+		D09FFDE3269CDE66008B33B5 /* CollegeCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CollegeCell.h; sourceTree = "<group>"; };
+		D09FFDE4269CDE66008B33B5 /* CollegeCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CollegeCell.m; sourceTree = "<group>"; };
+		D0B7A623269D0EFE0029D204 /* Keys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Keys.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +81,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D56325CDB651DCF1D6E74995 /* Pods_UniFlip.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,6 +89,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EEF5230230B5B4982AA7A2F1 /* Pods_UniFlipTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,12 +97,36 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BCD0F66F1D33992042698236 /* Pods_UniFlip_UniFlipUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5FEBF2F486C97D6D63C9978B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				896002A9551245D6FC5C1603 /* Pods_UniFlip.framework */,
+				12E62F05025D37B8BE7A4EA6 /* Pods_UniFlip_UniFlipUITests.framework */,
+				0E75917EC6DEA44684821653 /* Pods_UniFlipTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		7980EBA49B191DCE7671B747 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				3152BFBE0ABEDBF2F22D7215 /* Pods-UniFlip.debug.xcconfig */,
+				0251D112866DDE40B3076057 /* Pods-UniFlip.release.xcconfig */,
+				93DD376268BA64498F545A48 /* Pods-UniFlip-UniFlipUITests.debug.xcconfig */,
+				3AE5F59DAC6CE47A878CBE4D /* Pods-UniFlip-UniFlipUITests.release.xcconfig */,
+				A2FCF7C2A13E6F96EDEF3697 /* Pods-UniFlipTests.debug.xcconfig */,
+				9FFB65567518D5633E345DA3 /* Pods-UniFlipTests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		D09FFD97269C2174008B33B5 = {
 			isa = PBXGroup;
 			children = (
@@ -91,6 +134,8 @@
 				D09FFDBE269C2176008B33B5 /* UniFlipTests */,
 				D09FFDC9269C2176008B33B5 /* UniFlipUITests */,
 				D09FFDA1269C2174008B33B5 /* Products */,
+				7980EBA49B191DCE7671B747 /* Pods */,
+				5FEBF2F486C97D6D63C9978B /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -107,6 +152,7 @@
 		D09FFDA2269C2174008B33B5 /* UniFlip */ = {
 			isa = PBXGroup;
 			children = (
+				D09FFDE2269CDE4C008B33B5 /* Views */,
 				D09FFDD8269C2180008B33B5 /* View Contollers */,
 				D09FFDA3269C2174008B33B5 /* AppDelegate.h */,
 				D09FFDA4269C2174008B33B5 /* AppDelegate.m */,
@@ -117,6 +163,7 @@
 				D09FFDB1269C2176008B33B5 /* LaunchScreen.storyboard */,
 				D09FFDB4269C2176008B33B5 /* Info.plist */,
 				D09FFDB5269C2176008B33B5 /* main.m */,
+				D0B7A623269D0EFE0029D204 /* Keys.plist */,
 			);
 			path = UniFlip;
 			sourceTree = "<group>";
@@ -150,6 +197,15 @@
 			path = "View Contollers";
 			sourceTree = "<group>";
 		};
+		D09FFDE2269CDE4C008B33B5 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				D09FFDE3269CDE66008B33B5 /* CollegeCell.h */,
+				D09FFDE4269CDE66008B33B5 /* CollegeCell.m */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -157,9 +213,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D09FFDCF269C2176008B33B5 /* Build configuration list for PBXNativeTarget "UniFlip" */;
 			buildPhases = (
+				59138E7703A5BBDB4D7A87D6 /* [CP] Check Pods Manifest.lock */,
 				D09FFD9C269C2174008B33B5 /* Sources */,
 				D09FFD9D269C2174008B33B5 /* Frameworks */,
 				D09FFD9E269C2174008B33B5 /* Resources */,
+				7ACEDAE1ECB8B8F27D37D355 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -174,6 +232,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D09FFDD2269C2176008B33B5 /* Build configuration list for PBXNativeTarget "UniFlipTests" */;
 			buildPhases = (
+				6CE8E9F0F07835EC95CF1CE1 /* [CP] Check Pods Manifest.lock */,
 				D09FFDB7269C2176008B33B5 /* Sources */,
 				D09FFDB8269C2176008B33B5 /* Frameworks */,
 				D09FFDB9269C2176008B33B5 /* Resources */,
@@ -192,9 +251,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D09FFDD5269C2176008B33B5 /* Build configuration list for PBXNativeTarget "UniFlipUITests" */;
 			buildPhases = (
+				5FD0E091569BC87EA006BA1A /* [CP] Check Pods Manifest.lock */,
 				D09FFDC2269C2176008B33B5 /* Sources */,
 				D09FFDC3269C2176008B33B5 /* Frameworks */,
 				D09FFDC4269C2176008B33B5 /* Resources */,
+				5BDCFECDE5B7333BE01DEA35 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -252,6 +313,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0B7A624269D0EFE0029D204 /* Keys.plist in Resources */,
 				D09FFDB3269C2176008B33B5 /* LaunchScreen.storyboard in Resources */,
 				D09FFDB0269C2176008B33B5 /* Assets.xcassets in Resources */,
 				D09FFDAE269C2174008B33B5 /* Main.storyboard in Resources */,
@@ -274,6 +336,109 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		59138E7703A5BBDB4D7A87D6 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-UniFlip-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5BDCFECDE5B7333BE01DEA35 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-UniFlip-UniFlipUITests/Pods-UniFlip-UniFlipUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-UniFlip-UniFlipUITests/Pods-UniFlip-UniFlipUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-UniFlip-UniFlipUITests/Pods-UniFlip-UniFlipUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5FD0E091569BC87EA006BA1A /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-UniFlip-UniFlipUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6CE8E9F0F07835EC95CF1CE1 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-UniFlipTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7ACEDAE1ECB8B8F27D37D355 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-UniFlip/Pods-UniFlip-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-UniFlip/Pods-UniFlip-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-UniFlip/Pods-UniFlip-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		D09FFD9C269C2174008B33B5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -284,6 +449,7 @@
 				D09FFDA5269C2174008B33B5 /* AppDelegate.m in Sources */,
 				D09FFDB6269C2176008B33B5 /* main.m in Sources */,
 				D09FFDA8269C2174008B33B5 /* SceneDelegate.m in Sources */,
+				D09FFDE5269CDE66008B33B5 /* CollegeCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -452,6 +618,7 @@
 		};
 		D09FFDD0269C2176008B33B5 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3152BFBE0ABEDBF2F22D7215 /* Pods-UniFlip.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -470,6 +637,7 @@
 		};
 		D09FFDD1269C2176008B33B5 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0251D112866DDE40B3076057 /* Pods-UniFlip.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -488,6 +656,7 @@
 		};
 		D09FFDD3269C2176008B33B5 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A2FCF7C2A13E6F96EDEF3697 /* Pods-UniFlipTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -508,6 +677,7 @@
 		};
 		D09FFDD4269C2176008B33B5 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9FFB65567518D5633E345DA3 /* Pods-UniFlipTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -528,6 +698,7 @@
 		};
 		D09FFDD6269C2176008B33B5 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 93DD376268BA64498F545A48 /* Pods-UniFlip-UniFlipUITests.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = DHFZKU4548;
@@ -546,6 +717,7 @@
 		};
 		D09FFDD7269C2176008B33B5 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3AE5F59DAC6CE47A878CBE4D /* Pods-UniFlip-UniFlipUITests.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = DHFZKU4548;

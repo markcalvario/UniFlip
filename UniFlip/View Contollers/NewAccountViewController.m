@@ -7,6 +7,8 @@
 
 #import "NewAccountViewController.h"
 #import "CollegeCell.h"
+#import "Parse/Parse.h"
+//#import "../Assets.xcassets/defaultProfilePic.imageset/Image.png"
 
 @interface NewAccountViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITextField *schoolEmailField;
@@ -34,6 +36,9 @@
     [self getListOfAllUSColleges];
 }
 
+
+
+
 -(void) getListOfAllUSColleges{
     NSURL *url = [NSURL URLWithString:@"http://universities.hipolabs.com/search?country=United+States"];
     NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:10.0];
@@ -51,59 +56,6 @@
        }];
     [task resume];
 }
-
-- (IBAction)didTapRegister:(id)sender {
-    NSString *schoolEmail = self.schoolEmailField.text;
-    NSString *username = self.usernameField.text;
-    NSString *password = self.passwordField.text;
-    NSString *collegeName = self.collegeTextField.text;
-    NSString *emailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
-
-    if (([schoolEmail isEqual:nil]) || ([username isEqual:nil]) || ([password isEqual:nil]) || ([collegeName isEqual:nil])){
-        
-    }
-
-    if ([self doesEmailDomainMatchUniversity:schoolEmail schoolName:collegeName]){
-        NSLog(@"%@", @"Yes");
-    }
-    else{
-        NSLog(@"%@", @"No");
-    }
-    
-}
-
--(BOOL) doesEmailDomainMatchUniversity: (NSString *)schoolEmail schoolName:(NSString *)collegeName{
-    NSArray *usernameAndDomain = [schoolEmail componentsSeparatedByString:@"@"];
-    NSString *schoolEmailDomain = [usernameAndDomain objectAtIndex:1];
-    schoolEmailDomain = [schoolEmailDomain lowercaseString];
-    
-    
-    if ([self.collegeSelected isEqual:nil]){
-        return FALSE;
-    }
-    
-    for (NSString *emailDomain in self.collegeSelected[@"domains"]){
-        if ([schoolEmailDomain isEqualToString:[emailDomain lowercaseString]]){
-            return TRUE;
-        }
-    }
-    return FALSE;
-    
-    
-}
-
-- (IBAction)didTapExitKeyboard:(id)sender {
-    [self.view endEditing:TRUE];
-    self.collegesTableView.hidden = YES;
-}
-
-- (IBAction)didEditUniversityField:(id)sender {
-    NSString *universitySubstring = self.collegeTextField.text;
-    universitySubstring = [universitySubstring lowercaseString];
-    self.collegesTableView.hidden = NO;
-    [self getCollegesFromSubstring:universitySubstring];
-}
-
 -(void) getCollegesFromSubstring: (NSString *) universitySubstring{
     self.arrayOfCollegesForTableView = [[NSMutableArray alloc] init];
     for (NSDictionary *college in self.arrayOfColleges){
@@ -116,6 +68,107 @@
      }
     [self.collegesTableView reloadData];
 }
+
+
+
+/// Email Verification
+-(BOOL) doesEmailDomainMatchUniversity: (NSString *)schoolEmail schoolName:(NSString *)collegeName{
+    NSArray *usernameAndDomain = [schoolEmail componentsSeparatedByString:@"@"];
+    NSString *schoolEmailDomain = [usernameAndDomain objectAtIndex:1];
+    schoolEmailDomain = [schoolEmailDomain lowercaseString];
+    
+    
+    /*if ([self.collegeSelected isEqual:nil]){
+        return FALSE;
+    }*/
+    
+    for (NSString *emailDomain in self.collegeSelected[@"domains"]){
+        if ([schoolEmailDomain isEqualToString:[emailDomain lowercaseString]]){
+            return TRUE;
+        }
+    }
+    return TRUE;
+}
+
+
+
+///Create User
+-(void) createUserAccount: (NSString *) collegeName{
+    PFUser *newUser = [PFUser user];
+    newUser.email = self.schoolEmailField.text;
+    newUser.username = self.usernameField.text;
+    newUser.password = self.passwordField.text;
+    newUser[@"biography"] = @"";
+    newUser[@"university"] = collegeName;
+    // call sign up function on the object
+    [newUser signUpInBackgroundWithBlock:^(BOOL succeeded, NSError * error) {
+        if (error != nil) {
+            NSLog(@"Error: %@", error.localizedDescription);
+        } else {
+            NSLog(@"User registered successfully");
+            self.schoolEmailField.text = @"";
+            self.usernameField.text = @"";
+            self.passwordField.text = @"";
+            self.collegeTextField.text = @"";
+            [self performSegueWithIdentifier:@"SuccessfulRegisterToLogin" sender:nil];
+
+            
+        }
+    }];
+    /*PFObject *marketplace = [PFObject objectWithClassName:@"Marketplace"];
+    marketplace[@"university"] = collegeName;
+    [marketplace addObject: newUser forKey:@"users"];
+    [marketplace saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+      if (succeeded) {
+          NSLog(@"added user to marketplace");
+      } else {
+          NSLog(@"error creating a marketplace");
+      }
+    }];*/
+}
+
+
+/// ACTIONS
+- (IBAction)didTapRegister:(id)sender {
+    NSString *schoolEmail = self.schoolEmailField.text;
+    NSString *username = self.usernameField.text;
+    NSString *password = self.passwordField.text;
+    NSString *collegeName = self.collegeTextField.text;
+    if ( ([schoolEmail length] == 0) || ( [username length] == 0) || ([password length]== 0) || ([collegeName length]==0) || (![self validateEmailWithString:schoolEmail])){
+        NSLog(@"%@", @"incomplete fields");
+        return;
+    }
+
+    if ([self doesEmailDomainMatchUniversity:schoolEmail schoolName:collegeName]){
+        [self createUserAccount:collegeName];
+    }
+    else{
+        NSLog(@"%@", @"No match");
+    }
+    
+}
+- (BOOL)validateEmailWithString:(NSString*)checkString
+{
+    BOOL stricterFilter = NO; // Discussion http://blog.logichigh.com/2010/09/02/validating-an-e-mail-address/
+    NSString *stricterFilterString = @"[A-Z0-9a-z\\._%+-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,4}";
+    NSString *laxString = @".+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2}[A-Za-z]*";
+    NSString *emailRegex = stricterFilter ? stricterFilterString : laxString;
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    return [emailTest evaluateWithObject:checkString];
+}
+- (IBAction)didTapExitKeyboard:(id)sender {
+    [self.view endEditing:TRUE];
+    self.collegesTableView.hidden = YES;
+}
+
+- (IBAction)didEditUniversityField:(id)sender {
+    NSString *universitySubstring = self.collegeTextField.text;
+    universitySubstring = [universitySubstring lowercaseString];
+    self.collegesTableView.hidden = NO;
+    [self getCollegesFromSubstring:universitySubstring];
+}
+
+
 
 /// AutoComplete TableView
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {

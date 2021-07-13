@@ -1,0 +1,6 @@
+framework module Pods_UniFlip_UniFlipUITests {
+  umbrella header "Pods-UniFlip-UniFlipUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}
