@@ -38,7 +38,7 @@
 
 
 
-
+/// API Requests
 -(void) getListOfAllUSColleges{
     NSURL *url = [NSURL URLWithString:@"http://universities.hipolabs.com/search?country=United+States"];
     NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:10.0];
@@ -68,10 +68,10 @@
      }
     [self.collegesTableView reloadData];
 }
+//*******************
 
 
-
-/// Email Verification
+/// Email Verification/Validation
 -(BOOL) doesEmailDomainMatchUniversity: (NSString *)schoolEmail schoolName:(NSString *)collegeName{
     NSArray *usernameAndDomain = [schoolEmail componentsSeparatedByString:@"@"];
     NSString *schoolEmailDomain = [usernameAndDomain objectAtIndex:1];
@@ -89,8 +89,16 @@
     }
     return TRUE;
 }
-
-
+- (BOOL)validateEmailWithString:(NSString*)checkString
+{
+    BOOL stricterFilter = NO; // Discussion http://blog.logichigh.com/2010/09/02/validating-an-e-mail-address/
+    NSString *stricterFilterString = @"[A-Z0-9a-z\\._%+-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,4}";
+    NSString *laxString = @".+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2}[A-Za-z]*";
+    NSString *emailRegex = stricterFilter ? stricterFilterString : laxString;
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    return [emailTest evaluateWithObject:checkString];
+}
+//*****************
 
 ///Create User
 -(void) createUserAccount: (NSString *) collegeName{
@@ -110,22 +118,48 @@
             self.usernameField.text = @"";
             self.passwordField.text = @"";
             self.collegeTextField.text = @"";
+            NSLog(@"%@", newUser);
+            [self addUserToMarketplace:newUser.username school:collegeName];
             [self performSegueWithIdentifier:@"SuccessfulRegisterToLogin" sender:nil];
-
-            
         }
     }];
-    /*PFObject *marketplace = [PFObject objectWithClassName:@"Marketplace"];
-    marketplace[@"university"] = collegeName;
-    [marketplace addObject: newUser forKey:@"users"];
-    [marketplace saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-      if (succeeded) {
-          NSLog(@"added user to marketplace");
-      } else {
-          NSLog(@"error creating a marketplace");
-      }
-    }];*/
 }
+
+-(void) addUserToMarketplace:(NSString *) username school: (NSString *)school{
+    PFUser *user = nil;
+    PFQuery *queryUser = [PFUser query];
+    [queryUser whereKey:@"username" equalTo:username]; // find the unique username
+    NSArray *users = [queryUser findObjects];
+    user = users[0];
+    PFQuery *query = [PFQuery queryWithClassName:@"Marketplace"];
+    [query whereKey:@"school" equalTo:school];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *markets, NSError *error) {
+        if (error) {
+          NSLog(@"Error: %@ %@", error, [error userInfo]);
+        }
+        /// No marketplace exists
+        if ([markets count] == 0){
+            PFObject *marketplace = [PFObject objectWithClassName:@"Marketplace"];
+            marketplace[@"school"] = school;
+            [marketplace addUniqueObject:user forKey:@"users"];
+            [marketplace saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+              if (succeeded) {
+                  NSLog(@"added user to marketplace");
+              } else {
+                  NSLog(@"error creating a marketplace");
+              }
+            }];
+        }
+        else{
+            PFObject *marketplace = markets[0];
+            [marketplace addUniqueObject:user forKey:@"users"];
+            [marketplace saveInBackground];
+        }
+        
+
+    }];
+}
+
 
 
 /// ACTIONS
@@ -146,15 +180,6 @@
         NSLog(@"%@", @"No match");
     }
     
-}
-- (BOOL)validateEmailWithString:(NSString*)checkString
-{
-    BOOL stricterFilter = NO; // Discussion http://blog.logichigh.com/2010/09/02/validating-an-e-mail-address/
-    NSString *stricterFilterString = @"[A-Z0-9a-z\\._%+-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,4}";
-    NSString *laxString = @".+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2}[A-Za-z]*";
-    NSString *emailRegex = stricterFilter ? stricterFilterString : laxString;
-    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
-    return [emailTest evaluateWithObject:checkString];
 }
 - (IBAction)didTapExitKeyboard:(id)sender {
     [self.view endEditing:TRUE];
