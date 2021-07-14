@@ -388,5 +388,53 @@
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "99B94345-0BF2-477A-A077-2B82FE9EA09C"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "UniFlip/View Contollers/SellViewController.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "13"
+            endingLineNumber = "13"
+            landmarkName = "imageOfProductButton"
+            landmarkType = "24">
+            <Locations>
+               <Location
+                  uuid = "99B94345-0BF2-477A-A077-2B82FE9EA09C - a2f4472f8d523d10"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[SellViewController imagePlaceHolder]"
+                  moduleName = "UniFlip"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mac2492/Desktop/UniFlip/UniFlip/View%20Contollers/SellViewController.m"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "12"
+                  endingLineNumber = "12"
+                  offsetFromSymbolStart = "12">
+               </Location>
+               <Location
+                  uuid = "99B94345-0BF2-477A-A077-2B82FE9EA09C - c5f61e65bd9f14fa"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[SellViewController setImagePlaceHolder:]"
+                  moduleName = "UniFlip"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mac2492/Desktop/UniFlip/UniFlip/View%20Contollers/SellViewController.m"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "12"
+                  endingLineNumber = "12"
+                  offsetFromSymbolStart = "48">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

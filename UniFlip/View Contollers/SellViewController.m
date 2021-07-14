@@ -6,11 +6,18 @@
 //
 
 #import "SellViewController.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface SellViewController ()<UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 @property (strong, nonatomic) UIAlertController *alert;
 @property (strong, nonatomic) UIImage *imagePlaceHolder;
 @property (weak, nonatomic) IBOutlet UIButton *imageOfProductButton;
+@property (weak, nonatomic) IBOutlet UITextField *listingTitleField;
+@property (weak, nonatomic) IBOutlet UITextView *listingDescriptionView;
+@property (weak, nonatomic) IBOutlet UITextField *categoryField;
+@property (weak, nonatomic) IBOutlet UITextField *locationField;
+@property (weak, nonatomic) IBOutlet UITextField *conditionField;
+@property (weak, nonatomic) IBOutlet UITextField *brandField;
 
 
 @end
@@ -20,6 +27,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [[self.listingDescriptionView layer] setBorderColor:[[UIColor systemGray5Color] CGColor]];
+    [[self.listingDescriptionView layer] setBorderWidth:1];
+    [[self.listingDescriptionView layer] setCornerRadius:10];
 }
 
 
@@ -83,6 +93,9 @@
 
 - (IBAction)didTapSelectPhotos:(id)sender {
     [self showPhotoAlert];
+}
+- (IBAction)didTapExitKeyboard:(id)sender {
+    [self.view endEditing:TRUE];
 }
 
 /*
