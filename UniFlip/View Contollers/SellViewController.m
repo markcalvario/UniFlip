@@ -8,14 +8,15 @@
 #import "SellViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "SelectOptionViewController.h"
+#import "PlaceAutocompleteViewController.h"
 
-@interface SellViewController ()<UINavigationControllerDelegate, UIImagePickerControllerDelegate, SelectOptionViewControllerDelege>
+@interface SellViewController ()<UINavigationControllerDelegate, UIImagePickerControllerDelegate, SelectOptionViewControllerDelege, PlaceAutocompleteDelege>
 @property (strong, nonatomic) UIAlertController *alert;
 @property (strong, nonatomic) UIImage *imagePlaceHolder;
 @property (weak, nonatomic) IBOutlet UIButton *imageOfProductButton;
 @property (weak, nonatomic) IBOutlet UITextField *listingTitleField;
 @property (weak, nonatomic) IBOutlet UITextView *listingDescriptionView;
-@property (weak, nonatomic) IBOutlet UITextField *locationField;
+@property (weak, nonatomic) IBOutlet UIButton *locationButton;
 @property (weak, nonatomic) IBOutlet UITextField *conditionField;
 @property (weak, nonatomic) IBOutlet UITextField *brandField;
 @property (weak, nonatomic) IBOutlet UIButton *postListingButton;
@@ -36,6 +37,11 @@
     [[self.listingDescriptionView layer] setBorderColor:[[UIColor systemGray5Color] CGColor]];
     [[self.listingDescriptionView layer] setBorderWidth:1];
     [[self.listingDescriptionView layer] setCornerRadius:10];
+    
+    //Location Button styling
+    [[self.locationButton layer] setBorderColor:[[UIColor systemGray5Color] CGColor]];
+    [[self.locationButton layer] setBorderWidth:1];
+    [[self.locationButton layer] setCornerRadius:5];
     
     [[self.categoryButton layer] setBorderColor:[[UIColor systemGray5Color] CGColor]];
     [[self.categoryButton layer] setBorderWidth:1];
@@ -108,6 +114,13 @@
     [self.categoryButton setTitleColor:[UIColor colorWithRed:0 green:0.58984375 blue:0.8984375 alpha:1] forState:UIControlStateNormal];
 }
 
+- (void)addPlaceSelectedToViewController:(NSString*)location{
+    //do whatever you want with the data
+    NSLog(@"%@", location);
+    [self.locationButton setTitle: location forState:UIControlStateNormal];
+    [self.locationButton setTitleColor:[UIColor colorWithRed:0 green:0.58984375 blue:0.8984375 alpha:1] forState:UIControlStateNormal];
+}
+
 ///Actions from buttons or gestures
 - (IBAction)didTapSelectPhotos:(id)sender {
     [self showPhotoAlert];
@@ -115,6 +128,7 @@
 - (IBAction)didTapExitKeyboard:(id)sender {
     [self.view endEditing:TRUE];
 }
+
 
 
 #pragma mark - Navigation
@@ -133,6 +147,18 @@
         SelectOptionViewController *selectOptionViewController = [segue destinationViewController];
         selectOptionViewController.data = arrayOfCategories;
         selectOptionViewController.delegate = self;
+    }
+    else if ([[segue identifier] isEqualToString: @"LocationToSelectOption"]){
+        /*NSArray *arrayOfCategories = @[@"Appliances", @"Apps & Games", @"Arts, Crafts, & Sewing",
+            @"Automotive Parts & Accessories", @"Baby", @"Beauty & Personal Care", @"Books", @"CDs & Vinyl",
+            @"Cell Phones & Accessories", @"Clothing, Shoes and Jewelry", @"Collectibles & Fine Art", @"Computers", @"Electronics",
+            @"Garden & Outdoor", @"Grocery & Gourmet Food", @"Handmade", @"Health, Household & Baby Care", @"Home & Kitchen", @"Industrial & Scientific",
+           @"Luggage & Travel Gear", @"Movies & TV", @"Musical Instruments", @"Office Products", @"Pet Supplies", @"Sports & Outdoors",
+            @"Tools & Home Improvement", @"Toys & Games", @"Video Games"];*/
+        PlaceAutocompleteViewController *placeAutocompleteViewController = [segue destinationViewController];
+        placeAutocompleteViewController.delegate = self;
+        //selectOptionViewController.data = arrayOfCategories;
+        //selectOptionViewController.delegate = self;
     }
     
 }

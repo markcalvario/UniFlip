@@ -41,9 +41,6 @@
     }];
     
 }
--(void) addUserToMarketPlace: (PFUser *) user{
-    
-}
 /*
 #pragma mark - Navigation
 

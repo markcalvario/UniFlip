@@ -25,6 +25,7 @@
 		D0B7A62E269E5B0A0029D204 /* Listing.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B7A62D269E5B0A0029D204 /* Listing.m */; };
 		D0B7A631269E8C530029D204 /* SelectOptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B7A630269E8C530029D204 /* SelectOptionViewController.m */; };
 		D0B7A634269E934D0029D204 /* OptionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B7A633269E934D0029D204 /* OptionCell.m */; };
+		D0B7A638269F4A760029D204 /* PlaceAutocompleteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B7A637269F4A760029D204 /* PlaceAutocompleteViewController.m */; };
 		D56325CDB651DCF1D6E74995 /* Pods_UniFlip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 896002A9551245D6FC5C1603 /* Pods_UniFlip.framework */; };
 		EEF5230230B5B4982AA7A2F1 /* Pods_UniFlipTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E75917EC6DEA44684821653 /* Pods_UniFlipTests.framework */; };
 /* End PBXBuildFile section */
@@ -89,6 +90,8 @@
 		D0B7A630269E8C530029D204 /* SelectOptionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SelectOptionViewController.m; sourceTree = "<group>"; };
 		D0B7A632269E934D0029D204 /* OptionCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OptionCell.h; sourceTree = "<group>"; };
 		D0B7A633269E934D0029D204 /* OptionCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OptionCell.m; sourceTree = "<group>"; };
+		D0B7A636269F4A760029D204 /* PlaceAutocompleteViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlaceAutocompleteViewController.h; sourceTree = "<group>"; };
+		D0B7A637269F4A760029D204 /* PlaceAutocompleteViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlaceAutocompleteViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -215,6 +218,8 @@
 				D0B7A629269DEE470029D204 /* SellViewController.m */,
 				D0B7A62F269E8C530029D204 /* SelectOptionViewController.h */,
 				D0B7A630269E8C530029D204 /* SelectOptionViewController.m */,
+				D0B7A636269F4A760029D204 /* PlaceAutocompleteViewController.h */,
+				D0B7A637269F4A760029D204 /* PlaceAutocompleteViewController.m */,
 			);
 			path = "View Contollers";
 			sourceTree = "<group>";
@@ -523,6 +528,7 @@
 				D0B7A627269D5A6D0029D204 /* HomeViewController.m in Sources */,
 				D0B7A62A269DEE470029D204 /* SellViewController.m in Sources */,
 				D09FFDE5269CDE66008B33B5 /* CollegeCell.m in Sources */,
+				D0B7A638269F4A760029D204 /* PlaceAutocompleteViewController.m in Sources */,
 				D0B7A631269E8C530029D204 /* SelectOptionViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

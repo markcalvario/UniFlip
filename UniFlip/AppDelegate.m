@@ -7,6 +7,7 @@
 
 #import "AppDelegate.h"
 #import "Parse/Parse.h"
+@import GooglePlaces;
 
 @interface AppDelegate ()
 
@@ -32,6 +33,12 @@
         }];
 
     [Parse initializeWithConfiguration:config];
+    
+    
+    //Google Maps API
+    NSString *googleMapsAPIKey = [dict objectForKey: @"google_maps_api_key"];
+    [GMSPlacesClient provideAPIKey:googleMapsAPIKey];
+
     return YES;
 }
 

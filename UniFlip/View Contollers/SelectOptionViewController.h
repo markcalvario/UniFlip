@@ -20,6 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface SelectOptionViewController : UIViewController
 @property (strong, nonatomic) NSArray *data;
 @property (nonatomic, weak) id <SelectOptionViewControllerDelege> delegate;
+@property (strong, nonatomic) NSString *optionFor;
 
 
 @end
