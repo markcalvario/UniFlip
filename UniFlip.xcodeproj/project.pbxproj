@@ -26,6 +26,7 @@
 		D0B7A634269E934D0029D204 /* OptionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B7A633269E934D0029D204 /* OptionCell.m */; };
 		D0B7A638269F4A760029D204 /* PlaceAutocompleteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B7A637269F4A760029D204 /* PlaceAutocompleteViewController.m */; };
 		D0B7A63E269FB3E30029D204 /* Listing.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B7A63D269FB3E30029D204 /* Listing.m */; };
+		D0B7A641269FD5710029D204 /* CategoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B7A640269FD5710029D204 /* CategoryCell.m */; };
 		D56325CDB651DCF1D6E74995 /* Pods_UniFlip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 896002A9551245D6FC5C1603 /* Pods_UniFlip.framework */; };
 		EEF5230230B5B4982AA7A2F1 /* Pods_UniFlipTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E75917EC6DEA44684821653 /* Pods_UniFlipTests.framework */; };
 /* End PBXBuildFile section */
@@ -92,6 +93,8 @@
 		D0B7A637269F4A760029D204 /* PlaceAutocompleteViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlaceAutocompleteViewController.m; sourceTree = "<group>"; };
 		D0B7A63C269FB3E30029D204 /* Listing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Listing.h; sourceTree = "<group>"; };
 		D0B7A63D269FB3E30029D204 /* Listing.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Listing.m; sourceTree = "<group>"; };
+		D0B7A63F269FD5710029D204 /* CategoryCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CategoryCell.h; sourceTree = "<group>"; };
+		D0B7A640269FD5710029D204 /* CategoryCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CategoryCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -231,6 +234,8 @@
 				D09FFDE4269CDE66008B33B5 /* CollegeCell.m */,
 				D0B7A632269E934D0029D204 /* OptionCell.h */,
 				D0B7A633269E934D0029D204 /* OptionCell.m */,
+				D0B7A63F269FD5710029D204 /* CategoryCell.h */,
+				D0B7A640269FD5710029D204 /* CategoryCell.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -523,6 +528,7 @@
 				D0B7A634269E934D0029D204 /* OptionCell.m in Sources */,
 				D09FFDA5269C2174008B33B5 /* AppDelegate.m in Sources */,
 				D09FFDB6269C2176008B33B5 /* main.m in Sources */,
+				D0B7A641269FD5710029D204 /* CategoryCell.m in Sources */,
 				D09FFDA8269C2174008B33B5 /* SceneDelegate.m in Sources */,
 				D0B7A63E269FB3E30029D204 /* Listing.m in Sources */,
 				D0B7A627269D5A6D0029D204 /* HomeViewController.m in Sources */,
