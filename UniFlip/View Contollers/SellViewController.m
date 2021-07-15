@@ -9,6 +9,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "SelectOptionViewController.h"
 #import "PlaceAutocompleteViewController.h"
+#import "Listing.h"
 
 @interface SellViewController ()<UINavigationControllerDelegate, UIImagePickerControllerDelegate, SelectOptionViewControllerDelege, PlaceAutocompleteDelege>
 @property (strong, nonatomic) UIAlertController *alert;
@@ -21,6 +22,8 @@
 @property (weak, nonatomic) IBOutlet UITextField *brandField;
 @property (weak, nonatomic) IBOutlet UIButton *postListingButton;
 @property (weak, nonatomic) IBOutlet UIButton *categoryButton;
+@property (weak, nonatomic) IBOutlet UITextField *listingTypeField;
+@property (weak, nonatomic) IBOutlet UITextField *priceField;
 
 
 @end
@@ -31,6 +34,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self setSellViewControllerStyling];
+    self.imagePlaceHolder = [self.imageOfProductButton currentImage];
     
 }
 - (void) setSellViewControllerStyling{
@@ -52,6 +56,8 @@
     [self.postListingButton setClipsToBounds:TRUE];
 }
 
+
+/// Photo Selection Alert
 - (void)showPhotoAlert {
     // Add code to be run periodically
      UIImagePickerController *imagePickerVC = [UIImagePickerController new];
@@ -90,30 +96,24 @@
          // optional code for what happens after the alert controller has finished presenting
      }];
 }
-
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
     // Get the image captured by the UIImagePickerController
     UIImage *originalImage = info[UIImagePickerControllerOriginalImage];
     //UIImage *editedImage = info[UIImagePickerControllerEditedImage];
-
     // Do something with the images (based on your use case)
     [self.imageOfProductButton setImage:originalImage forState:UIControlStateNormal];
-    
-    
     // Dismiss UIImagePickerController to go back to your original view controller
     [self dismissViewControllerAnimated:YES completion:nil];
-    
-    
-    
 }
 
 
+
+///Getting the option selected
 - (void)addOptionSelectedToViewController:(NSString*)option{
     //do whatever you want with the data
     [self.categoryButton setTitle:option forState:UIControlStateNormal];
     [self.categoryButton setTitleColor:[UIColor colorWithRed:0 green:0.58984375 blue:0.8984375 alpha:1] forState:UIControlStateNormal];
 }
-
 - (void)addPlaceSelectedToViewController:(NSString*)location{
     //do whatever you want with the data
     NSLog(@"%@", location);
@@ -121,18 +121,51 @@
     [self.locationButton setTitleColor:[UIColor colorWithRed:0 green:0.58984375 blue:0.8984375 alpha:1] forState:UIControlStateNormal];
 }
 
-///Actions from buttons or gestures
+#pragma mark - Actions performed on touch
 - (IBAction)didTapSelectPhotos:(id)sender {
     [self showPhotoAlert];
 }
 - (IBAction)didTapExitKeyboard:(id)sender {
     [self.view endEditing:TRUE];
 }
+- (IBAction)didTapPostListing:(id)sender {
+    UIImage *image = self.imageOfProductButton.currentImage;
+    NSString *title = self.listingTitleField.text;
+    NSString *type = self.listingTypeField.text;
+    NSString *description = self.listingDescriptionView.text;
+    NSString *location = self.locationButton.currentTitle;
+    NSString *category = self.categoryButton.currentTitle;
+    NSString *brand = self.brandField.text;
+    NSString *condition = self.conditionField.text;
+    NSString *price = self.priceField.text;
+    
+    [Listing postUserListing:image withTitle:title withType:type withDescription:description withLocation:location withCategory:category withBrand:brand withCondition:condition withPrice:price withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+        if (error == nil){
+            NSLog(@"Listing is posted");
+            [self resetInputFields];
+            self.tabBarController.selectedViewController = [self.tabBarController.viewControllers objectAtIndex:0];
+        }
+        else{
+            NSLog(@"Error with posting");
+        }
+    }];
+    
+}
 
 
+-(void) resetInputFields{
+    [self.imageOfProductButton setImage:self.imagePlaceHolder forState:UIControlStateNormal];
+    self.listingTitleField.text = @"";
+    self.listingTypeField.text = @"";
+    self.listingDescriptionView.text = @"Description of listing";
+    [self.locationButton setTitle:@"Location" forState:UIControlStateNormal];
+    [self.categoryButton setTitle:@"Category" forState:UIControlStateNormal];
+    self.brandField.text = @"";
+    self.conditionField.text = @"";
+    self.priceField.text = @"";
+}
 
 #pragma mark - Navigation
-
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
@@ -149,19 +182,8 @@
         selectOptionViewController.delegate = self;
     }
     else if ([[segue identifier] isEqualToString: @"LocationToSelectOption"]){
-        /*NSArray *arrayOfCategories = @[@"Appliances", @"Apps & Games", @"Arts, Crafts, & Sewing",
-            @"Automotive Parts & Accessories", @"Baby", @"Beauty & Personal Care", @"Books", @"CDs & Vinyl",
-            @"Cell Phones & Accessories", @"Clothing, Shoes and Jewelry", @"Collectibles & Fine Art", @"Computers", @"Electronics",
-            @"Garden & Outdoor", @"Grocery & Gourmet Food", @"Handmade", @"Health, Household & Baby Care", @"Home & Kitchen", @"Industrial & Scientific",
-           @"Luggage & Travel Gear", @"Movies & TV", @"Musical Instruments", @"Office Products", @"Pet Supplies", @"Sports & Outdoors",
-            @"Tools & Home Improvement", @"Toys & Games", @"Video Games"];*/
         PlaceAutocompleteViewController *placeAutocompleteViewController = [segue destinationViewController];
         placeAutocompleteViewController.delegate = self;
-        //selectOptionViewController.data = arrayOfCategories;
-        //selectOptionViewController.delegate = self;
     }
-    
 }
-
-
 @end

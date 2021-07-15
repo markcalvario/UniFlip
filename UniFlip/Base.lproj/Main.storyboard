@@ -271,6 +271,9 @@
                                                 <state key="normal" title="Post Listing">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="didTapPostListing:" destination="To8-2H-q8L" eventType="touchUpInside" id="jig-3H-75M"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -346,8 +349,10 @@
                         <outlet property="imageOfProductButton" destination="t1a-sY-TRZ" id="vTP-yX-mwy"/>
                         <outlet property="listingDescriptionView" destination="rcc-tw-Q1B" id="aOf-VB-XAu"/>
                         <outlet property="listingTitleField" destination="UMz-59-50G" id="vG7-Yb-8Hf"/>
+                        <outlet property="listingTypeField" destination="1Ni-Jp-djw" id="PLw-6h-8no"/>
                         <outlet property="locationButton" destination="pXH-5Y-rUe" id="APr-IE-xO3"/>
                         <outlet property="postListingButton" destination="8kr-Qr-zUV" id="rqB-me-4v4"/>
+                        <outlet property="priceField" destination="2ld-qB-emE" id="M3f-or-b1b"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VmE-dX-3ha" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
