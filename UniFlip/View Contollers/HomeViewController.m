@@ -30,11 +30,7 @@
     self.arrayOfCategories = [NSMutableArray array];
     [self getListingsByCategory];
     
-    
-    /*CGFloat postsPerRow = 3;
-    CGFloat itemWidth = (self.postsCollectionView.frame.size.width - layout.minimumInteritemSpacing * (postsPerRow) )/ postsPerRow;
-    CGFloat itemHeight = itemWidth * 1;
-    layout.itemSize = CGSizeMake(itemWidth, itemHeight);*/
+
 }
 /*-(void) viewWillAppear:(BOOL)animated{
     [self getListingsByCategory];
@@ -81,11 +77,11 @@
                 }
             }
             [self.listingCategoryTableView reloadData];
-            //[self.]
         }
         else {
             // handle error
         }
+        NSLog(@"%@", self.categoryToArrayOfPosts);
     }];
 }
 
@@ -120,7 +116,8 @@
     Listing *listing = self.categoryToArrayOfPosts[self.currentCategory][indexPath.row];
     NSLog(@"%@", listing);
     cell.titleLabel.text = listing.listingTitle;
-    cell.priceLabel.text = listing.listingPrice;
+    NSString *price = listing.listingPrice;
+    cell.priceLabel.text = [@"$" stringByAppendingString: price];
     PFFileObject *listingImageFile = listing.listingImage;
     [listingImageFile getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
                 if (!error) {
@@ -128,11 +125,39 @@
                     [cell.imageButton setImage:image forState:UIControlStateNormal];
                 }
             }];
-   
+    
+    //like button
+    cell.likeButton.tag = indexPath.row;
+    [cell.likeButton setTitle:self.currentCategory forState:UIControlStateNormal];
+    cell.likeButton.titleLabel.font = [UIFont systemFontOfSize:0];
+    [cell.likeButton addTarget:self action:@selector(didTapLikeIcon:) forControlEvents:UIControlEventTouchUpInside];
+    //[cell.likeButton ]
+    
     return cell;
 }
 
-
+-(void) didTapLikeIcon:(UIButton *)sender{
+    Listing *listing = self.categoryToArrayOfPosts[[sender currentTitle]][sender.tag];
+    PFUser *currentUser = [PFUser currentUser];
+    __block bool hasUserLikedListing = YES;
+    PFRelation *relation = [listing relationForKey:@"likedBy"];
+    PFQuery *queryForUsers = [relation query];
+    [queryForUsers findObjectsInBackgroundWithBlock:^(NSArray * _Nullable arrayOfUsers, NSError * _Nullable error) {
+        for (PFUser *user in arrayOfUsers){
+            if ([user.objectId isEqualToString:currentUser.objectId]){
+                NSLog(@"user has not liked this listing");
+                hasUserLikedListing = NO;
+                sender.selected = YES;
+                [Listing postUserUnlike:listing withUser:currentUser withCompetion:^(BOOL succeeded, NSError * _Nullable error) {}];
+            }
+        }
+        if (hasUserLikedListing){
+            NSLog(@"user has been liked this listing");
+            sender.selected = NO;
+            [Listing postUserLike:listing withUser:currentUser withCompetion:^(BOOL succeeded, NSError * _Nullable error) {}];
+        }
+    }];
+}
 /*
 #pragma mark - Navigation
 

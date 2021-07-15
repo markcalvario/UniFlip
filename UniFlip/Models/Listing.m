@@ -21,6 +21,7 @@
 @dynamic listingCondition;
 @dynamic listingPrice;
 @dynamic isReported;
+@dynamic likeCount;
 
 
 + (nonnull NSString *)parseClassName {
@@ -32,6 +33,7 @@
     Listing *newListing = [Listing new];
     newListing.author = [PFUser currentUser];
     newListing.listingImage = [self getPFFileFromImage: [newListing resizeImage: image withSize: CGSizeMake(300, 300)]];
+    newListing.listingTitle = title;
     newListing.typeOfListing = type;
     newListing.listingDescription = description;
     newListing.listingLocation = location;
@@ -40,10 +42,23 @@
     newListing.listingCondition = condition;
     newListing.listingPrice = price;
     newListing.isReported = FALSE;
-
+    newListing.likeCount = @(0);
     [newListing saveInBackgroundWithBlock:completion];
     
     
+}
+
++ (void) postUserLike: (Listing *)listing withUser: (PFUser *)user withCompetion:(PFBooleanResultBlock  _Nullable)completion{
+    PFRelation *relation = [listing relationForKey:@"likedBy"];
+    [relation addObject:user];
+    [listing incrementKey:@"likeCount" byAmount:@(1)];
+    [listing saveInBackground];
+}
++ (void) postUserUnlike: (Listing *)listing withUser: (PFUser *)user withCompetion:(PFBooleanResultBlock  _Nullable)completion{
+    PFRelation *relation = [listing relationForKey:@"likedBy"];
+    [relation removeObject:user];
+    [listing incrementKey:@"likeCount" byAmount:@(-1)];
+    [listing saveInBackground];
 }
 
 + (PFFileObject *)getPFFileFromImage: (UIImage * _Nullable)image {
