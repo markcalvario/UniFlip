@@ -12,6 +12,14 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *)self.listingCollectionView.collectionViewLayout;
+    layout.minimumLineSpacing = 1;
+    layout.minimumInteritemSpacing = 1;
+    CGFloat postsPerRow = 2;
+    CGFloat itemWidth = (self.listingCollectionView.frame.size.width - layout.minimumInteritemSpacing * (postsPerRow) )/ postsPerRow;
+    CGFloat itemHeight = itemWidth * 1;
+    layout.itemSize = CGSizeMake(itemWidth, itemHeight);
+    
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -19,5 +27,7 @@
 
     // Configure the view for the selected state
 }
+
+
 
 @end
