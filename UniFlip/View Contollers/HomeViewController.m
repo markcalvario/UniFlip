@@ -17,6 +17,7 @@
 @property (strong, nonatomic) NSMutableDictionary *categoryToArrayOfPosts;
 @property (strong, nonatomic) NSMutableArray *arrayOfCategories;
 @property (strong, nonatomic) NSString *currentCategory;
+@property (strong, nonatomic) NSMutableArray *arrayOfTableViewCells;
 @end
 
 @implementation HomeViewController
@@ -28,6 +29,7 @@
     self.listingCategoryTableView.dataSource = self;
     self.categoryToArrayOfPosts = [NSMutableDictionary dictionary];
     self.arrayOfCategories = [NSMutableArray array];
+    self.arrayOfTableViewCells = [NSMutableArray array];
     [self getListingsByCategory];
     
 
@@ -81,7 +83,7 @@
         else {
             // handle error
         }
-        NSLog(@"%@", self.categoryToArrayOfPosts);
+        //NSLog(@"%@", self.categoryToArrayOfPosts);
     }];
 }
 
@@ -95,7 +97,9 @@
     cell.listingCollectionView.delegate = self;
     cell.listingCollectionView.dataSource = self;
     [cell.listingCollectionView reloadData];
-    
+    //NSLog(@"from cellForRow...: %@", cell.categoryLabel.text);
+
+    [self.arrayOfTableViewCells addObject:cell];
     
     return cell;
 }
@@ -114,7 +118,7 @@
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     ListingCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ListingCell" forIndexPath:indexPath];
     Listing *listing = self.categoryToArrayOfPosts[self.currentCategory][indexPath.row];
-    NSLog(@"%@", listing);
+    NSLog(@"loading listing title: %@", listing.listingTitle);
     cell.titleLabel.text = listing.listingTitle;
     NSString *price = listing.listingPrice;
     cell.priceLabel.text = [@"$" stringByAppendingString: price];
@@ -128,35 +132,89 @@
     
     //like button
     cell.likeButton.tag = indexPath.row;
-    [cell.likeButton setTitle:self.currentCategory forState:UIControlStateNormal];
+    [cell.likeButton setTitle: listing.listingCategory forState:UIControlStateNormal];
     cell.likeButton.titleLabel.font = [UIFont systemFontOfSize:0];
     [cell.likeButton addTarget:self action:@selector(didTapLikeIcon:) forControlEvents:UIControlEventTouchUpInside];
-    //[cell.likeButton ]
-    
+    [self updateSaveIcon: cell.likeButton didTapSaveIcon:FALSE];
+        
     return cell;
 }
 
 -(void) didTapLikeIcon:(UIButton *)sender{
-    Listing *listing = self.categoryToArrayOfPosts[[sender currentTitle]][sender.tag];
+    NSString *category = [sender currentTitle];
+    self.currentCategory = category;
+    CategoryCell *cell = self.arrayOfTableViewCells[ [self.arrayOfCategories indexOfObject:category]];
+    Listing *listing = self.categoryToArrayOfPosts[category][sender.tag];
+    NSLog(@"updating listing title: %@", listing.listingTitle);
+    NSLog(@"updating this table view cell: %@", cell.categoryLabel.text);
     PFUser *currentUser = [PFUser currentUser];
     __block bool hasUserLikedListing = YES;
-    PFRelation *relation = [listing relationForKey:@"likedBy"];
+    PFRelation *relation = [listing relationForKey:@"savedBy"];
     PFQuery *queryForUsers = [relation query];
     [queryForUsers findObjectsInBackgroundWithBlock:^(NSArray * _Nullable arrayOfUsers, NSError * _Nullable error) {
         for (PFUser *user in arrayOfUsers){
             if ([user.objectId isEqualToString:currentUser.objectId]){
-                NSLog(@"user has not liked this listing");
+                NSLog(@"user has not saved this listing");
                 hasUserLikedListing = NO;
                 sender.selected = YES;
-                [Listing postUserUnlike:listing withUser:currentUser withCompetion:^(BOOL succeeded, NSError * _Nullable error) {}];
+                [Listing postUserUnsave:listing withUser:currentUser withCompetion:^(BOOL succeeded, NSError * _Nullable error) {}];
+                [cell.listingCollectionView reloadData];
             }
         }
         if (hasUserLikedListing){
-            NSLog(@"user has been liked this listing");
+            NSLog(@"user has saved this listing");
             sender.selected = NO;
-            [Listing postUserLike:listing withUser:currentUser withCompetion:^(BOOL succeeded, NSError * _Nullable error) {}];
+            [Listing postUserSave:listing withUser:currentUser withCompetion:^(BOOL succeeded, NSError * _Nullable error) {}];
+            [cell.listingCollectionView reloadData];
+
         }
     }];
+    
+    //[self updateSaveIcon: sender didTapSaveIcon:TRUE];
+}
+
+-(void) updateSaveIcon: (UIButton *) saveButton didTapSaveIcon: (BOOL) didTapSaveIcon{
+    /*NSString *category = [saveButton currentTitle];
+    self.currentCategory = category;
+    CategoryCell *cell = self.arrayOfTableViewCells[ [self.arrayOfCategories indexOfObject:category]];
+    Listing *listing = self.categoryToArrayOfPosts[category][saveButton.tag];
+    NSLog(@"updating listing title: %@", listing.listingTitle);
+    NSLog(@"updating this table view cell: %@", cell.categoryLabel.text);
+    PFUser *currentUser = [PFUser currentUser];
+    __block bool hasUserLikedListing = YES;
+    PFRelation *relation = [listing relationForKey:@"savedBy"];
+    PFQuery *queryForUsers = [relation query];
+    [queryForUsers findObjectsInBackgroundWithBlock:^(NSArray * _Nullable arrayOfUsers, NSError * _Nullable error) {
+        for (PFUser *user in arrayOfUsers){
+            if ([user.objectId isEqualToString:currentUser.objectId]){
+                NSLog(@"user has not saved this listing");
+                hasUserLikedListing = NO;
+                saveButton.selected = YES;
+                [Listing postUserUnsave:listing withUser:currentUser withCompetion:^(BOOL succeeded, NSError * _Nullable error) {}];
+                if (didTapSaveIcon){
+                    [cell.listingCollectionView reloadData];
+                }
+            }
+        }
+        if (hasUserLikedListing){
+            NSLog(@"user has saved this listing");
+            saveButton.selected = NO;
+            [Listing postUserSave:listing withUser:currentUser withCompetion:^(BOOL succeeded, NSError * _Nullable error) {}];
+            if (didTapSaveIcon){
+                [cell.listingCollectionView reloadData];
+            }
+
+        }
+    }];*/
+    if (saveButton.selected){
+        [saveButton setImage:[UIImage imageNamed:@"saved_icon"] forState:UIControlStateNormal];
+        //NSLog(@"Should be saved icon for %@", saveButton.currentTitle);
+
+    }
+    else{
+        [saveButton setImage:[UIImage imageNamed:@"unsaved_icon"] forState:UIControlStateNormal];
+        //NSLog(@"Should be unsaved icon for %@", saveButton.currentTitle);
+    }
 }
 /*
 #pragma mark - Navigation

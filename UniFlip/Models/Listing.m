@@ -21,7 +21,7 @@
 @dynamic listingCondition;
 @dynamic listingPrice;
 @dynamic isReported;
-@dynamic likeCount;
+@dynamic saveCount;
 
 
 + (nonnull NSString *)parseClassName {
@@ -42,22 +42,22 @@
     newListing.listingCondition = condition;
     newListing.listingPrice = price;
     newListing.isReported = FALSE;
-    newListing.likeCount = @(0);
+    newListing.saveCount = @(0);
     [newListing saveInBackgroundWithBlock:completion];
     
     
 }
 
-+ (void) postUserLike: (Listing *)listing withUser: (PFUser *)user withCompetion:(PFBooleanResultBlock  _Nullable)completion{
-    PFRelation *relation = [listing relationForKey:@"likedBy"];
++ (void) postUserSave: (Listing *)listing withUser: (PFUser *)user withCompetion:(PFBooleanResultBlock  _Nullable)completion{
+    PFRelation *relation = [listing relationForKey:@"savedBy"];
     [relation addObject:user];
-    [listing incrementKey:@"likeCount" byAmount:@(1)];
+    [listing incrementKey:@"saveCount" byAmount:@(1)];
     [listing saveInBackground];
 }
-+ (void) postUserUnlike: (Listing *)listing withUser: (PFUser *)user withCompetion:(PFBooleanResultBlock  _Nullable)completion{
-    PFRelation *relation = [listing relationForKey:@"likedBy"];
++ (void) postUserUnsave: (Listing *)listing withUser: (PFUser *)user withCompetion:(PFBooleanResultBlock  _Nullable)completion{
+    PFRelation *relation = [listing relationForKey:@"savedBy"];
     [relation removeObject:user];
-    [listing incrementKey:@"likeCount" byAmount:@(-1)];
+    [listing incrementKey:@"saveCount" byAmount:@(-1)];
     [listing saveInBackground];
 }
 

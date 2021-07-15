@@ -22,13 +22,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *listingCondition;
 @property (nonatomic, strong) NSString *listingPrice;
 @property (nonatomic) BOOL isReported;
-@property (nonatomic, strong) NSNumber *likeCount;
+@property (nonatomic, strong) NSNumber *saveCount;
 
 
 ///Methods
 + (void) postUserListing:(UIImage * _Nullable)image withTitle:(NSString * _Nullable)title withType:(NSString * _Nullable)type withDescription:(NSString * _Nullable)description withLocation:(NSString * _Nullable)location withCategory:(NSString * _Nullable)category withBrand:(NSString * _Nullable)brand withCondition:(NSString * _Nullable)condition withPrice:(NSString * _Nullable)price withCompletion: (PFBooleanResultBlock  _Nullable)completion;
-+ (void) postUserLike: (Listing *)listing withUser: (PFUser *)user withCompetion:(PFBooleanResultBlock  _Nullable)completion;
-+ (void) postUserUnlike: (Listing *)listing withUser: (PFUser *)user withCompetion:(PFBooleanResultBlock  _Nullable)completion;
++ (void) postUserSave: (Listing *)listing withUser: (PFUser *)user withCompetion:(PFBooleanResultBlock  _Nullable)completion;
++ (void) postUserUnsave: (Listing *)listing withUser: (PFUser *)user withCompetion:(PFBooleanResultBlock  _Nullable)completion;
 + (PFFileObject *)getPFFileFromImage: (UIImage * _Nullable)image;
 - (UIImage *)resizeImage:(UIImage *)image withSize:(CGSize)size;
 @end
