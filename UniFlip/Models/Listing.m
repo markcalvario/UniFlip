@@ -77,6 +77,18 @@
     return [PFFileObject fileObjectWithName:@"image.jpeg" data:imageData];
 }
 
++ (void) PFFileToUIImage: (PFFileObject *)imageFile completion:(void(^)(UIImage *, NSError *))completion{
+    [imageFile getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
+        if (!error) {
+            UIImage *image = [UIImage imageWithData:imageData];
+            completion(image, nil);
+        }
+        else{
+            completion(nil, error);
+        }
+    }];
+    
+}
 
 - (UIImage *)resizeImage:(UIImage *)image withSize:(CGSize)size {
     UIImageView *resizeImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];

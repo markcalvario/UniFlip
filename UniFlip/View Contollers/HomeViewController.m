@@ -16,8 +16,10 @@
 @property (weak, nonatomic) IBOutlet UITableView *listingCategoryTableView;
 @property (strong, nonatomic) NSMutableDictionary *categoryToArrayOfPosts;
 @property (strong, nonatomic) NSMutableArray *arrayOfCategories;
+@property (strong, nonatomic) NSArray *arrayOfListings;
 @property (strong, nonatomic) NSString *currentCategory;
 @property (strong, nonatomic) NSMutableArray *arrayOfTableViewCells;
+
 @end
 
 @implementation HomeViewController
@@ -30,34 +32,18 @@
     self.categoryToArrayOfPosts = [NSMutableDictionary dictionary];
     self.arrayOfCategories = [NSMutableArray array];
     self.arrayOfTableViewCells = [NSMutableArray array];
-    [self getListingsByCategory];
+    //[self getListingsByCategory];
     
 
 }
-/*-(void) viewWillAppear:(BOOL)animated{
+-(void) viewWillAppear:(BOOL)animated{
     [self getListingsByCategory];
-}
-*/
-
-- (IBAction)didTapLogOut:(id)sender {
-    SceneDelegate *myDelegate = (SceneDelegate *)self.view.window.windowScene.delegate;
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    UIViewController *loginViewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
-    myDelegate.window.rootViewController = loginViewController;
-    [PFUser logOutInBackgroundWithBlock:^(NSError * _Nullable error) {
-        // PFUser.current() will now be nil
-    }];
-}
-- (IBAction)didTapExitKeyboard:(id)sender {
-    [self.view endEditing:TRUE];
 }
 
 -(void) getListingsByCategory{
     PFQuery *queryListings = [PFQuery queryWithClassName:@"Listing"];
     [queryListings orderByDescending:@"createdAt"];
     [queryListings includeKey:@"listingCategory"];
-    
-    
     // fetch data asynchronously
     [queryListings findObjectsInBackgroundWithBlock:^(NSArray<Listing *> * _Nullable listings, NSError * _Nullable error) {
         if (listings) {
@@ -68,25 +54,53 @@
                     NSMutableArray *arrayOfListingsValue = [self.categoryToArrayOfPosts objectForKey:category];
                     [arrayOfListingsValue addObject:listing];
                     [self.categoryToArrayOfPosts setObject:arrayOfListingsValue forKey:category];
-                    
                 }
                 else{
                     NSMutableArray *arrayOfListingsValue = [[NSMutableArray alloc] init];
                     [arrayOfListingsValue addObject:listing];
-                    
                     [self.arrayOfCategories addObject: category];
                     [self.categoryToArrayOfPosts setObject:arrayOfListingsValue forKey:category];
                 }
             }
             [self.listingCategoryTableView reloadData];
         }
-        else {
-            // handle error
-        }
-        //NSLog(@"%@", self.categoryToArrayOfPosts);
+        else {        }
     }];
 }
 
+-(void) getSavedListingsByUser: (Listing *)listing completion:(void(^)(BOOL hasSavedListing))hasSavedListing{
+    __block bool hasUserLikedListing = YES;
+    PFUser *currentUser = [PFUser currentUser];
+    PFRelation *relation = [listing relationForKey:@"savedBy"];
+    PFQuery *queryForUsers = [relation query];
+    [queryForUsers findObjectsInBackgroundWithBlock:^(NSArray * _Nullable arrayOfUsers, NSError * _Nullable error) {
+        //NSLog(@"%@", arrayOfUsers);
+        for (PFUser *user in arrayOfUsers){
+            if ([user.objectId isEqualToString:currentUser.objectId]){
+                NSLog(@"user has not saved this listing");
+                hasUserLikedListing = NO;
+                hasSavedListing(true);
+            }
+        }
+        if (hasUserLikedListing){
+            NSLog(@"user has saved this listing");
+            hasSavedListing(false);
+        }
+    }];
+}
+
+#pragma mark - Action Handlers
+
+- (IBAction)didTapLogOut:(id)sender {
+    SceneDelegate *myDelegate = (SceneDelegate *)self.view.window.windowScene.delegate;
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    UIViewController *loginViewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+    myDelegate.window.rootViewController = loginViewController;
+    [PFUser logOutInBackgroundWithBlock:^(NSError * _Nullable error) {    }];
+}
+- (IBAction)didTapExitKeyboard:(id)sender {
+    [self.view endEditing:TRUE];
+}
 
 #pragma mark - Table View
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
@@ -96,28 +110,34 @@
     cell.categoryLabel.text = category;
     cell.listingCollectionView.delegate = self;
     cell.listingCollectionView.dataSource = self;
-    [cell.listingCollectionView reloadData];
+    cell.listingCollectionView.tag = indexPath.row;
+    
+    //cell.listingCollectionView.parent
     //NSLog(@"from cellForRow...: %@", cell.categoryLabel.text);
+    cell.listingCollectionView.scrollEnabled = NO;
 
     [self.arrayOfTableViewCells addObject:cell];
     
     return cell;
 }
-
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return [self.categoryToArrayOfPosts count];
 }
 
-#pragma mark - Collection View
 
+#pragma mark - Collection View
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
-    NSInteger lengthOfArray = [self.categoryToArrayOfPosts[self.currentCategory] count];
+    NSString *category = self.arrayOfCategories[collectionView.tag];
+    //NSInteger lengthOfArray = [self.categoryToArrayOfPosts[self.currentCategory] count];
+    NSInteger lengthOfArray = [self.categoryToArrayOfPosts[category] count];
+
     return lengthOfArray;
 }
-
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     ListingCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ListingCell" forIndexPath:indexPath];
-    Listing *listing = self.categoryToArrayOfPosts[self.currentCategory][indexPath.row];
+    NSString *category = self.arrayOfCategories[collectionView.tag];
+    //Listing *listing = self.categoryToArrayOfPosts[self.currentCategory][indexPath.row];
+    Listing *listing = self.categoryToArrayOfPosts[category][indexPath.row];
     NSLog(@"loading listing title: %@", listing.listingTitle);
     cell.titleLabel.text = listing.listingTitle;
     NSString *price = listing.listingPrice;
@@ -129,14 +149,21 @@
                     [cell.imageButton setImage:image forState:UIControlStateNormal];
                 }
             }];
-    
     //like button
     cell.likeButton.tag = indexPath.row;
     [cell.likeButton setTitle: listing.listingCategory forState:UIControlStateNormal];
     cell.likeButton.titleLabel.font = [UIFont systemFontOfSize:0];
-    [cell.likeButton addTarget:self action:@selector(didTapLikeIcon:) forControlEvents:UIControlEventTouchUpInside];
-    [self updateSaveIcon: cell.likeButton didTapSaveIcon:FALSE];
-        
+    //[cell.likeButton addTarget:self action:@selector(didTapLikeIcon:) forControlEvents:UIControlEventTouchUpInside];
+    /*[self getSavedListingsByUser:listing completion:^(BOOL hasSavedListing) {
+        NSLog(@"%@", listing.listingTitle);
+        if (hasSavedListing){
+            [cell.likeButton setImage:[UIImage imageNamed:@"saved_icon"] forState:UIControlStateNormal];
+        }
+        else{
+            [cell.likeButton setImage:[UIImage imageNamed:@"unsaved_icon"] forState:UIControlStateNormal];
+        }
+    }];*/
+    
     return cell;
 }
 
@@ -153,7 +180,7 @@
     PFQuery *queryForUsers = [relation query];
     [queryForUsers findObjectsInBackgroundWithBlock:^(NSArray * _Nullable arrayOfUsers, NSError * _Nullable error) {
         for (PFUser *user in arrayOfUsers){
-            if ([user.objectId isEqualToString:currentUser.objectId]){
+            if ([user.username isEqualToString:currentUser.username]){
                 NSLog(@"user has not saved this listing");
                 hasUserLikedListing = NO;
                 sender.selected = YES;
@@ -169,53 +196,13 @@
 
         }
     }];
-    
-    //[self updateSaveIcon: sender didTapSaveIcon:TRUE];
 }
 
--(void) updateSaveIcon: (UIButton *) saveButton didTapSaveIcon: (BOOL) didTapSaveIcon{
-    /*NSString *category = [saveButton currentTitle];
-    self.currentCategory = category;
-    CategoryCell *cell = self.arrayOfTableViewCells[ [self.arrayOfCategories indexOfObject:category]];
-    Listing *listing = self.categoryToArrayOfPosts[category][saveButton.tag];
-    NSLog(@"updating listing title: %@", listing.listingTitle);
-    NSLog(@"updating this table view cell: %@", cell.categoryLabel.text);
-    PFUser *currentUser = [PFUser currentUser];
-    __block bool hasUserLikedListing = YES;
-    PFRelation *relation = [listing relationForKey:@"savedBy"];
-    PFQuery *queryForUsers = [relation query];
-    [queryForUsers findObjectsInBackgroundWithBlock:^(NSArray * _Nullable arrayOfUsers, NSError * _Nullable error) {
-        for (PFUser *user in arrayOfUsers){
-            if ([user.objectId isEqualToString:currentUser.objectId]){
-                NSLog(@"user has not saved this listing");
-                hasUserLikedListing = NO;
-                saveButton.selected = YES;
-                [Listing postUserUnsave:listing withUser:currentUser withCompetion:^(BOOL succeeded, NSError * _Nullable error) {}];
-                if (didTapSaveIcon){
-                    [cell.listingCollectionView reloadData];
-                }
-            }
-        }
-        if (hasUserLikedListing){
-            NSLog(@"user has saved this listing");
-            saveButton.selected = NO;
-            [Listing postUserSave:listing withUser:currentUser withCompetion:^(BOOL succeeded, NSError * _Nullable error) {}];
-            if (didTapSaveIcon){
-                [cell.listingCollectionView reloadData];
-            }
 
-        }
-    }];*/
-    if (saveButton.selected){
-        [saveButton setImage:[UIImage imageNamed:@"saved_icon"] forState:UIControlStateNormal];
-        //NSLog(@"Should be saved icon for %@", saveButton.currentTitle);
 
-    }
-    else{
-        [saveButton setImage:[UIImage imageNamed:@"unsaved_icon"] forState:UIControlStateNormal];
-        //NSLog(@"Should be unsaved icon for %@", saveButton.currentTitle);
-    }
-}
+
+
+
 /*
 #pragma mark - Navigation
 

@@ -28,6 +28,8 @@
 		D0B7A63E269FB3E30029D204 /* Listing.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B7A63D269FB3E30029D204 /* Listing.m */; };
 		D0B7A641269FD5710029D204 /* CategoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B7A640269FD5710029D204 /* CategoryCell.m */; };
 		D0B7A644269FDA730029D204 /* ListingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B7A643269FDA730029D204 /* ListingCell.m */; };
+		D0B7A64A26A13F790029D204 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B7A64926A13F790029D204 /* ProfileViewController.m */; };
+		D0B7A65026A144A70029D204 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B7A64F26A144A70029D204 /* User.m */; };
 		D56325CDB651DCF1D6E74995 /* Pods_UniFlip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 896002A9551245D6FC5C1603 /* Pods_UniFlip.framework */; };
 		EEF5230230B5B4982AA7A2F1 /* Pods_UniFlipTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E75917EC6DEA44684821653 /* Pods_UniFlipTests.framework */; };
 /* End PBXBuildFile section */
@@ -98,6 +100,10 @@
 		D0B7A640269FD5710029D204 /* CategoryCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CategoryCell.m; sourceTree = "<group>"; };
 		D0B7A642269FDA730029D204 /* ListingCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ListingCell.h; sourceTree = "<group>"; };
 		D0B7A643269FDA730029D204 /* ListingCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ListingCell.m; sourceTree = "<group>"; };
+		D0B7A64826A13F790029D204 /* ProfileViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
+		D0B7A64926A13F790029D204 /* ProfileViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
+		D0B7A64E26A144A70029D204 /* User.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		D0B7A64F26A144A70029D204 /* User.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -226,6 +232,8 @@
 				D0B7A630269E8C530029D204 /* SelectOptionViewController.m */,
 				D0B7A636269F4A760029D204 /* PlaceAutocompleteViewController.h */,
 				D0B7A637269F4A760029D204 /* PlaceAutocompleteViewController.m */,
+				D0B7A64826A13F790029D204 /* ProfileViewController.h */,
+				D0B7A64926A13F790029D204 /* ProfileViewController.m */,
 			);
 			path = "View Contollers";
 			sourceTree = "<group>";
@@ -250,6 +258,8 @@
 			children = (
 				D0B7A63C269FB3E30029D204 /* Listing.h */,
 				D0B7A63D269FB3E30029D204 /* Listing.m */,
+				D0B7A64E26A144A70029D204 /* User.h */,
+				D0B7A64F26A144A70029D204 /* User.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -528,10 +538,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0B7A65026A144A70029D204 /* User.m in Sources */,
 				D0B7A644269FDA730029D204 /* ListingCell.m in Sources */,
 				D09FFDE1269CAF50008B33B5 /* NewAccountViewController.m in Sources */,
 				D09FFDDB269C2322008B33B5 /* LoginViewController.m in Sources */,
 				D0B7A634269E934D0029D204 /* OptionCell.m in Sources */,
+				D0B7A64A26A13F790029D204 /* ProfileViewController.m in Sources */,
 				D09FFDA5269C2174008B33B5 /* AppDelegate.m in Sources */,
 				D09FFDB6269C2176008B33B5 /* main.m in Sources */,
 				D0B7A641269FD5710029D204 /* CategoryCell.m in Sources */,
