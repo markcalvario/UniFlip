@@ -22,6 +22,7 @@
 @dynamic listingPrice;
 @dynamic isReported;
 @dynamic saveCount;
+@dynamic isSaved;
 
 
 + (nonnull NSString *)parseClassName {
@@ -43,6 +44,7 @@
     newListing.listingPrice = price;
     newListing.isReported = FALSE;
     newListing.saveCount = @(0);
+    newListing.isSaved = FALSE;
     [newListing saveInBackgroundWithBlock:completion];
     
     

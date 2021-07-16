@@ -23,6 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *listingPrice;
 @property (nonatomic) BOOL isReported;
 @property (nonatomic, strong) NSNumber *saveCount;
+@property (nonatomic) BOOL isSaved;
 
 
 ///Methods

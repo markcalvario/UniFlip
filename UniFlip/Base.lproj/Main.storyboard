@@ -619,7 +619,7 @@
                                                 <state key="normal" image="default_profile_pic"/>
                                             </button>
                                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ump-lS-Fur">
-                                                <rect key="frame" x="0.0" y="150" width="414" height="577"/>
+                                                <rect key="frame" x="0.0" y="219" width="414" height="508"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="xuH-g6-z4c">
                                                     <size key="itemSize" width="169" height="239"/>
@@ -672,6 +672,32 @@
                                                     </collectionViewCell>
                                                 </cells>
                                             </collectionView>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FzF-Lw-tBN">
+                                                <rect key="frame" x="8" y="181" width="197" height="30"/>
+                                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="197" id="BdR-OR-VUd"/>
+                                                </constraints>
+                                                <state key="normal" title="Your Listings">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="didTapGetOwnListings:" destination="RaW-Wm-Soe" eventType="touchUpInside" id="jzd-am-rJp"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i6B-VY-SgN">
+                                                <rect key="frame" x="209" y="181" width="197" height="30"/>
+                                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="197" id="dcW-fr-DQZ"/>
+                                                </constraints>
+                                                <state key="normal" title="Saved">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="didTapGetSavedListings:" destination="RaW-Wm-Soe" eventType="touchUpInside" id="gVx-kZ-tbk"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
@@ -681,12 +707,16 @@
                                             <constraint firstItem="YXr-ek-GJ3" firstAttribute="leading" secondItem="nD5-vE-Lv2" secondAttribute="leading" id="DRB-sM-7go"/>
                                             <constraint firstItem="nD5-vE-Lv2" firstAttribute="leading" secondItem="4b4-Tg-lbI" secondAttribute="leading" constant="8" id="DW4-eI-uFs"/>
                                             <constraint firstAttribute="trailing" secondItem="Cvb-Rs-t7A" secondAttribute="trailing" constant="8" id="Nmq-1p-MGL"/>
-                                            <constraint firstItem="ump-lS-Fur" firstAttribute="top" secondItem="YXr-ek-GJ3" secondAttribute="bottom" constant="4.5" id="Ymy-Lo-kqc"/>
+                                            <constraint firstItem="ump-lS-Fur" firstAttribute="top" secondItem="FzF-Lw-tBN" secondAttribute="bottom" constant="8" symbolic="YES" id="OSV-uD-tV2"/>
+                                            <constraint firstItem="i6B-VY-SgN" firstAttribute="top" secondItem="FzF-Lw-tBN" secondAttribute="top" id="U14-zm-gtH"/>
                                             <constraint firstItem="Cvb-Rs-t7A" firstAttribute="top" secondItem="nD5-vE-Lv2" secondAttribute="bottom" constant="8" symbolic="YES" id="Z17-ao-P8M"/>
                                             <constraint firstAttribute="trailing" secondItem="ump-lS-Fur" secondAttribute="trailing" id="Zux-jl-gJH"/>
+                                            <constraint firstItem="i6B-VY-SgN" firstAttribute="leading" secondItem="FzF-Lw-tBN" secondAttribute="trailing" constant="4" id="dMc-Hc-gGO"/>
                                             <constraint firstItem="Cvb-Rs-t7A" firstAttribute="leading" secondItem="nD5-vE-Lv2" secondAttribute="leading" id="euL-Py-p3M"/>
                                             <constraint firstAttribute="trailing" secondItem="YXr-ek-GJ3" secondAttribute="trailing" constant="8" id="kk8-0x-yq9"/>
+                                            <constraint firstItem="FzF-Lw-tBN" firstAttribute="leading" secondItem="YXr-ek-GJ3" secondAttribute="leading" id="lEg-gI-PwA"/>
                                             <constraint firstItem="nD5-vE-Lv2" firstAttribute="top" secondItem="4b4-Tg-lbI" secondAttribute="top" constant="8" id="siP-x5-K7e"/>
+                                            <constraint firstItem="FzF-Lw-tBN" firstAttribute="top" secondItem="YXr-ek-GJ3" secondAttribute="bottom" constant="35.5" id="vgK-xf-e9S"/>
                                         </constraints>
                                     </view>
                                 </subviews>
