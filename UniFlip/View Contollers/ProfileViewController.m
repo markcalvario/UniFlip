@@ -36,6 +36,7 @@ BOOL showUserListings = TRUE;
     [self setProfileScreen];
     [self setCollectionViewStyle];
 
+    
 }
 
 -(void) setProfileScreen{
@@ -50,46 +51,23 @@ BOOL showUserListings = TRUE;
     }
     */
     if (showUserListings){
-        [self getListingsMadeByUser];
+        [self getListingsBasedOnSavedButton:TRUE];
     }
-}
--(void) getListingsMadeByUser{
-    PFQuery *query = [PFQuery queryWithClassName:@"Listing"];
-    [query includeKey:@"savedBy"];
-    [query orderByDescending:@"createdAt"];
-    [query whereKey:@"author" equalTo:self.user];
-    // fetch data asynchronously
-    [query findObjectsInBackgroundWithBlock:^(NSArray *listings, NSError *error) {
-        if (listings != nil) {
-            // do something with the array of object returned by the call
-            self.arrayOfListings = (NSMutableArray *) listings;
-            [self.listingsCollectionView reloadData];
-        } else {
-            NSLog(@"%@", error.localizedDescription);
-        }
-    }];
+    else{
+        [self getListingsBasedOnSavedButton:FALSE];
+    }
 }
 
 #pragma mark - If User wants their saved listings
--(void) getAllListings{
-    PFQuery *query = [PFQuery queryWithClassName:@"Listing"];
-    [query includeKey:@"author"];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *listings, NSError *error) {
-        if (listings != nil) {
-            self.arrayOfListings = (NSMutableArray *) listings;
-        }
-        else {
-            NSLog(@"%@", error.localizedDescription);
-        }
-    }];
-}
-
--(void) getListingsSavedByUser {
+-(void) getListingsBasedOnSavedButton: (BOOL) getAllUserListings {
     dispatch_group_t dispatchGroup = dispatch_group_create();
     PFQuery *query = [Listing query];
     [query includeKey:@"savedBy"];
     [query orderByDescending:@"createdAt"];
     [query includeKey:@"author"];
+    if (getAllUserListings){
+        [query whereKey:@"author" equalTo:self.user];
+    }
     NSMutableArray *savedListings = [NSMutableArray array];
     [query findObjectsInBackgroundWithBlock:^(NSArray *listings, NSError *error) {
         if (listings != nil) {
@@ -106,9 +84,12 @@ BOOL showUserListings = TRUE;
                                 listing.isSaved = TRUE;
                                 [savedListings addObject:listing];
                             }
-                            else{
-                                NSLog(@"user has not saved this listing");
-                            }
+                        }
+                        if (getAllUserListings && (!listing.isSaved)){
+                            listing.isSaved = FALSE;
+                            [savedListings addObject:listing]; //maybe refactor
+                            NSLog(@"user has not saved this listing");
+
                         }
                         self.arrayOfListings = savedListings;
                     }else{
@@ -116,7 +97,9 @@ BOOL showUserListings = TRUE;
                     }
                     dispatch_group_leave(dispatchGroup);
                 }];
+            
             }
+            
         } else {
             NSLog(@"%@", error.localizedDescription);
         }
@@ -133,7 +116,7 @@ BOOL showUserListings = TRUE;
 }
 - (IBAction)didTapGetSavedListings:(id)sender {
     showUserListings = FALSE;
-    [self getListingsSavedByUser];
+    [self setProfileScreen];
 }
 
 
@@ -148,6 +131,13 @@ BOOL showUserListings = TRUE;
     NSString *price = [@"$" stringByAppendingString:listing.listingPrice];
     cell.profileListingPriceLabel.text = price;
     cell.profileListingTitleLabel.text = listing.listingTitle;
+    NSLog(@"listing: %@ isSaved: %d", listing.listingTitle, listing.isSaved);
+    if (listing.isSaved){
+        [cell.profileListingSaveButton setImage:[UIImage imageNamed:@"saved_icon"] forState:UIControlStateNormal];
+    }
+    else{
+        [cell.profileListingSaveButton setImage:[UIImage imageNamed:@"unsaved_icon"] forState:UIControlStateNormal];
+    }
     
     return cell;
 }

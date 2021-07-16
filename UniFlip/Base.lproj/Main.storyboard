@@ -621,9 +621,8 @@
                                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ump-lS-Fur">
                                                 <rect key="frame" x="0.0" y="219" width="414" height="508"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="xuH-g6-z4c">
-                                                    <size key="itemSize" width="169" height="239"/>
-                                                    <size key="estimatedItemSize" width="169" height="239"/>
+                                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="FFb-Mk-NwE">
+                                                    <size key="itemSize" width="128" height="128"/>
                                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -676,7 +675,7 @@
                                                 <rect key="frame" x="8" y="181" width="197" height="30"/>
                                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="197" id="BdR-OR-VUd"/>
+                                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="197" id="BdR-OR-VUd"/>
                                                 </constraints>
                                                 <state key="normal" title="Your Listings">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -689,7 +688,7 @@
                                                 <rect key="frame" x="209" y="181" width="197" height="30"/>
                                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="197" id="dcW-fr-DQZ"/>
+                                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="197" id="dcW-fr-DQZ"/>
                                                 </constraints>
                                                 <state key="normal" title="Saved">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -709,6 +708,7 @@
                                             <constraint firstAttribute="trailing" secondItem="Cvb-Rs-t7A" secondAttribute="trailing" constant="8" id="Nmq-1p-MGL"/>
                                             <constraint firstItem="ump-lS-Fur" firstAttribute="top" secondItem="FzF-Lw-tBN" secondAttribute="bottom" constant="8" symbolic="YES" id="OSV-uD-tV2"/>
                                             <constraint firstItem="i6B-VY-SgN" firstAttribute="top" secondItem="FzF-Lw-tBN" secondAttribute="top" id="U14-zm-gtH"/>
+                                            <constraint firstAttribute="trailing" secondItem="i6B-VY-SgN" secondAttribute="trailing" constant="8" id="Vts-dt-Fux"/>
                                             <constraint firstItem="Cvb-Rs-t7A" firstAttribute="top" secondItem="nD5-vE-Lv2" secondAttribute="bottom" constant="8" symbolic="YES" id="Z17-ao-P8M"/>
                                             <constraint firstAttribute="trailing" secondItem="ump-lS-Fur" secondAttribute="trailing" id="Zux-jl-gJH"/>
                                             <constraint firstItem="i6B-VY-SgN" firstAttribute="leading" secondItem="FzF-Lw-tBN" secondAttribute="trailing" constant="4" id="dMc-Hc-gGO"/>
