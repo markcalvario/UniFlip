@@ -6,11 +6,13 @@ PODS:
     - Parse/Core (= 1.19.2)
   - Parse/Core (1.19.2):
     - Bolts/Tasks (= 1.9.1)
+  - "UITextView+Placeholder (1.4.0)"
 
 DEPENDENCIES:
   - DateTools
   - GooglePlaces
   - Parse
+  - "UITextView+Placeholder"
 
 SPEC REPOS:
   trunk:
@@ -18,13 +20,15 @@ SPEC REPOS:
     - DateTools
     - GooglePlaces
     - Parse
+    - "UITextView+Placeholder"
 
 SPEC CHECKSUMS:
   Bolts: 8c1e8aab2f603387b8b9924f57d1d64f43d3ffdc
   DateTools: 933ac9c490f21f92127cf690ccd8c397e0126caf
   GooglePlaces: 5d87ca13ed98b7a937e0d8bc7026f718c7263271
   Parse: 081fb8755c3000fd11df817eec235def233d0af3
+  "UITextView+Placeholder": d7b0c400921f66523f3a85d74f774512e14f6502
 
-PODFILE CHECKSUM: 8a6e0a4b790d798c5ed623aa02bb587a6b1e1c99
+PODFILE CHECKSUM: e383b73ea0322f43c5edca89092c1d90b6ead140
 
 COCOAPODS: 1.10.1

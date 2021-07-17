@@ -9,6 +9,7 @@ target 'UniFlip' do
   pod "Parse"
   pod "DateTools"
   pod 'GooglePlaces'
+  pod 'UITextView+Placeholder'
 
   target 'UniFlipTests' do
     inherit! :search_paths

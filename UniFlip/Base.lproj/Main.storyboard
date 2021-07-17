@@ -172,7 +172,7 @@
                                                         <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                                     </collectionViewFlowLayout>
                                                     <cells>
-                                                        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ListingCell" id="SYE-JW-3ZV" customClass="ListingCell">
+                                                        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="HomeScreenListingCell" id="SYE-JW-3ZV" customClass="ListingCell">
                                                             <rect key="frame" x="0.0" y="0.0" width="169" height="239"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="dAD-i9-W5k">
@@ -212,6 +212,9 @@
                                                                             <constraint firstAttribute="height" constant="20" id="mfp-Rn-hTH"/>
                                                                         </constraints>
                                                                         <state key="normal" image="unsaved_icon"/>
+                                                                        <connections>
+                                                                            <action selector="didTapSaveIcon:" destination="HO4-Lc-3CA" eventType="touchUpInside" id="gKK-1J-r2z"/>
+                                                                        </connections>
                                                                     </button>
                                                                 </subviews>
                                                                 <constraints>
@@ -231,8 +234,8 @@
                                                             <size key="customSize" width="169" height="239"/>
                                                             <connections>
                                                                 <outlet property="imageButton" destination="HcP-dv-dXP" id="Pbh-xW-mUD"/>
-                                                                <outlet property="likeButton" destination="pf3-sQ-5qw" id="aBh-Th-PHL"/>
                                                                 <outlet property="priceLabel" destination="h9j-0Q-DWM" id="wii-vT-Zfj"/>
+                                                                <outlet property="saveButton" destination="pf3-sQ-5qw" id="4oP-MO-yLK"/>
                                                                 <outlet property="titleLabel" destination="B3f-A3-IVG" id="guD-wB-ziH"/>
                                                             </connections>
                                                         </collectionViewCell>
@@ -334,13 +337,13 @@
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits"/>
                                             </textField>
-                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Description of your listing" translatesAutoresizingMaskIntoConstraints="NO" id="rcc-tw-Q1B">
+                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rcc-tw-Q1B">
                                                 <rect key="frame" x="8" y="255" width="398" height="82"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="82" id="4jZ-hv-FeF"/>
                                                 </constraints>
-                                                <color key="textColor" systemColor="systemGray4Color"/>
+                                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                             </textView>
@@ -391,7 +394,7 @@
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits"/>
                                             </textField>
-                                            <textField opaque="NO" contentMode="scaleAspectFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Brand" textAlignment="natural" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="lyH-Al-bKA">
+                                            <textField opaque="NO" contentMode="scaleAspectFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Brand (optional)" textAlignment="natural" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="lyH-Al-bKA">
                                                 <rect key="frame" x="8" y="490" width="398" height="34"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits"/>

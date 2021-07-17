@@ -49,18 +49,31 @@
     
     
 }
-
-+ (void) postUserSave: (Listing *)listing withUser: (PFUser *)user withCompetion:(PFBooleanResultBlock  _Nullable)completion{
++ (void) postSaveListing: (Listing *)listing withUser: (PFUser *)user completion:(void(^)(BOOL , NSError *))completion{
     PFRelation *relation = [listing relationForKey:@"savedBy"];
     [relation addObject:user];
     [listing incrementKey:@"saveCount" byAmount:@(1)];
-    [listing saveInBackground];
+    [listing saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+        if (succeeded){
+            completion(TRUE, nil);
+        }
+        else{
+            completion(FALSE, error);
+        }
+    }];
 }
-+ (void) postUserUnsave: (Listing *)listing withUser: (PFUser *)user withCompetion:(PFBooleanResultBlock  _Nullable)completion{
++ (void) postUnsaveListing: (Listing *)listing withUser: (PFUser *)user completion:(void(^)(BOOL , NSError *))completion{
     PFRelation *relation = [listing relationForKey:@"savedBy"];
     [relation removeObject:user];
     [listing incrementKey:@"saveCount" byAmount:@(-1)];
-    [listing saveInBackground];
+    [listing saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+        if (succeeded){
+            completion(TRUE, nil);
+        }
+        else{
+            completion(FALSE, error);
+        }
+    }];
 }
 
 + (PFFileObject *)getPFFileFromImage: (UIImage * _Nullable)image {

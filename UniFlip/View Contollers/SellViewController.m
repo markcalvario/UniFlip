@@ -10,6 +10,7 @@
 #import "SelectOptionViewController.h"
 #import "PlaceAutocompleteViewController.h"
 #import "Listing.h"
+@import UITextView_Placeholder;
 
 @interface SellViewController ()<UINavigationControllerDelegate, UIImagePickerControllerDelegate, SelectOptionViewControllerDelege, PlaceAutocompleteDelege>
 @property (strong, nonatomic) UIAlertController *alert;
@@ -35,6 +36,9 @@
     // Do any additional setup after loading the view.
     [self setSellViewControllerStyling];
     self.imagePlaceHolder = [self.imageOfProductButton currentImage];
+    self.listingDescriptionView.placeholder = @"Description of your listing";
+
+
     
 }
 - (void) setSellViewControllerStyling{

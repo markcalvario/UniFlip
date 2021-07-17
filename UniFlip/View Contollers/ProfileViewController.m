@@ -70,7 +70,7 @@ BOOL showUserListings = TRUE;
     }
     NSMutableArray *savedListings = [NSMutableArray array];
     [query findObjectsInBackgroundWithBlock:^(NSArray *listings, NSError *error) {
-        if (listings != nil) {
+        if (listings) {
             for (Listing *listing in listings){
                 dispatch_group_enter(dispatchGroup);
                 PFRelation *relation = [listing relationForKey:@"savedBy"];
