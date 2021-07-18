@@ -14,7 +14,7 @@
 #import "User.h"
 #import <SystemConfiguration/SystemConfiguration.h>
 
-@interface HomeViewController ()<UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource>
+@interface HomeViewController ()<UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 @property (weak, nonatomic) IBOutlet UITableView *listingCategoryTableView;
 @property (strong, nonatomic) NSMutableDictionary *categoryToArrayOfPosts;
 @property (strong, nonatomic) NSMutableArray *arrayOfCategories;
@@ -34,7 +34,10 @@
     self.categoryToArrayOfPosts = [NSMutableDictionary dictionary];
     self.arrayOfCategories = [NSMutableArray array];
     [self updateListingsByCategory];
-    
+
+    //self.listingCategoryTableView.rowHeight = UITableViewAutomaticDimension;
+    //self.listingCategoryTableView.estimatedRowHeight = 294;
+
 
 }
 -(void) updateListingsByCategory{
@@ -102,8 +105,13 @@
 
     cell.listingCollectionView.tag = indexPath.row;
     cell.listingCollectionView.scrollEnabled = NO;
-    //[self.arrayOfTableViewCells addObject:cell];
     
+    /*cell.frame = tableView.bounds;
+    [cell layoutIfNeeded];
+    [cell.listingCollectionView reloadData];
+    cell.listingCollectionViewHeight.constant = cell.listingCollectionView.collectionViewLayout.collectionViewContentSize.height;*/
+
+
     return cell;
 }
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -113,8 +121,22 @@
     CategoryCell *tableViewCell = (CategoryCell *) cell;
     tableViewCell.listingCollectionView.delegate = self;
     tableViewCell.listingCollectionView.dataSource = self;
+    
+    //tableViewCell.frame = tableView.bounds;
     [tableViewCell.listingCollectionView reloadData];
+    //[tableViewCell layoutIfNeeded];
+    //tableViewCell.listingCollectionViewHeight.constant = tableViewCell.listingCollectionView.collectionViewLayout.collectionViewContentSize.height;
+
 }
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    NSString *category = self.arrayOfCategories[indexPath.row];
+    NSArray *listings = self.categoryToArrayOfPosts[category];
+    CGFloat numOfListings = listings.count;
+    CGFloat height = (245 * ceil(numOfListings/2)) + 50;
+    return height;
+}
+
 #pragma mark - Collection View
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
     NSInteger tableViewIndex = collectionView.tag;
@@ -145,12 +167,30 @@
     listingCell.saveButton.tag = indexPath.row;
     [listingCell.saveButton setTitle: listing.listingCategory forState:UIControlStateNormal];
     listingCell.saveButton.titleLabel.font = [UIFont systemFontOfSize:0];
-   // NSLog(@"%@ isSaved?: %d", listing.listingTitle, listing.isSaved);
     [self updateSaveButtonUI:listing.isSaved withButton: listingCell.saveButton];
     [listingCell.saveButton addTarget:self action:@selector(didTapSaveIcon:) forControlEvents: UIControlEventTouchUpInside];
+    
+    
+    /*CALayer* layer = listingCell.layer;
+    [layer setCornerRadius:4.0f];
+    [layer setBorderColor:[UIColor colorWithWhite:0.8 alpha:1].CGColor];
+    [layer setBorderWidth:1.0f];*/
 
     return listingCell;
 }
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
+    UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *) collectionViewLayout;
+    layout.minimumLineSpacing = 1;
+    layout.minimumInteritemSpacing = 2;
+
+    
+    CGFloat numberOfItemsPerRow = 2;
+    CGFloat itemWidth = (collectionView.frame.size.width - layout.minimumInteritemSpacing *(numberOfItemsPerRow))/numberOfItemsPerRow;
+    CGFloat itemHeight = itemWidth *1.25;
+    return CGSizeMake(itemWidth, itemHeight);
+    
+}
+
 
 
 #pragma mark - Action Handlers
@@ -190,7 +230,6 @@
     }
     
 }
-
 -(void) updateSaveButtonUI:(BOOL )isSaved withButton:(UIButton *)saveButton{
     if (isSaved){
         [saveButton setImage:[UIImage imageNamed:@"saved_icon"] forState:UIControlStateNormal];

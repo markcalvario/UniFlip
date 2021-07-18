@@ -34,7 +34,7 @@ BOOL showUserListings = TRUE;
         self.user = [User currentUser];
     }
     [self setProfileScreen];
-    [self setCollectionViewStyle];
+    //[self setCollectionViewStyle];
 
     
 }
@@ -76,7 +76,6 @@ BOOL showUserListings = TRUE;
                 PFRelation *relation = [listing relationForKey:@"savedBy"];
                 PFQuery *query = [relation query];
                 [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable arrayOfUsers, NSError * _Nullable error) {
-                    NSLog(@"%@", listing);
                     if (arrayOfUsers){
                         for (User *user in arrayOfUsers){
                             if ([user.username isEqualToString: self.user.username]){
@@ -131,7 +130,6 @@ BOOL showUserListings = TRUE;
     NSString *price = [@"$" stringByAppendingString:listing.listingPrice];
     cell.profileListingPriceLabel.text = price;
     cell.profileListingTitleLabel.text = listing.listingTitle;
-    NSLog(@"listing: %@ isSaved: %d", listing.listingTitle, listing.isSaved);
     if (listing.isSaved){
         [cell.profileListingSaveButton setImage:[UIImage imageNamed:@"saved_icon"] forState:UIControlStateNormal];
     }
@@ -145,8 +143,20 @@ BOOL showUserListings = TRUE;
     
     return self.arrayOfListings.count;
 }
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
+    UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *) collectionViewLayout;
+    layout.minimumLineSpacing = 1;
+    layout.minimumInteritemSpacing = 3;
 
--(void) setCollectionViewStyle{
+    
+    CGFloat numberOfItemsPerRow = 2;
+    CGFloat itemWidth = (collectionView.frame.size.width - (layout.minimumInteritemSpacing * (numberOfItemsPerRow)) )/numberOfItemsPerRow;
+    CGFloat itemHeight = itemWidth *1.25;
+    return CGSizeMake(itemWidth, itemHeight);
+    
+}
+
+/*-(void) setCollectionViewStyle{
     UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *)self.listingsCollectionView.collectionViewLayout;
     layout.minimumLineSpacing = 1;
     layout.minimumInteritemSpacing = 1;
@@ -154,7 +164,7 @@ BOOL showUserListings = TRUE;
     CGFloat itemWidth = (self.listingsCollectionView.frame.size.width - layout.minimumInteritemSpacing * (postsPerRow) )/ postsPerRow;
     CGFloat itemHeight = itemWidth * 1;
     layout.itemSize = CGSizeMake(itemWidth, itemHeight);
-}
+}*/
 
 /*
 #pragma mark - Navigation
