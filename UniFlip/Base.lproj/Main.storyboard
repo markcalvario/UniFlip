@@ -1116,12 +1116,24 @@
                             <constraint firstItem="cM6-57-0c1" firstAttribute="leading" secondItem="xQk-XF-QcN" secondAttribute="leading" id="wpS-Bh-bcB"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="qlv-mE-44u"/>
+                    <navigationItem key="navigationItem" id="qlv-mE-44u">
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="7pJ-if-ZWw">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="od2-Mu-fOo">
+                                <rect key="frame" x="298" y="0.0" width="96" height="44"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="unsaved_icon"/>
+                                <connections>
+                                    <action selector="didTapSaveIcon:" destination="Ydr-sh-TIk" eventType="touchUpInside" id="SJI-dl-BLF"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="categoryLabel" destination="o7R-pQ-1vG" id="arT-ue-PkE"/>
                         <outlet property="descriptionLabel" destination="lNs-cD-jBU" id="GIT-un-CfY"/>
                         <outlet property="imageOfAuthorButton" destination="hdC-lu-ffu" id="0nA-J2-Lcp"/>
                         <outlet property="listingImage" destination="K7g-Qh-ATF" id="CLq-nf-LAl"/>
+                        <outlet property="saveButton" destination="od2-Mu-fOo" id="g8M-iK-8ff"/>
                         <outlet property="titleLabel" destination="ilc-zu-VZy" id="uR0-2y-93E"/>
                     </connections>
                 </viewController>
@@ -1165,7 +1177,7 @@
         <image name="profile_settings_icon" width="24" height="24"/>
         <image name="profile_tab" width="25" height="25"/>
         <image name="sell_icon" width="42.666667938232422" height="42.666667938232422"/>
-        <image name="unsaved_icon" width="96" height="96"/>
+        <image name="unsaved_icon" width="24" height="24"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

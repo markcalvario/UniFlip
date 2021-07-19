@@ -14,6 +14,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *categoryLabel;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
+@property (strong, nonatomic) IBOutlet UIButton *saveButton;
 
 @end
 
@@ -46,6 +47,7 @@
             }
         }];
     }
+    [self updateSaveButtonUI:self.listing.isSaved withButton:self.saveButton];
 }
 
 +(UIImage*)imageWithImage: (UIImage*) sourceImage scaledToWidth: (float) i_width{
@@ -61,21 +63,6 @@
     UIGraphicsEndImageContext();
     return newImage;
 }
-- (IBAction)didTapComposeMail:(id)sender {
-    // get a new new MailComposeViewController object
-    MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
-
-    // his class should be the delegate of the mc
-    mc.mailComposeDelegate = self;
-
-    // set some recipients ... but you do not need to do this :)
-    [mc setToRecipients:[NSArray arrayWithObjects: self.listing.authorEmail , nil]];
-
-    // displaying our modal view controller on the screen with standard transition
-    [self presentViewController:mc animated:true completion:nil];
-    // be a good memory manager and release mc, as you are responsible for it because your alloc/init
-}
-
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(nullable NSError *)error {
     switch (result) {
         case MFMailComposeResultCancelled:
@@ -101,6 +88,61 @@
     // Dismiss the mail compose view controller.
     [controller dismissViewControllerAnimated:true completion:nil];
 }
+-(void) updateSaveButtonUI:(BOOL )isSaved withButton:(UIButton *)saveButton{
+    if (isSaved){
+        [saveButton setImage:[UIImage imageNamed:@"saved_icon"] forState:UIControlStateNormal];
+    }
+    else{
+        [saveButton setImage:[UIImage imageNamed:@"unsaved_icon"] forState:UIControlStateNormal];
+    }
+}
+
+#pragma mark - Action Handlers
+- (IBAction)didTapComposeMail:(id)sender {
+    // get a new new MailComposeViewController object
+    MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
+
+    // his class should be the delegate of the mc
+    mc.mailComposeDelegate = self;
+
+    // set some recipients ... but you do not need to do this :)
+    [mc setToRecipients:[NSArray arrayWithObjects: self.listing.authorEmail , nil]];
+
+    // displaying our modal view controller on the screen with standard transition
+    [self presentViewController:mc animated:true completion:nil];
+    // be a good memory manager and release mc, as you are responsible for it because your alloc/init
+}
+- (IBAction)didTapSaveIcon:(id)sender {
+    if (self.listing.isSaved){
+        NSLog(@"was saved but is now not saved");
+        [Listing postUnsaveListing:self.listing withUser:self.listing.author completion:^(BOOL succeeded, NSError * _Nullable error) {
+            if (succeeded){
+                self.listing.isSaved = FALSE;
+                [self updateSaveButtonUI:self.listing.isSaved withButton: sender];
+
+            }
+        }];
+    }
+    else{
+        NSLog(@"was not saved but now is saved");
+        [Listing postSaveListing:self.listing withUser:self.listing.author completion:^(BOOL succeeded, NSError * _Nullable error) {
+            if (succeeded){
+                self.listing.isSaved = TRUE;
+                [self updateSaveButtonUI:self.listing.isSaved withButton: sender];
+            }
+        }];
+    }
+    
+}
+
+
+
+
+
+
+
+
+
 /*
 #pragma mark - Navigation
 
