@@ -18,6 +18,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) BOOL isReported;
 @property (nonatomic, strong) PFFileObject *profilePicture;
 
++ (void) postSaveSettings:(User *)user withProfileImage:(UIImage *)image withBiography:(NSString *)biography;
+- (UIImage *)resizeImage:(UIImage *)image withSize:(CGSize)size;
+
 @end
 
 NS_ASSUME_NONNULL_END

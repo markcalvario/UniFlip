@@ -26,6 +26,10 @@
     // Do any additional setup after loading the view.
     [self loadListingScreenDetais];
 }
+-(void) viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self loadListingScreenDetais];
+}
 
 -(void) loadListingScreenDetais{
     self.titleLabel.text = self.listing.listingTitle;
@@ -48,6 +52,9 @@
             }
         }];
     }
+    self.imageOfAuthorButton.layer.cornerRadius = self.imageOfAuthorButton.frame.size.width / 2;
+    self.imageOfAuthorButton.clipsToBounds = YES;
+
     [self updateSaveButtonUI:self.listing.isSaved withButton:self.saveButton];
 }
 

@@ -29,17 +29,17 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [self updateListingsByCategory];
+}
+-(void) viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+}
+-(void) updateListingsByCategory{
     self.currentUser = [User currentUser];
     self.listingCategoryTableView.delegate = self;
     self.listingCategoryTableView.dataSource = self;
     self.categoryToArrayOfPosts = [NSMutableDictionary dictionary];
     self.arrayOfCategories = [NSMutableArray array];
-    [self updateListingsByCategory];
-}
--(void) viewWillAppear:(BOOL)animated{
-    [self.listingCategoryTableView reloadData];
-}
--(void) updateListingsByCategory{
     dispatch_group_t dispatchGroup = dispatch_group_create();
     PFQuery *query = [Listing query];
     [query includeKey:@"savedBy"];

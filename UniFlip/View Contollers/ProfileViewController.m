@@ -14,7 +14,7 @@
 #import <SystemConfiguration/SystemConfiguration.h>
 
 
-@interface ProfileViewController ()<UICollectionViewDelegate, UICollectionViewDataSource>
+@interface ProfileViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIButton *profilePicButton;
 @property (weak, nonatomic) IBOutlet UILabel *usernameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *userBioLabel;
@@ -27,6 +27,7 @@
 
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *settingsBarButton;
 @property (strong, nonatomic) IBOutlet UIButton *settingsButton;
+@property (strong, nonatomic) UIAlertController *photoSelectorAlert;
 
 
 
@@ -50,11 +51,15 @@ BOOL showUserListings = TRUE;
     if (!self.user){
         self.user = currentUser;
     }
+    //User is viewing themselves
     if ([self.user.objectId isEqualToString: currentUser.objectId]){
         self.settingsButton.hidden = NO;
         self.cancelButton.hidden = YES;
         self.saveSettingsButton.hidden = YES;
+        [self.profilePicButton addTarget:self action:@selector(didTapChangeProfilePic:) forControlEvents: UIControlEventTouchUpInside];
+
     }
+    //User is viewing a different user
     else{
         self.settingsButton.hidden = YES;
         self.cancelButton.hidden = YES;
@@ -62,24 +67,27 @@ BOOL showUserListings = TRUE;
     }
     
     self.toolbarButtons = [self.navigationItem.rightBarButtonItems mutableCopy];
-    
-    
-
     self.arrayOfListings = [NSMutableArray array];
     self.listingsCollectionView.dataSource = self;
     self.listingsCollectionView.delegate = self;
     self.usernameLabel.text = self.user.username;
     self.userBioLabel.text = self.user.biography;
-    /*if (self.user.profilePicture){
-        [self.profilePicButton setImage:self.user.profilePicture forState:UIControlStateNormal];
+    self.profilePicButton.layer.cornerRadius = self.profilePicButton.frame.size.width / 2;
+    self.profilePicButton.clipsToBounds = YES;
+    
+    PFFileObject *userProfilePicture = self.user.profilePicture;
+    if (userProfilePicture){
+        [Listing PFFileToUIImage:userProfilePicture completion:^(UIImage * image, NSError * error) {
+            if (image){
+                [self.profilePicButton setImage: [ListingDetailViewController imageWithImage:image scaledToWidth:414] forState:UIControlStateNormal];
+            }
+            else{
+                [self.profilePicButton setImage: [UIImage imageNamed:@"default_profile_pic"] forState:UIControlStateNormal];
+            }
+        }];
     }
-    */
-    if (showUserListings){
-        [self getListingsBasedOnSavedButton:TRUE];
-    }
-    else{
-        [self getListingsBasedOnSavedButton:FALSE];
-    }
+    showUserListings ? [self getListingsBasedOnSavedButton:TRUE] : [self getListingsBasedOnSavedButton:FALSE];
+   
 }
 
 #pragma mark - If User wants their saved listings
@@ -175,6 +183,8 @@ BOOL showUserListings = TRUE;
     self.cancelButton.hidden = YES;
     [self showSettingsIcon];
     
+    [User postSaveSettings:self.user withProfileImage: self.profilePicButton.currentImage withBiography:@""];
+    
 }
 - (void) didTapSaveIcon:(UIButton *)sender {
     Listing *listing = self.arrayOfListings[sender.tag];
@@ -202,6 +212,56 @@ BOOL showUserListings = TRUE;
     }
     
 }
+-(void) didTapChangeProfilePic: (UIButton *) profileButton{
+    [self showPhotoAlert];
+}
+- (void)showPhotoAlert {
+    // Add code to be run periodically
+     UIImagePickerController *imagePickerVC = [UIImagePickerController new];
+     imagePickerVC.delegate = self;
+     imagePickerVC.allowsEditing = YES;
+     self.photoSelectorAlert = [UIAlertController alertControllerWithTitle:@"Select a photo" message:@""
+                                preferredStyle:UIAlertControllerStyleActionSheet];
+
+     
+     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+         UIAlertAction *didSelectCamera = [UIAlertAction actionWithTitle:@"Camera"
+                                                       style:UIAlertActionStyleDefault
+                                           
+                                     handler:^(UIAlertAction * _Nonnull action) {
+                                            // handle cancel response here. Doing nothing will dismiss the view.
+                                         imagePickerVC.sourceType = UIImagePickerControllerSourceTypeCamera;
+             [self presentViewController:imagePickerVC animated:YES completion:nil];
+                                         
+                             }];
+         [self.photoSelectorAlert addAction:didSelectCamera];
+     }
+     UIAlertAction *didSelectCameraRoll = [UIAlertAction actionWithTitle:@"Camera Roll"
+                                                   style:UIAlertActionStyleDefault
+                                 handler:^(UIAlertAction * _Nonnull action) {
+                                        // handle cancel response here. Doing nothing will dismiss the view.
+                                     imagePickerVC.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+                                     [self presentViewController:imagePickerVC animated:YES completion:nil];
+         
+                                 }];
+     [self.photoSelectorAlert addAction:didSelectCameraRoll];
+  
+     [self presentViewController:self.photoSelectorAlert animated:YES completion:^{
+         // optional code for what happens after the alert controller has finished presenting
+     }];
+}
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
+    // Get the image captured by the UIImagePickerController
+    UIImage *originalImage = info[UIImagePickerControllerOriginalImage];
+    //UIImage *editedImage = info[UIImagePickerControllerEditedImage];
+    // Do something with the images (based on your use case)
+    [self.profilePicButton setImage:originalImage forState:UIControlStateNormal];
+    // Dismiss UIImagePickerController to go back to your original view controller
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+
+
 
 #pragma mark - Collection View
 
@@ -242,14 +302,8 @@ BOOL showUserListings = TRUE;
     
 }
 
-
-
 #pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
     if ([[segue identifier] isEqualToString:@"ProfileToListingDetail"]){
         ListingCell *tappedCell = sender;
         NSIndexPath *indexPath = [self.listingsCollectionView indexPathForCell:tappedCell];
