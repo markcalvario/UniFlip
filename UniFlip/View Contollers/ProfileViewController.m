@@ -39,20 +39,18 @@ BOOL showUserListings = TRUE;
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    if (!self.user){
-        self.user = [User currentUser];
-    }
-    //self.toolbarButtons = [NSMutableArray array];
-    self.toolbarButtons = [self.navigationItem.rightBarButtonItems mutableCopy];
-
     [self setProfileScreen];
-    //[self setCollectionViewStyle];
-
     
+}
+- (void)viewWillAppear:(BOOL)animated{
+    [self setProfileScreen];
 }
 
 -(void) setProfileScreen{
-    //self.settingsButton.hidden = YES;
+    if (!self.user){
+        self.user = [User currentUser];
+    }
+    self.toolbarButtons = [self.navigationItem.rightBarButtonItems mutableCopy];
     if ([self.user isEqual:[User currentUser]]){
         self.settingsButton.hidden = NO;
         self.cancelButton.hidden = YES;
@@ -96,18 +94,19 @@ BOOL showUserListings = TRUE;
                 PFQuery *query = [relation query];
                 [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable arrayOfUsers, NSError * _Nullable error) {
                     if (arrayOfUsers){
-                        for (User *user in arrayOfUsers){
-                            if ([user.username isEqualToString: self.user.username]){
-                                NSLog(@"user has saved this listing");
-                                listing.isSaved = TRUE;
-                                [savedListings addObject:listing];
-                            }
-                        }
-                        if (getAllUserListings && (!listing.isSaved)){
-                            listing.isSaved = FALSE;
+                        if (getAllUserListings){
+                            listing.isSaved = !listing.isSaved;
                             [savedListings addObject:listing]; //maybe refactor
-                            NSLog(@"user has not saved this listing");
+                            //NSLog(@"user has not saved this listing");
 
+                        }else{
+                            for (User *user in arrayOfUsers){
+                                if ([user.username isEqualToString: self.user.username]){
+                                    NSLog(@"user has saved this listing");
+                                    listing.isSaved = TRUE;
+                                    [savedListings addObject:listing];
+                                }
+                            }
                         }
                         self.arrayOfListings = savedListings;
                     }else{
@@ -126,14 +125,30 @@ BOOL showUserListings = TRUE;
         });
     }];
 }
-
+-(void) showSettingsIcon{
+    if (![self.toolbarButtons containsObject:self.settingsBarButton]) {
+        [self.toolbarButtons insertObject:self.settingsBarButton atIndex:0];
+        [self.navigationItem setRightBarButtonItems:self.toolbarButtons animated:YES];
+    }
+}
+-(void) updateSaveButtonUI:(BOOL )isSaved withButton:(UIButton *)saveButton{
+    if (isSaved){
+        [saveButton setImage:[UIImage imageNamed:@"saved_icon"] forState:UIControlStateNormal];
+    }
+    else{
+        [saveButton setImage:[UIImage imageNamed:@"unsaved_icon"] forState:UIControlStateNormal];
+    }
+}
 #pragma mark - Action Handlers
 - (IBAction)didTapGetOwnListings:(id)sender {
     showUserListings = TRUE;
+    [self showSettingsIcon];
     [self setProfileScreen];
+    
 }
 - (IBAction)didTapGetSavedListings:(id)sender {
     showUserListings = FALSE;
+    [self showSettingsIcon];
     [self setProfileScreen];
 }
 - (IBAction)didTapSettingButton:(id)sender {
@@ -145,23 +160,41 @@ BOOL showUserListings = TRUE;
 - (IBAction)didTapCancelButton:(id)sender {
     self.cancelButton.hidden = YES;
     self.saveSettingsButton.hidden = YES;
-    if (![self.toolbarButtons containsObject:self.settingsBarButton]) {
-        [self.toolbarButtons insertObject:self.settingsBarButton atIndex:0];
-        [self.navigationItem setRightBarButtonItems:self.toolbarButtons animated:YES];
-    }
+    [self showSettingsIcon];
 
 }
 - (IBAction)saveSettingsButton:(id)sender {
     self.saveSettingsButton.hidden = YES;
     self.cancelButton.hidden = YES;
+    [self showSettingsIcon];
     
-    if (![self.toolbarButtons containsObject:self.settingsBarButton]) {
-        [self.toolbarButtons insertObject:self.settingsBarButton atIndex:0];
-        [self.navigationItem setRightBarButtonItems:self.toolbarButtons animated:YES];
+}
+- (void) didTapSaveIcon:(UIButton *)sender {
+    Listing *listing = self.arrayOfListings[sender.tag];
+    if (listing.isSaved){
+        NSLog(@"was saved but is now not saved");
+        [Listing postUnsaveListing:listing withUser:self.user completion:^(BOOL succeeded, NSError * _Nullable error) {
+            if (succeeded){
+                listing.isSaved = FALSE;
+                [self updateSaveButtonUI:listing.isSaved withButton: sender];
+                [self.listingsCollectionView reloadData];
+
+            }
+        }];
+    }
+    else{
+        NSLog(@"was not saved but now is saved");
+        [Listing postSaveListing:listing withUser:self.user completion:^(BOOL succeeded, NSError * _Nullable error) {
+            if (succeeded){
+                listing.isSaved = TRUE;
+                [self updateSaveButtonUI:listing.isSaved withButton: sender];
+                [self.listingsCollectionView reloadData];
+
+            }
+        }];
     }
     
 }
-
 
 #pragma mark - Collection View
 
@@ -180,7 +213,9 @@ BOOL showUserListings = TRUE;
     else{
         [cell.profileListingSaveButton setImage:[UIImage imageNamed:@"unsaved_icon"] forState:UIControlStateNormal];
     }
-    
+    cell.profileListingSaveButton.tag = indexPath.row;
+    [self updateSaveButtonUI:listing.isSaved withButton: cell.profileListingSaveButton];
+    [cell.profileListingSaveButton addTarget:self action:@selector(didTapSaveIcon:) forControlEvents: UIControlEventTouchUpInside];
     return cell;
 }
 - (NSInteger)collectionView:(nonnull UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
@@ -199,6 +234,8 @@ BOOL showUserListings = TRUE;
     return CGSizeMake(itemWidth, itemHeight);
     
 }
+
+
 
 #pragma mark - Navigation
 

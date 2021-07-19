@@ -34,7 +34,9 @@
     self.categoryToArrayOfPosts = [NSMutableDictionary dictionary];
     self.arrayOfCategories = [NSMutableArray array];
     [self updateListingsByCategory];
-
+}
+-(void) viewWillAppear:(BOOL)animated{
+    [self.listingCategoryTableView reloadData];
 }
 -(void) updateListingsByCategory{
     dispatch_group_t dispatchGroup = dispatch_group_create();
@@ -44,7 +46,9 @@
     [query includeKey:@"author"];
     [query findObjectsInBackgroundWithBlock:^(NSArray<Listing *> * _Nullable listings, NSError * _Nullable error) {
         if (listings) {
+            
             for (Listing *listing in listings){
+                __block BOOL isListingSaved = FALSE;
                 dispatch_group_enter(dispatchGroup);
                 
                 //Adding listing to appropiate dictionary key
@@ -68,9 +72,10 @@
                         for (User *user in arrayOfUsers){
                             if ([user.username isEqualToString: self.currentUser.username]){
                                 listing.isSaved = TRUE;
+                                isListingSaved = TRUE;
                             }
                         }
-                        if (!listing.isSaved){
+                        if (!isListingSaved){
                             listing.isSaved = FALSE;
                         }
                     }else{
