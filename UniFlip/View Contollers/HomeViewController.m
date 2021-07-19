@@ -35,10 +35,6 @@
     self.arrayOfCategories = [NSMutableArray array];
     [self updateListingsByCategory];
 
-    //self.listingCategoryTableView.rowHeight = UITableViewAutomaticDimension;
-    //self.listingCategoryTableView.estimatedRowHeight = 294;
-
-
 }
 -(void) updateListingsByCategory{
     dispatch_group_t dispatchGroup = dispatch_group_create();
@@ -71,15 +67,11 @@
                     if (arrayOfUsers){
                         for (User *user in arrayOfUsers){
                             if ([user.username isEqualToString: self.currentUser.username]){
-                                NSLog(@"user has saved this listing");
                                 listing.isSaved = TRUE;
                             }
                         }
                         if (!listing.isSaved){
                             listing.isSaved = FALSE;
-                                //maybe refactor
-                            NSLog(@"user has not saved this listing");
-
                         }
                     }else{
                         NSLog(@"Could not load saved listings");
@@ -102,16 +94,8 @@
     CategoryCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CategoryCell" forIndexPath:indexPath];
     NSString *category = self.arrayOfCategories[indexPath.row];
     cell.categoryLabel.text = category;
-
     cell.listingCollectionView.tag = indexPath.row;
     cell.listingCollectionView.scrollEnabled = NO;
-    
-    /*cell.frame = tableView.bounds;
-    [cell layoutIfNeeded];
-    [cell.listingCollectionView reloadData];
-    cell.listingCollectionViewHeight.constant = cell.listingCollectionView.collectionViewLayout.collectionViewContentSize.height;*/
-
-
     return cell;
 }
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -121,11 +105,7 @@
     CategoryCell *tableViewCell = (CategoryCell *) cell;
     tableViewCell.listingCollectionView.delegate = self;
     tableViewCell.listingCollectionView.dataSource = self;
-    
-    //tableViewCell.frame = tableView.bounds;
     [tableViewCell.listingCollectionView reloadData];
-    //[tableViewCell layoutIfNeeded];
-    //tableViewCell.listingCollectionViewHeight.constant = tableViewCell.listingCollectionView.collectionViewLayout.collectionViewContentSize.height;
 
 }
 
@@ -169,12 +149,6 @@
     listingCell.saveButton.titleLabel.font = [UIFont systemFontOfSize:0];
     [self updateSaveButtonUI:listing.isSaved withButton: listingCell.saveButton];
     [listingCell.saveButton addTarget:self action:@selector(didTapSaveIcon:) forControlEvents: UIControlEventTouchUpInside];
-    
-    
-    /*CALayer* layer = listingCell.layer;
-    [layer setCornerRadius:4.0f];
-    [layer setBorderColor:[UIColor colorWithWhite:0.8 alpha:1].CGColor];
-    [layer setBorderWidth:1.0f];*/
 
     return listingCell;
 }

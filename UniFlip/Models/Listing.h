@@ -6,12 +6,13 @@
 //
 
 #import <Parse/Parse.h>
+#import "User.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface Listing : PFObject<PFSubclassing>
 @property (nonatomic, strong) NSString *postID;
-@property (nonatomic, strong) PFUser *author;
+@property (nonatomic, strong) User *author;
 @property (nonatomic, strong) PFFileObject *listingImage;
 @property (nonatomic, strong) NSString *listingTitle;
 @property (nonatomic, strong) NSString *typeOfListing;
@@ -31,6 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (void) postSaveListing: (Listing *)listing withUser: (PFUser *)user completion:(void(^)(BOOL , NSError *))completion;
 + (void) postUnsaveListing: (Listing *)listing withUser: (PFUser *)user completion:(void(^)(BOOL , NSError *))completion;
 + (void) PFFileToUIImage: (PFFileObject *)imageFile completion:(void(^)(UIImage *, NSError *))completion;
+
 + (PFFileObject *)getPFFileFromImage: (UIImage * _Nullable)image;
 - (UIImage *)resizeImage:(UIImage *)image withSize:(CGSize)size;
 @end

@@ -10,6 +10,7 @@
 #import "User.h"
 #import "Listing.h"
 #import "ListingCell.h"
+#import "ListingDetailViewController.h"
 #import <SystemConfiguration/SystemConfiguration.h>
 
 
@@ -125,7 +126,7 @@ BOOL showUserListings = TRUE;
     ListingCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ListingCell" forIndexPath:indexPath];
     Listing *listing = self.arrayOfListings[indexPath.row];
     [Listing PFFileToUIImage:listing.listingImage completion:^(UIImage* image, NSError * error) {
-        [cell.profileListingImageButton setImage:image forState:UIControlStateNormal];
+        [cell.profileListingImage setImage:image];
     }];
     NSString *price = [@"$" stringByAppendingString:listing.listingPrice];
     cell.profileListingPriceLabel.text = price;
@@ -156,25 +157,22 @@ BOOL showUserListings = TRUE;
     
 }
 
-/*-(void) setCollectionViewStyle{
-    UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *)self.listingsCollectionView.collectionViewLayout;
-    layout.minimumLineSpacing = 1;
-    layout.minimumInteritemSpacing = 1;
-    CGFloat postsPerRow = 2;
-    CGFloat itemWidth = (self.listingsCollectionView.frame.size.width - layout.minimumInteritemSpacing * (postsPerRow) )/ postsPerRow;
-    CGFloat itemHeight = itemWidth * 1;
-    layout.itemSize = CGSizeMake(itemWidth, itemHeight);
-}*/
-
-/*
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    if ([[segue identifier] isEqualToString:@"ProfileToListingDetail"]){
+        ListingCell *tappedCell = sender;
+        NSIndexPath *indexPath = [self.listingsCollectionView indexPathForCell:tappedCell];
+        Listing *listing = self.arrayOfListings[indexPath.row];
+        ListingDetailViewController *listingDetailViewController = [segue destinationViewController];
+        listingDetailViewController.listing = listing;
+        
+    }
 }
-*/
+
 
 
 

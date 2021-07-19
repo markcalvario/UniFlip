@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 // For the ProfileViewController
-@property (weak, nonatomic) IBOutlet UIButton *profileListingImageButton;
+@property (weak, nonatomic) IBOutlet UIImageView *profileListingImage;
 @property (weak, nonatomic) IBOutlet UILabel *profileListingPriceLabel;
 @property (weak, nonatomic) IBOutlet UILabel *profileListingTitleLabel;
 @property (weak, nonatomic) IBOutlet UIButton *profileListingSaveButton;

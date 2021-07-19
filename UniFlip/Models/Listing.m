@@ -32,7 +32,7 @@
 + (void) postUserListing:(UIImage * _Nullable)image withTitle:(NSString * _Nullable)title withType:(NSString * _Nullable)type withDescription:(NSString * _Nullable)description withLocation:(NSString * _Nullable)location withCategory:(NSString * _Nullable)category withBrand:(NSString * _Nullable)brand withCondition:(NSString * _Nullable)condition withPrice:(NSString * _Nullable)price withCompletion: (PFBooleanResultBlock  _Nullable)completion {
     
     Listing *newListing = [Listing new];
-    newListing.author = [PFUser currentUser];
+    newListing.author = [User currentUser];
     newListing.listingImage = [self getPFFileFromImage: [newListing resizeImage: image withSize: CGSizeMake(300, 300)]];
     newListing.listingTitle = title;
     newListing.typeOfListing = type;
@@ -104,6 +104,7 @@
     }];
     
 }
+
 
 - (UIImage *)resizeImage:(UIImage *)image withSize:(CGSize)size {
     UIImageView *resizeImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
