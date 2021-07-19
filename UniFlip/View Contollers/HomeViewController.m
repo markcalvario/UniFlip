@@ -12,6 +12,7 @@
 #import "CategoryCell.h"
 #import "ListingCell.h"
 #import "User.h"
+#import "ListingDetailViewController.h"
 #import <SystemConfiguration/SystemConfiguration.h>
 
 @interface HomeViewController ()<UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
@@ -146,7 +147,7 @@
     [listingImageFile getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
                 if (!error) {
                     UIImage *image = [UIImage imageWithData:imageData];
-                    [listingCell.imageButton setImage:image forState:UIControlStateNormal];
+                    [listingCell.listingImage setImage:image];
                 }
         }];
     listingCell.saveButton.tag = indexPath.row;
@@ -155,7 +156,15 @@
     [self updateSaveButtonUI:listing.isSaved withButton: listingCell.saveButton];
     [listingCell.saveButton addTarget:self action:@selector(didTapSaveIcon:) forControlEvents: UIControlEventTouchUpInside];
 
+    
+    /*UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]
+                                             initWithTarget:self action:@selector(didTapListing:)];
+    [tapRecognizer setNumberOfTouchesRequired:1];
+    [tapRecognizer setDelegate:self];
+    listingCell.userInteractionEnabled = YES;
+    [listingCell addGestureRecognizer:tapRecognizer];*/
     return listingCell;
+    
 }
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
     UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *) collectionViewLayout;
@@ -169,8 +178,11 @@
     return CGSizeMake(itemWidth, itemHeight);
     
 }
-
-
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+    NSString *category = self.arrayOfCategories[collectionView.tag];
+    Listing *listing = self.categoryToArrayOfPosts[category][indexPath.row];
+    [self performSegueWithIdentifier:@"HomeToListingDetail" sender:listing];
+}
 
 #pragma mark - Action Handlers
 - (IBAction)didTapLogOut:(id)sender {
@@ -180,9 +192,7 @@
     myDelegate.window.rootViewController = loginViewController;
     [PFUser logOutInBackgroundWithBlock:^(NSError * _Nullable error) {    }];
 }
-- (IBAction)didTapExitKeyboard:(id)sender {
-    [self.view endEditing:TRUE];
-}
+
 - (IBAction)didTapSaveIcon:(UIButton *)sender {
     Listing *listing = self.categoryToArrayOfPosts[[sender currentTitle]][sender.tag];
     if (listing.isSaved){
@@ -218,14 +228,18 @@
     }
 }
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    if ([[segue identifier] isEqualToString:@"HomeToListingDetail"]){
+        ListingDetailViewController *listingDetailViewController = [segue destinationViewController];
+        listingDetailViewController.listing = sender;
+    }
 }
-*/
+
 
 @end

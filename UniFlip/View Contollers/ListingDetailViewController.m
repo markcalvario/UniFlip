@@ -77,7 +77,6 @@
 }
 
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(nullable NSError *)error {
-
     switch (result) {
         case MFMailComposeResultCancelled:
             NSLog(@"Mail cancelled");
@@ -101,7 +100,6 @@
 
     // Dismiss the mail compose view controller.
     [controller dismissViewControllerAnimated:true completion:nil];
-
 }
 /*
 #pragma mark - Navigation

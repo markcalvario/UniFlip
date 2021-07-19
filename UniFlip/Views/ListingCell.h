@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ListingCell : UICollectionViewCell
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *priceLabel;
-@property (weak, nonatomic) IBOutlet UIButton *imageButton;
+@property (strong, nonatomic) IBOutlet UIImageView *listingImage;
 @property (weak, nonatomic) IBOutlet UIButton *saveButton;
 
 
