@@ -23,6 +23,7 @@
 @dynamic isReported;
 @dynamic saveCount;
 @dynamic isSaved;
+@dynamic authorEmail;
 
 
 + (nonnull NSString *)parseClassName {
@@ -45,6 +46,7 @@
     newListing.isReported = FALSE;
     newListing.saveCount = @(0);
     newListing.isSaved = FALSE;
+    newListing.authorEmail = newListing.author.email;
     [newListing saveInBackgroundWithBlock:completion];
     
     

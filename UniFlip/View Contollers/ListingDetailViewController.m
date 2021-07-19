@@ -6,8 +6,9 @@
 //
 
 #import "ListingDetailViewController.h"
+#import <MessageUI/MessageUI.h>
 
-@interface ListingDetailViewController ()
+@interface ListingDetailViewController ()<MFMailComposeViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIImageView *listingImage;
 @property (weak, nonatomic) IBOutlet UIButton *imageOfAuthorButton;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
@@ -47,8 +48,7 @@
     }
 }
 
-+(UIImage*)imageWithImage: (UIImage*) sourceImage scaledToWidth: (float) i_width
-{
++(UIImage*)imageWithImage: (UIImage*) sourceImage scaledToWidth: (float) i_width{
     float oldWidth = sourceImage.size.width;
     float scaleFactor = i_width / oldWidth;
 
@@ -61,7 +61,48 @@
     UIGraphicsEndImageContext();
     return newImage;
 }
+- (IBAction)didTapComposeMail:(id)sender {
+    // get a new new MailComposeViewController object
+    MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
 
+    // his class should be the delegate of the mc
+    mc.mailComposeDelegate = self;
+
+    // set some recipients ... but you do not need to do this :)
+    [mc setToRecipients:[NSArray arrayWithObjects: self.listing.authorEmail , nil]];
+
+    // displaying our modal view controller on the screen with standard transition
+    [self presentViewController:mc animated:true completion:nil];
+    // be a good memory manager and release mc, as you are responsible for it because your alloc/init
+}
+
+- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(nullable NSError *)error {
+
+    switch (result) {
+        case MFMailComposeResultCancelled:
+            NSLog(@"Mail cancelled");
+
+            break;
+
+        case MFMailComposeResultSaved:
+            NSLog(@"Mail saved");
+
+            break;
+
+        case MFMailComposeResultSent:
+            NSLog(@"Mail sent");
+
+            break;
+
+        case MFMailComposeResultFailed:
+            NSLog(@"Mail sent failure: %@",error.description);
+            break;
+    }
+
+    // Dismiss the mail compose view controller.
+    [controller dismissViewControllerAnimated:true completion:nil];
+
+}
 /*
 #pragma mark - Navigation
 

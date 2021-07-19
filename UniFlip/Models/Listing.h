@@ -25,6 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) BOOL isReported;
 @property (nonatomic, strong) NSNumber *saveCount;
 @property (nonatomic) BOOL isSaved;
+@property (nonatomic, strong) NSString *authorEmail;
 
 
 ///Methods
