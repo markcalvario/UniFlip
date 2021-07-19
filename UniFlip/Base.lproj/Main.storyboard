@@ -1027,7 +1027,7 @@
                                 <rect key="frame" x="0.0" y="88" width="414" height="725"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rFm-RF-ljk">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="816"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="794"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="image_placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="K7g-Qh-ATF">
                                                 <rect key="frame" x="0.0" y="0.0" width="414" height="280"/>
@@ -1056,7 +1056,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Category" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o7R-pQ-1vG">
-                                                <rect key="frame" x="88" y="353.5" width="265" height="14.5"/>
+                                                <rect key="frame" x="88" y="357" width="265" height="14.5"/>
                                                 <fontDescription key="fontDescription" type="system" weight="thin" pointSize="12"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -1068,20 +1068,27 @@
                                                     <action selector="didTapComposeMail:" destination="Ydr-sh-TIk" eventType="touchUpInside" id="hLT-03-BtR"/>
                                                 </connections>
                                             </button>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lNs-cD-jBU">
-                                                <rect key="frame" x="22" y="391" width="373" height="172"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lNs-cD-jBU">
+                                                <rect key="frame" x="22" y="396" width="373" height="172"/>
                                                 <string key="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
                                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="$1000" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lAR-Rn-RUS">
+                                                <rect key="frame" x="88" y="334" width="247" height="15"/>
+                                                <fontDescription key="fontDescription" name="Galvji" family="Galvji" pointSize="12"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
+                                            <constraint firstItem="o7R-pQ-1vG" firstAttribute="top" secondItem="lAR-Rn-RUS" secondAttribute="bottom" constant="8" id="5rr-QG-h8c"/>
                                             <constraint firstItem="o7R-pQ-1vG" firstAttribute="leading" secondItem="ilc-zu-VZy" secondAttribute="leading" id="7ZZ-H7-wO2"/>
                                             <constraint firstItem="hdC-lu-ffu" firstAttribute="leading" secondItem="rFm-RF-ljk" secondAttribute="leading" constant="8" id="8V4-7e-REK"/>
                                             <constraint firstAttribute="trailing" secondItem="o7R-pQ-1vG" secondAttribute="trailing" constant="61" id="CJx-cp-eXd"/>
-                                            <constraint firstItem="lNs-cD-jBU" firstAttribute="top" secondItem="o7R-pQ-1vG" secondAttribute="bottom" constant="23" id="Cwl-0m-Mqp"/>
+                                            <constraint firstItem="lNs-cD-jBU" firstAttribute="top" relation="greaterThanOrEqual" secondItem="o7R-pQ-1vG" secondAttribute="bottom" constant="8.5" id="Cwl-0m-Mqp"/>
                                             <constraint firstItem="ilc-zu-VZy" firstAttribute="top" secondItem="hdC-lu-ffu" secondAttribute="top" id="Hrk-2D-J5m"/>
                                             <constraint firstItem="ilc-zu-VZy" firstAttribute="leading" secondItem="hdC-lu-ffu" secondAttribute="trailing" constant="8" symbolic="YES" id="Kvf-XE-zyT"/>
                                             <constraint firstItem="K7g-Qh-ATF" firstAttribute="leading" secondItem="rFm-RF-ljk" secondAttribute="leading" id="LM1-aI-Plh"/>
@@ -1089,12 +1096,13 @@
                                             <constraint firstItem="ssl-a0-r5E" firstAttribute="leading" relation="lessThanOrEqual" secondItem="ilc-zu-VZy" secondAttribute="trailing" constant="36" id="S2I-g1-D7V"/>
                                             <constraint firstAttribute="trailing" secondItem="lNs-cD-jBU" secondAttribute="trailing" constant="19" id="Yra-Dr-RdX"/>
                                             <constraint firstAttribute="trailing" secondItem="K7g-Qh-ATF" secondAttribute="trailing" id="aqf-mW-T54"/>
-                                            <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="lNs-cD-jBU" secondAttribute="bottom" constant="253" id="b0p-F0-kNs"/>
+                                            <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="lNs-cD-jBU" secondAttribute="bottom" constant="242" id="b0p-F0-kNs"/>
                                             <constraint firstItem="hdC-lu-ffu" firstAttribute="top" secondItem="K7g-Qh-ATF" secondAttribute="bottom" constant="25" id="b6u-6B-F6N"/>
                                             <constraint firstAttribute="trailing" secondItem="ssl-a0-r5E" secondAttribute="trailing" constant="19" id="ddh-my-oxl"/>
-                                            <constraint firstItem="o7R-pQ-1vG" firstAttribute="top" relation="greaterThanOrEqual" secondItem="ilc-zu-VZy" secondAttribute="bottom" constant="27" id="s5I-E3-sja"/>
+                                            <constraint firstItem="lAR-Rn-RUS" firstAttribute="leading" secondItem="ilc-zu-VZy" secondAttribute="leading" id="ija-1C-ZMN"/>
                                             <constraint firstItem="ssl-a0-r5E" firstAttribute="top" secondItem="hdC-lu-ffu" secondAttribute="top" id="sr0-xy-8Mt"/>
                                             <constraint firstItem="K7g-Qh-ATF" firstAttribute="top" secondItem="rFm-RF-ljk" secondAttribute="top" id="uUK-ho-ivP"/>
+                                            <constraint firstItem="lAR-Rn-RUS" firstAttribute="top" secondItem="ilc-zu-VZy" secondAttribute="bottom" constant="7.5" id="vcc-Sy-NgZ"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -1136,6 +1144,7 @@
                         <outlet property="descriptionLabel" destination="lNs-cD-jBU" id="GIT-un-CfY"/>
                         <outlet property="imageOfAuthorButton" destination="hdC-lu-ffu" id="0nA-J2-Lcp"/>
                         <outlet property="listingImage" destination="K7g-Qh-ATF" id="CLq-nf-LAl"/>
+                        <outlet property="priceLabel" destination="lAR-Rn-RUS" id="0Qc-qd-0yz"/>
                         <outlet property="saveButton" destination="od2-Mu-fOo" id="g8M-iK-8ff"/>
                         <outlet property="titleLabel" destination="ilc-zu-VZy" id="uR0-2y-93E"/>
                         <segue destination="RaW-Wm-Soe" kind="show" identifier="ListingDetailToProfile" id="1cV-ZD-tXO"/>

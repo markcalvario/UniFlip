@@ -42,9 +42,9 @@ BOOL showUserListings = TRUE;
     [self setProfileScreen];
     
 }
-- (void)viewWillAppear:(BOOL)animated{
+/*- (void)viewWillAppear:(BOOL)animated{
     [self setProfileScreen];
-}
+}*/
 
 -(void) setProfileScreen{
     User *currentUser = [User currentUser];
