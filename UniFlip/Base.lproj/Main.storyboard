@@ -763,10 +763,49 @@
                             <constraint firstItem="Dr4-ac-JeE" firstAttribute="trailing" secondItem="f0D-LA-Kyk" secondAttribute="trailing" id="uxf-RY-xh2"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="Z1p-Qd-MGY"/>
+                    <navigationItem key="navigationItem" id="Z1p-Qd-MGY">
+                        <barButtonItem key="leftBarButtonItem" style="plain" id="2M7-JT-4Pi">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Zqx-v4-O8O">
+                                <rect key="frame" x="20" y="10" width="24" height="24"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="cancel_icon"/>
+                                <connections>
+                                    <action selector="didTapCancelButton:" destination="RaW-Wm-Soe" eventType="touchUpInside" id="dED-FS-AfA"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem style="plain" id="sbw-Cx-B5S">
+                                <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Nat-Jh-uLw">
+                                    <rect key="frame" x="370" y="10" width="24" height="24"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <state key="normal" image="profile_settings_icon"/>
+                                    <connections>
+                                        <action selector="didTapSettingButton:" destination="RaW-Wm-Soe" eventType="touchUpInside" id="Ufq-sr-4g1"/>
+                                    </connections>
+                                </button>
+                            </barButtonItem>
+                            <barButtonItem style="plain" id="9PP-Au-TuQ">
+                                <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="hxf-fg-dvg">
+                                    <rect key="frame" x="338" y="10" width="24" height="24"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <state key="normal" image="checkmark_bold"/>
+                                    <connections>
+                                        <action selector="saveSettingsButton:" destination="RaW-Wm-Soe" eventType="touchUpInside" id="w64-WH-I6l"/>
+                                    </connections>
+                                </button>
+                            </barButtonItem>
+                        </rightBarButtonItems>
+                    </navigationItem>
                     <connections>
+                        <outlet property="cancelButton" destination="Zqx-v4-O8O" id="a35-W7-Wp1"/>
                         <outlet property="listingsCollectionView" destination="ump-lS-Fur" id="nIU-Xi-fEs"/>
+                        <outlet property="navigationBar" destination="Z1p-Qd-MGY" id="2Ur-vZ-sv7"/>
                         <outlet property="profilePicButton" destination="nD5-vE-Lv2" id="HzL-Gb-VgB"/>
+                        <outlet property="saveSettingsButton" destination="hxf-fg-dvg" id="C5M-Zo-Dis"/>
+                        <outlet property="settingsBarButton" destination="sbw-Cx-B5S" id="3Sm-OP-2JJ"/>
+                        <outlet property="settingsButton" destination="Nat-Jh-uLw" id="pms-mj-0Bv"/>
                         <outlet property="userBioLabel" destination="YXr-ek-GJ3" id="VaH-d1-WgM"/>
                         <outlet property="usernameLabel" destination="Cvb-Rs-t7A" id="u58-WW-pUA"/>
                     </connections>
@@ -1119,10 +1158,13 @@
         <segue reference="yJF-wa-pAP"/>
     </inferredMetricsTieBreakers>
     <resources>
+        <image name="cancel_icon" width="24" height="24"/>
+        <image name="checkmark_bold" width="24" height="24"/>
         <image name="default_profile_pic" width="360" height="360"/>
         <image name="envelope_icon" width="24" height="24"/>
         <image name="home_icon" width="72" height="77.666664123535156"/>
         <image name="image_placeholder" width="375" height="375"/>
+        <image name="profile_settings_icon" width="24" height="24"/>
         <image name="profile_tab" width="25" height="25"/>
         <image name="sell_icon" width="42.666667938232422" height="42.666667938232422"/>
         <image name="unsaved_icon" width="96" height="96"/>

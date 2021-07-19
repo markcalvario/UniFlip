@@ -21,6 +21,14 @@
 @property (weak, nonatomic) IBOutlet UICollectionView *listingsCollectionView;
 @property (strong, nonatomic) User *user;
 @property (strong, nonatomic) NSMutableArray *arrayOfListings;
+@property (weak, nonatomic) IBOutlet UIButton *cancelButton;
+@property (weak, nonatomic) IBOutlet UIButton *saveSettingsButton;
+@property (weak, nonatomic) IBOutlet UINavigationItem *navigationBar;
+@property (strong, nonatomic) NSMutableArray *toolbarButtons;
+
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *settingsBarButton;
+@property (strong, nonatomic) IBOutlet UIButton *settingsButton;
+
 
 
 @end
@@ -34,6 +42,9 @@ BOOL showUserListings = TRUE;
     if (!self.user){
         self.user = [User currentUser];
     }
+    //self.toolbarButtons = [NSMutableArray array];
+    self.toolbarButtons = [self.navigationItem.rightBarButtonItems mutableCopy];
+
     [self setProfileScreen];
     //[self setCollectionViewStyle];
 
@@ -41,8 +52,15 @@ BOOL showUserListings = TRUE;
 }
 
 -(void) setProfileScreen{
-    self.arrayOfListings = [NSMutableArray array];
+    //self.settingsButton.hidden = YES;
+    if ([self.user isEqual:[User currentUser]]){
+        self.settingsButton.hidden = NO;
+        self.cancelButton.hidden = YES;
+        self.saveSettingsButton.hidden = YES;
+    }
+    
 
+    self.arrayOfListings = [NSMutableArray array];
     self.listingsCollectionView.dataSource = self;
     self.listingsCollectionView.delegate = self;
     self.usernameLabel.text = self.user.username;
@@ -117,6 +135,31 @@ BOOL showUserListings = TRUE;
 - (IBAction)didTapGetSavedListings:(id)sender {
     showUserListings = FALSE;
     [self setProfileScreen];
+}
+- (IBAction)didTapSettingButton:(id)sender {
+    self.cancelButton.hidden = NO;
+    self.saveSettingsButton.hidden = NO;
+    [self.toolbarButtons removeObject:self.settingsBarButton];
+    [self.navigationItem setRightBarButtonItems:self.toolbarButtons animated:YES];
+}
+- (IBAction)didTapCancelButton:(id)sender {
+    self.cancelButton.hidden = YES;
+    self.saveSettingsButton.hidden = YES;
+    if (![self.toolbarButtons containsObject:self.settingsBarButton]) {
+        [self.toolbarButtons insertObject:self.settingsBarButton atIndex:0];
+        [self.navigationItem setRightBarButtonItems:self.toolbarButtons animated:YES];
+    }
+
+}
+- (IBAction)saveSettingsButton:(id)sender {
+    self.saveSettingsButton.hidden = YES;
+    self.cancelButton.hidden = YES;
+    
+    if (![self.toolbarButtons containsObject:self.settingsBarButton]) {
+        [self.toolbarButtons insertObject:self.settingsBarButton atIndex:0];
+        [self.navigationItem setRightBarButtonItems:self.toolbarButtons animated:YES];
+    }
+    
 }
 
 
