@@ -6,6 +6,7 @@
 //
 
 #import "ListingDetailViewController.h"
+#import "ProfileViewController.h"
 #import <MessageUI/MessageUI.h>
 
 @interface ListingDetailViewController ()<MFMailComposeViewControllerDelegate>
@@ -134,6 +135,9 @@
     }
     
 }
+- (IBAction)didTapViewProfileButton:(id)sender {
+    [self performSegueWithIdentifier:@"ListingDetailToProfile" sender:self.listing.author];
+}
 
 
 
@@ -143,14 +147,18 @@
 
 
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    if ([[segue identifier] isEqualToString:@"ListingDetailToProfile"]){
+        ProfileViewController *profileViewController = [segue destinationViewController];
+        profileViewController.user = sender;
+    }
 }
-*/
+
 
 @end

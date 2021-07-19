@@ -19,7 +19,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *usernameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *userBioLabel;
 @property (weak, nonatomic) IBOutlet UICollectionView *listingsCollectionView;
-@property (strong, nonatomic) User *user;
 @property (strong, nonatomic) NSMutableArray *arrayOfListings;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 @property (weak, nonatomic) IBOutlet UIButton *saveSettingsButton;
@@ -47,15 +46,23 @@ BOOL showUserListings = TRUE;
 }
 
 -(void) setProfileScreen{
+    User *currentUser = [User currentUser];
     if (!self.user){
-        self.user = [User currentUser];
+        self.user = currentUser;
     }
-    self.toolbarButtons = [self.navigationItem.rightBarButtonItems mutableCopy];
-    if ([self.user isEqual:[User currentUser]]){
+    if ([self.user.objectId isEqualToString: currentUser.objectId]){
         self.settingsButton.hidden = NO;
         self.cancelButton.hidden = YES;
         self.saveSettingsButton.hidden = YES;
     }
+    else{
+        self.settingsButton.hidden = YES;
+        self.cancelButton.hidden = YES;
+        self.saveSettingsButton.hidden = YES;
+    }
+    
+    self.toolbarButtons = [self.navigationItem.rightBarButtonItems mutableCopy];
+    
     
 
     self.arrayOfListings = [NSMutableArray array];

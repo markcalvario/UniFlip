@@ -583,7 +583,7 @@
         <!--Profile View Controller-->
         <scene sceneID="RnB-kT-ldm">
             <objects>
-                <viewController storyboardIdentifier="ProfileViewController" id="RaW-Wm-Soe" customClass="ProfileViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ProfileViewController" modalPresentationStyle="fullScreen" id="RaW-Wm-Soe" customClass="ProfileViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="fi7-yz-2EX">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1018,7 +1018,7 @@
         <!--Listing Detail View Controller-->
         <scene sceneID="gNN-0C-BWh">
             <objects>
-                <viewController id="Ydr-sh-TIk" customClass="ListingDetailViewController" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="fullScreen" id="Ydr-sh-TIk" customClass="ListingDetailViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="XGo-To-V3p">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1042,6 +1042,9 @@
                                                     <constraint firstAttribute="width" constant="72" id="oCG-72-fai"/>
                                                 </constraints>
                                                 <state key="normal" image="default_profile_pic"/>
+                                                <connections>
+                                                    <action selector="didTapViewProfileButton:" destination="Ydr-sh-TIk" eventType="touchUpInside" id="wkC-P4-giD"/>
+                                                </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title Of Listing" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ilc-zu-VZy">
                                                 <rect key="frame" x="88" y="305" width="247" height="21.5"/>
@@ -1135,20 +1138,22 @@
                         <outlet property="listingImage" destination="K7g-Qh-ATF" id="CLq-nf-LAl"/>
                         <outlet property="saveButton" destination="od2-Mu-fOo" id="g8M-iK-8ff"/>
                         <outlet property="titleLabel" destination="ilc-zu-VZy" id="uR0-2y-93E"/>
+                        <segue destination="RaW-Wm-Soe" kind="show" identifier="ListingDetailToProfile" id="1cV-ZD-tXO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vVK-eD-Jsx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1034.7826086956522" y="1695.5357142857142"/>
+            <point key="canvasLocation" x="2669.5652173913045" y="1780.5803571428571"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="279-uM-a7n">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="v1S-iv-Knf" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" modalPresentationStyle="fullScreen" id="v1S-iv-Knf" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="" image="profile_tab" id="EOM-kg-gQZ">
                         <inset key="imageInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="-6"/>
                     </tabBarItem>
                     <toolbarItems/>
+                    <navigationItem key="navigationItem" id="O88-F0-N5u"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="KRP-FI-0F0">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -1165,6 +1170,7 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="nHl-qN-Fv6"/>
+        <segue reference="1cV-ZD-tXO"/>
         <segue reference="yJF-wa-pAP"/>
     </inferredMetricsTieBreakers>
     <resources>

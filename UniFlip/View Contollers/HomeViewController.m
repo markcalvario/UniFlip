@@ -155,14 +155,6 @@
     listingCell.saveButton.titleLabel.font = [UIFont systemFontOfSize:0];
     [self updateSaveButtonUI:listing.isSaved withButton: listingCell.saveButton];
     [listingCell.saveButton addTarget:self action:@selector(didTapSaveIcon:) forControlEvents: UIControlEventTouchUpInside];
-
-    
-    /*UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]
-                                             initWithTarget:self action:@selector(didTapListing:)];
-    [tapRecognizer setNumberOfTouchesRequired:1];
-    [tapRecognizer setDelegate:self];
-    listingCell.userInteractionEnabled = YES;
-    [listingCell addGestureRecognizer:tapRecognizer];*/
     return listingCell;
     
 }
