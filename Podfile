@@ -16,6 +16,8 @@ target 'UniFlip' do
   pod 'MaterialComponents/TextControls+OutlinedTextAreas'
   pod 'MaterialComponents/TextControls+OutlinedTextFields'
 
+  pod 'MaterialComponents/Snackbar'
+
   target 'UniFlipTests' do
     inherit! :search_paths
     # Pods for testing

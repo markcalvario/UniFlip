@@ -10,6 +10,8 @@
 #import "SelectOptionViewController.h"
 #import "PlaceAutocompleteViewController.h"
 #import "Listing.h"
+#import "MaterialSnackbar.h"
+
 @import UITextView_Placeholder;
 
 @interface SellViewController ()<UINavigationControllerDelegate, UIImagePickerControllerDelegate, SelectOptionViewControllerDelege, PlaceAutocompleteDelege>
@@ -25,6 +27,17 @@
 @property (weak, nonatomic) IBOutlet UIButton *categoryButton;
 @property (weak, nonatomic) IBOutlet UITextField *listingTypeField;
 @property (weak, nonatomic) IBOutlet UITextField *priceField;
+
+@property (strong, nonatomic) UIImage *image;
+@property (strong, nonatomic) NSString *listingTitle;
+@property (strong, nonatomic) NSString *type;
+@property (strong, nonatomic) NSString *listingDescription;
+@property (strong, nonatomic) NSString *location;
+@property (strong, nonatomic) NSString *category;
+@property (strong, nonatomic) NSString *brand;
+@property (strong, nonatomic) NSString *condition;
+@property (strong, nonatomic) NSString *price;
+
 
 
 @end
@@ -133,26 +146,71 @@
     [self.view endEditing:TRUE];
 }
 - (IBAction)didTapPostListing:(id)sender {
-    UIImage *image = self.imageOfProductButton.currentImage;
-    NSString *title = self.listingTitleField.text;
-    NSString *type = self.listingTypeField.text;
-    NSString *description = self.listingDescriptionView.text;
-    NSString *location = self.locationButton.currentTitle;
-    NSString *category = self.categoryButton.currentTitle;
-    NSString *brand = self.brandField.text;
-    NSString *condition = self.conditionField.text;
-    NSString *price = self.priceField.text;
+    self.image = self.imageOfProductButton.currentImage;
+    self.listingTitle = [self.listingTitleField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    self.type = [self.listingTypeField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    self.listingDescription = [self.listingDescriptionView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    self.location = [self.locationButton.currentTitle stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    self.category = [self.categoryButton.currentTitle stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    self.brand = [self.brandField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    self.condition = [self.conditionField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    self.price = [self.priceField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     
-    [Listing postUserListing:image withTitle:title withType:type withDescription:description withLocation:location withCategory:category withBrand:brand withCondition:condition withPrice:price withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
-        if (error == nil){
-            NSLog(@"Listing is posted");
-            [self resetInputFields];
-            self.tabBarController.selectedViewController = [self.tabBarController.viewControllers objectAtIndex:0];
+    [self areFieldsValid:^(BOOL isValid, NSString *errorMessage){
+        if (isValid){
+            [Listing postUserListing:self.image withTitle:self.listingTitle withType:self.type withDescription:self.listingDescription withLocation:self.location withCategory:self.category withBrand:self.brand withCondition:self.condition withPrice:self.price withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+                if (error == nil){
+                    NSLog(@"Listing is posted");
+                    [self resetInputFields];
+                    self.tabBarController.selectedViewController = [self.tabBarController.viewControllers objectAtIndex:0];
+                }
+                else{
+                    NSLog(@"Error with posting");
+                }
+            }];
         }
         else{
-            NSLog(@"Error with posting");
+            NSLog(@"%@", errorMessage);
+            MDCSnackbarMessage *message = [[MDCSnackbarMessage alloc] init];
+            //MDCSnackbarMessageView *messageView = [[MDCSnackbarMessageView alloc] init];
+            [message setText:errorMessage];
+            message.duration = 1;
+            [MDCSnackbarManager.defaultManager showMessage:message];
+       
+           
+
+            
         }
     }];
+    
+}
+
+-(void) areFieldsValid:(void(^)(BOOL, NSString *)) completion{
+    if ([self.imagePlaceHolder isEqual: self.image]){
+        completion(FALSE, @"Missing at least 1 image");
+    }
+    else if (self.listingTitle.length == 0 || self.listingTitle == nil){
+        completion(FALSE, @"Missing a title for your listing");
+    }
+    else if (self.type.length==0 || self.listingTitle == nil){
+        completion(FALSE, @"Missing a type of listing");
+    }
+    else if (self.listingDescription.length == 0 || self.listingTitle == nil){
+        completion(FALSE, @"Missing a description for your listing");
+    }
+    else if(self.location.length == 0 || self.listingTitle == nil){
+        completion(FALSE, @"Missing a location of your listing");
+    }
+    else if(self.category.length == 0 || self.listingTitle == nil){
+        completion(FALSE, @"Missing a category for your listing");
+    }
+    else if(self.price.length == 0 || self.listingTitle == nil || [self.price isEqualToString:@"0"]){
+        completion(FALSE, @"Missing a price for your listing");
+    }
+    else{
+        completion(TRUE, nil);
+
+    }
     
 }
 
