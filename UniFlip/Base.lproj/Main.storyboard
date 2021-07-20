@@ -691,7 +691,7 @@
                                                 <rect key="frame" x="8" y="157.5" width="197" height="30"/>
                                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="197" id="BdR-OR-VUd"/>
+                                                    <constraint firstAttribute="width" constant="197" id="JAR-E6-6Mt"/>
                                                 </constraints>
                                                 <state key="normal" title="Your Listings">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -775,10 +775,12 @@
                         <outlet property="listingsCollectionView" destination="ump-lS-Fur" id="nIU-Xi-fEs"/>
                         <outlet property="navigationBar" destination="Z1p-Qd-MGY" id="2Ur-vZ-sv7"/>
                         <outlet property="profilePicButton" destination="nD5-vE-Lv2" id="HzL-Gb-VgB"/>
+                        <outlet property="savedButton" destination="i6B-VY-SgN" id="CNl-Tg-nM1"/>
                         <outlet property="settingsBarButton" destination="sbw-Cx-B5S" id="3Sm-OP-2JJ"/>
                         <outlet property="settingsButton" destination="Nat-Jh-uLw" id="pms-mj-0Bv"/>
                         <outlet property="userBioLabel" destination="YXr-ek-GJ3" id="VaH-d1-WgM"/>
                         <outlet property="usernameLabel" destination="Cvb-Rs-t7A" id="u58-WW-pUA"/>
+                        <outlet property="usersListingsButton" destination="FzF-Lw-tBN" id="3J9-CH-xqq"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7yj-uN-cU0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -805,12 +807,8 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="120" id="aBW-XS-5HK"/>
                                 </constraints>
-                                <string key="text">#import &lt;QuartzCore/QuartzCore.h&gt;
-#import &lt;QuartzCore/QuartzCore.h&gt;
-#import &lt;QuartzCore/QuartzCore.h&gt;
-#import &lt;QuartzCore/QuartzCore.h&gt;
-#import &lt;QuartzCore/QuartzCore.h&gt;
-#import &lt;QuartzCore/QuartzCore.h&gt;
+                                <string key="text" base64-UTF8="YES">
+Cg
 </string>
                                 <color key="textColor" systemColor="labelColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -845,6 +843,7 @@
                             <constraint firstItem="iRQ-CN-Kc2" firstAttribute="top" secondItem="6fA-En-b5u" secondAttribute="top" constant="29" id="UfA-py-AHr"/>
                             <constraint firstItem="zW4-Um-JSS" firstAttribute="leading" secondItem="NaR-bx-XT1" secondAttribute="trailing" constant="41.5" id="Vwg-I3-pxc"/>
                             <constraint firstItem="zW4-Um-JSS" firstAttribute="top" secondItem="NaR-bx-XT1" secondAttribute="top" id="WRb-O9-iJo"/>
+                            <constraint firstItem="zW4-Um-JSS" firstAttribute="top" secondItem="iRQ-CN-Kc2" secondAttribute="bottom" constant="22" id="ZyU-pM-Fuq"/>
                             <constraint firstItem="Stm-vf-vaV" firstAttribute="leading" secondItem="6fA-En-b5u" secondAttribute="leading" constant="177" id="gFW-xa-YJ2"/>
                             <constraint firstItem="Stm-vf-vaV" firstAttribute="top" secondItem="6fA-En-b5u" secondAttribute="top" constant="74" id="gxo-O1-GgE"/>
                             <constraint firstItem="6fA-En-b5u" firstAttribute="trailing" secondItem="zW4-Um-JSS" secondAttribute="trailing" constant="42" id="isa-wY-kdE"/>

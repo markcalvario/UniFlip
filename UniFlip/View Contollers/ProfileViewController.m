@@ -26,7 +26,9 @@
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *settingsBarButton;
 @property (strong, nonatomic) IBOutlet UIButton *settingsButton;
 @property (strong, nonatomic) UIAlertController *photoSelectorAlert;
-
+@property (strong, nonatomic) User *currentUser;
+@property (strong, nonatomic) IBOutlet UIButton *savedButton;
+@property (strong, nonatomic) IBOutlet UIButton *usersListingsButton;
 
 
 @end
@@ -37,6 +39,7 @@ BOOL showUserListings = TRUE;
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.currentUser = [User currentUser];
     [self setProfileScreen];
     
 }
@@ -45,17 +48,20 @@ BOOL showUserListings = TRUE;
 }
 
 -(void) setProfileScreen{
-    User *currentUser = [User currentUser];
+    
     if (!self.user){
-        self.user = currentUser;
+        self.user = self.currentUser;
     }
     //User is viewing themselves
-    if ([self.user.objectId isEqualToString: currentUser.objectId]){
+    if ([self.user.objectId isEqualToString: self.currentUser.objectId]){
         self.settingsButton.hidden = NO;
     }
     //User is viewing a different user
     else{
         self.settingsButton.hidden = YES;
+        //[self.savedButton removeFromSuperview];
+        [self.usersListingsButton setTitle:@"Listings Posted" forState:UIControlStateNormal];
+        /*self.usersListingsButton.frame = CGRectMake(self.usersListingsButton.frame.origin.x, self.usersListingsButton.frame.origin.y, self.usersListingsButton.frame.size.width*2, self.usersListingsButton.frame.size.height);*/
     }
     
     self.toolbarButtons = [self.navigationItem.rightBarButtonItems mutableCopy];
@@ -75,6 +81,7 @@ BOOL showUserListings = TRUE;
             }
             else{
                 [self.profilePicButton setImage: [UIImage imageNamed:@"default_profile_pic"] forState:UIControlStateNormal];
+                
             }
         }];
     }
@@ -96,24 +103,40 @@ BOOL showUserListings = TRUE;
     [query findObjectsInBackgroundWithBlock:^(NSArray *listings, NSError *error) {
         if (listings) {
             for (Listing *listing in listings){
+                __block BOOL isSaved = FALSE;
                 dispatch_group_enter(dispatchGroup);
                 PFRelation *relation = [listing relationForKey:@"savedBy"];
                 PFQuery *query = [relation query];
                 [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable arrayOfUsers, NSError * _Nullable error) {
                     if (arrayOfUsers){
-                        if (getAllUserListings){
-                            listing.isSaved = !listing.isSaved;
-                            [savedListings addObject:listing]; //maybe refactor
-                            //NSLog(@"user has not saved this listing");
+                        if (getAllUserListings && ([listing.author.username isEqualToString: self.user.username])){
+                            for (User *user in arrayOfUsers){
+                                if ([user.username isEqualToString: self.currentUser.username]){
+                                    NSLog(@"user has saved this listing");
+                                    listing.isSaved = TRUE;
+                                    isSaved = TRUE;
+                                    [savedListings addObject:listing];
+                                }
+                            }
+                            if (getAllUserListings && (!isSaved)){
+                                NSLog(@"user has not saved this listing");
+                                listing.isSaved = FALSE;
+                                [savedListings addObject:listing];
+                            }
 
                         }else{
                             for (User *user in arrayOfUsers){
                                 if ([user.username isEqualToString: self.user.username]){
                                     NSLog(@"user has saved this listing");
-                                    listing.isSaved = TRUE;
+                                    //listing.isSaved = TRUE;
                                     [savedListings addObject:listing];
                                 }
+                                if ([user.username isEqualToString: self.currentUser.username]){
+                                    NSLog(@"user has saved this listing");
+                                    listing.isSaved = TRUE;
+                                }
                             }
+        
                         }
                         self.arrayOfListings = savedListings;
                     }else{
