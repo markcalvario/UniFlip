@@ -11,6 +11,11 @@ target 'UniFlip' do
   pod 'GooglePlaces'
   pod 'UITextView+Placeholder'
 
+  pod 'MaterialComponents/TextControls+FilledTextAreas'
+  pod 'MaterialComponents/TextControls+FilledTextFields'
+  pod 'MaterialComponents/TextControls+OutlinedTextAreas'
+  pod 'MaterialComponents/TextControls+OutlinedTextFields'
+
   target 'UniFlipTests' do
     inherit! :search_paths
     # Pods for testing

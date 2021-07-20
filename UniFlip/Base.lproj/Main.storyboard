@@ -615,7 +615,7 @@
                                                 <state key="normal" image="default_profile_pic"/>
                                             </button>
                                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ump-lS-Fur">
-                                                <rect key="frame" x="0.0" y="219" width="414" height="508"/>
+                                                <rect key="frame" x="0.0" y="195.5" width="414" height="531.5"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="FFb-Mk-NwE">
                                                     <size key="itemSize" width="128" height="128"/>
@@ -688,7 +688,7 @@
                                                 </cells>
                                             </collectionView>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FzF-Lw-tBN">
-                                                <rect key="frame" x="8" y="181" width="197" height="30"/>
+                                                <rect key="frame" x="8" y="157.5" width="197" height="30"/>
                                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="197" id="BdR-OR-VUd"/>
@@ -701,7 +701,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i6B-VY-SgN">
-                                                <rect key="frame" x="209" y="181" width="197" height="30"/>
+                                                <rect key="frame" x="209" y="157.5" width="197" height="30"/>
                                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="197" id="dcW-fr-DQZ"/>
@@ -732,7 +732,7 @@
                                             <constraint firstAttribute="trailing" secondItem="YXr-ek-GJ3" secondAttribute="trailing" constant="8" id="kk8-0x-yq9"/>
                                             <constraint firstItem="FzF-Lw-tBN" firstAttribute="leading" secondItem="YXr-ek-GJ3" secondAttribute="leading" id="lEg-gI-PwA"/>
                                             <constraint firstItem="nD5-vE-Lv2" firstAttribute="top" secondItem="4b4-Tg-lbI" secondAttribute="top" constant="8" id="siP-x5-K7e"/>
-                                            <constraint firstItem="FzF-Lw-tBN" firstAttribute="top" secondItem="YXr-ek-GJ3" secondAttribute="bottom" constant="35.5" id="vgK-xf-e9S"/>
+                                            <constraint firstItem="FzF-Lw-tBN" firstAttribute="top" secondItem="YXr-ek-GJ3" secondAttribute="bottom" constant="12" id="vgK-xf-e9S"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -758,47 +758,23 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Z1p-Qd-MGY">
-                        <barButtonItem key="leftBarButtonItem" style="plain" id="2M7-JT-4Pi">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Zqx-v4-O8O">
-                                <rect key="frame" x="20" y="10" width="24" height="24"/>
+                        <barButtonItem key="backBarButtonItem" title="Cancel" id="Kz9-FP-ud6"/>
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="sbw-Cx-B5S">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Nat-Jh-uLw">
+                                <rect key="frame" x="370" y="10" width="24" height="24"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" image="cancel_icon"/>
+                                <state key="normal" image="profile_settings_icon"/>
                                 <connections>
-                                    <action selector="didTapCancelButton:" destination="RaW-Wm-Soe" eventType="touchUpInside" id="dED-FS-AfA"/>
+                                    <action selector="didTapSettingButton:" destination="RaW-Wm-Soe" eventType="touchUpInside" id="Ufq-sr-4g1"/>
+                                    <segue destination="HTU-AL-sfM" kind="show" id="Sb0-Zw-326"/>
                                 </connections>
                             </button>
                         </barButtonItem>
-                        <rightBarButtonItems>
-                            <barButtonItem style="plain" id="sbw-Cx-B5S">
-                                <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Nat-Jh-uLw">
-                                    <rect key="frame" x="370" y="10" width="24" height="24"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <state key="normal" image="profile_settings_icon"/>
-                                    <connections>
-                                        <action selector="didTapSettingButton:" destination="RaW-Wm-Soe" eventType="touchUpInside" id="Ufq-sr-4g1"/>
-                                        <segue destination="HTU-AL-sfM" kind="show" id="Sb0-Zw-326"/>
-                                    </connections>
-                                </button>
-                            </barButtonItem>
-                            <barButtonItem style="plain" id="9PP-Au-TuQ">
-                                <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="hxf-fg-dvg">
-                                    <rect key="frame" x="338" y="10" width="24" height="24"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <state key="normal" image="checkmark_bold"/>
-                                    <connections>
-                                        <action selector="saveSettingsButton:" destination="RaW-Wm-Soe" eventType="touchUpInside" id="w64-WH-I6l"/>
-                                    </connections>
-                                </button>
-                            </barButtonItem>
-                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
-                        <outlet property="cancelButton" destination="Zqx-v4-O8O" id="a35-W7-Wp1"/>
                         <outlet property="listingsCollectionView" destination="ump-lS-Fur" id="nIU-Xi-fEs"/>
                         <outlet property="navigationBar" destination="Z1p-Qd-MGY" id="2Ur-vZ-sv7"/>
                         <outlet property="profilePicButton" destination="nD5-vE-Lv2" id="HzL-Gb-VgB"/>
-                        <outlet property="saveSettingsButton" destination="hxf-fg-dvg" id="C5M-Zo-Dis"/>
                         <outlet property="settingsBarButton" destination="sbw-Cx-B5S" id="3Sm-OP-2JJ"/>
                         <outlet property="settingsButton" destination="Nat-Jh-uLw" id="pms-mj-0Bv"/>
                         <outlet property="userBioLabel" destination="YXr-ek-GJ3" id="VaH-d1-WgM"/>
@@ -809,21 +785,95 @@
             </objects>
             <point key="canvasLocation" x="4762.3188405797109" y="912.72321428571422"/>
         </scene>
-        <!--View Controller-->
+        <!--Edit Profile View Controller-->
         <scene sceneID="MfU-8b-Uuf">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dgd-Yi-qaG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <viewController modalPresentationStyle="fullScreen" id="HTU-AL-sfM" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="fullScreen" id="HTU-AL-sfM" customClass="EditProfileViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="nY1-9n-8e8">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bio" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NaR-bx-XT1">
+                                <rect key="frame" x="20" y="289" width="27.5" height="20.5"/>
+                                <fontDescription key="fontDescription" name="Galvji-Bold" family="Galvji" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="zW4-Um-JSS">
+                                <rect key="frame" x="89" y="289" width="283" height="120"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="120" id="aBW-XS-5HK"/>
+                                </constraints>
+                                <string key="text">#import &lt;QuartzCore/QuartzCore.h&gt;
+#import &lt;QuartzCore/QuartzCore.h&gt;
+#import &lt;QuartzCore/QuartzCore.h&gt;
+#import &lt;QuartzCore/QuartzCore.h&gt;
+#import &lt;QuartzCore/QuartzCore.h&gt;
+#import &lt;QuartzCore/QuartzCore.h&gt;
+</string>
+                                <color key="textColor" systemColor="labelColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <button opaque="NO" alpha="0.5" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iRQ-CN-Kc2">
+                                <rect key="frame" x="132" y="117" width="150" height="150"/>
+                                <accessibility key="accessibilityConfiguration">
+                                    <accessibilityTraits key="traits" button="YES" image="YES"/>
+                                </accessibility>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="150" id="09h-Gx-8K1"/>
+                                    <constraint firstAttribute="height" constant="150" id="eR5-Id-Ro8"/>
+                                </constraints>
+                                <state key="normal" image="default_profile_pic"/>
+                                <connections>
+                                    <action selector="didTapProfilePicButton:" destination="HTU-AL-sfM" eventType="touchUpInside" id="sRQ-SW-sUI"/>
+                                </connections>
+                            </button>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="photo_add_icon" translatesAutoresizingMaskIntoConstraints="NO" id="Stm-vf-vaV">
+                                <rect key="frame" x="177" y="162" width="60" height="60"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="60" id="1sH-Qe-cLq"/>
+                                    <constraint firstAttribute="height" constant="60" id="adp-Wb-UrU"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="6fA-En-b5u"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="iRQ-CN-Kc2" firstAttribute="leading" secondItem="6fA-En-b5u" secondAttribute="leading" constant="132" id="2qZ-3X-BF5"/>
+                            <constraint firstItem="iRQ-CN-Kc2" firstAttribute="top" secondItem="6fA-En-b5u" secondAttribute="top" constant="29" id="UfA-py-AHr"/>
+                            <constraint firstItem="zW4-Um-JSS" firstAttribute="leading" secondItem="NaR-bx-XT1" secondAttribute="trailing" constant="41.5" id="Vwg-I3-pxc"/>
+                            <constraint firstItem="zW4-Um-JSS" firstAttribute="top" secondItem="NaR-bx-XT1" secondAttribute="top" id="WRb-O9-iJo"/>
+                            <constraint firstItem="Stm-vf-vaV" firstAttribute="leading" secondItem="6fA-En-b5u" secondAttribute="leading" constant="177" id="gFW-xa-YJ2"/>
+                            <constraint firstItem="Stm-vf-vaV" firstAttribute="top" secondItem="6fA-En-b5u" secondAttribute="top" constant="74" id="gxo-O1-GgE"/>
+                            <constraint firstItem="6fA-En-b5u" firstAttribute="trailing" secondItem="zW4-Um-JSS" secondAttribute="trailing" constant="42" id="isa-wY-kdE"/>
+                            <constraint firstItem="NaR-bx-XT1" firstAttribute="top" secondItem="6fA-En-b5u" secondAttribute="top" constant="201" id="rja-wv-55v"/>
+                            <constraint firstItem="NaR-bx-XT1" firstAttribute="leading" secondItem="6fA-En-b5u" secondAttribute="leading" constant="20" id="v7f-hA-ywY"/>
+                        </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="bDm-dJ-3RX"/>
+                    <navigationItem key="navigationItem" id="bDm-dJ-3RX">
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="zA9-fq-eIV">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="mxI-bu-86h">
+                                <rect key="frame" x="370" y="10" width="24" height="24"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" image="checkmark_bold"/>
+                                <connections>
+                                    <action selector="didTapSaveSetttings:" destination="HTU-AL-sfM" eventType="touchUpInside" id="2aH-e3-7Ht"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="addPhotoIcon" destination="Stm-vf-vaV" id="hz4-GC-3oQ"/>
+                        <outlet property="bioTextView" destination="zW4-Um-JSS" id="gag-8H-cf7"/>
+                        <outlet property="profilePicButton" destination="iRQ-CN-Kc2" id="rw4-Gp-C65"/>
+                    </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dgd-Yi-qaG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5493" y="907"/>
+            <point key="canvasLocation" x="5492.753623188406" y="906.69642857142856"/>
         </scene>
         <!--New Account View Controller-->
         <scene sceneID="XYS-bH-KxP">
@@ -1200,16 +1250,19 @@
         <segue reference="yJF-wa-pAP"/>
     </inferredMetricsTieBreakers>
     <resources>
-        <image name="cancel_icon" width="24" height="24"/>
         <image name="checkmark_bold" width="24" height="24"/>
         <image name="default_profile_pic" width="360" height="360"/>
         <image name="envelope_icon" width="24" height="24"/>
         <image name="home_icon" width="72" height="77.666664123535156"/>
         <image name="image_placeholder" width="375" height="375"/>
+        <image name="photo_add_icon" width="24" height="24"/>
         <image name="profile_settings_icon" width="24" height="24"/>
         <image name="profile_tab" width="25" height="25"/>
         <image name="sell_icon" width="42.666667938232422" height="42.666667938232422"/>
         <image name="unsaved_icon" width="24" height="24"/>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

@@ -20,8 +20,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *userBioLabel;
 @property (weak, nonatomic) IBOutlet UICollectionView *listingsCollectionView;
 @property (strong, nonatomic) NSMutableArray *arrayOfListings;
-@property (weak, nonatomic) IBOutlet UIButton *cancelButton;
-@property (weak, nonatomic) IBOutlet UIButton *saveSettingsButton;
 @property (weak, nonatomic) IBOutlet UINavigationItem *navigationBar;
 @property (strong, nonatomic) NSMutableArray *toolbarButtons;
 
@@ -54,16 +52,10 @@ BOOL showUserListings = TRUE;
     //User is viewing themselves
     if ([self.user.objectId isEqualToString: currentUser.objectId]){
         self.settingsButton.hidden = NO;
-        self.cancelButton.hidden = YES;
-        self.saveSettingsButton.hidden = YES;
-        [self.profilePicButton addTarget:self action:@selector(didTapChangeProfilePic:) forControlEvents: UIControlEventTouchUpInside];
-
     }
     //User is viewing a different user
     else{
         self.settingsButton.hidden = YES;
-        self.cancelButton.hidden = YES;
-        self.saveSettingsButton.hidden = YES;
     }
     
     self.toolbarButtons = [self.navigationItem.rightBarButtonItems mutableCopy];
@@ -167,24 +159,6 @@ BOOL showUserListings = TRUE;
     [self setProfileScreen];
 }
 - (IBAction)didTapSettingButton:(id)sender {
-    self.cancelButton.hidden = NO;
-    self.saveSettingsButton.hidden = NO;
-    [self.toolbarButtons removeObject:self.settingsBarButton];
-    [self.navigationItem setRightBarButtonItems:self.toolbarButtons animated:YES];
-}
-- (IBAction)didTapCancelButton:(id)sender {
-    self.cancelButton.hidden = YES;
-    self.saveSettingsButton.hidden = YES;
-    [self showSettingsIcon];
-
-}
-- (IBAction) saveSettingsButton:(id)sender {
-    self.saveSettingsButton.hidden = YES;
-    self.cancelButton.hidden = YES;
-    [self showSettingsIcon];
-    
-    [User postSaveSettings:self.user withProfileImage: self.profilePicButton.currentImage withBiography:@""];
-    
 }
 - (void) didTapSaveIcon:(UIButton *)sender {
     Listing *listing = self.arrayOfListings[sender.tag];
