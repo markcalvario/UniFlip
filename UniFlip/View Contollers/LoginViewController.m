@@ -12,6 +12,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *usernameOrEmailLabel;
 @property (weak, nonatomic) IBOutlet UITextField *passwordLabel;
 
+
 @end
 
 @implementation LoginViewController
@@ -20,7 +21,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [self displayLoginScreen];
+}
+- (void)viewWillAppear:(BOOL)animated{
+    [self displayLoginScreen];
+}
+-(void) displayLoginScreen{
     self.passwordLabel.secureTextEntry = YES;
+
 }
 - (IBAction)didTapExitKeyboard:(id)sender {
     [self.view endEditing:TRUE];

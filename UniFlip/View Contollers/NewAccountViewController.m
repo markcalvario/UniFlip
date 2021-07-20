@@ -6,6 +6,7 @@
 //
 
 #import "NewAccountViewController.h"
+#import "LoginViewController.h"
 #import "CollegeCell.h"
 #import "Parse/Parse.h"
 //#import "../Assets.xcassets/defaultProfilePic.imageset/Image.png"
@@ -33,13 +34,40 @@
     // Do any additional setup after loading the view.
     self.passwordField.secureTextEntry = YES;
     self.collegesTableView.hidden = YES;
-    [self getListOfAllUSColleges];
+    [self updateListOfAllUSColleges];
 }
 
-
+-(void) showSuccessAlert{
+    UIAlertController *successfullyRegisteredAlert = [UIAlertController alertControllerWithTitle:[[@"Hi " stringByAppendingString:self.usernameField.text] stringByAppendingString: @","]
+                                                                               message:@"Congrats, on successfully registering your account! Please verify your email to start logging in!"
+                                                                        preferredStyle:(UIAlertControllerStyleAlert)];
+    // create an OK action
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Verify"
+                                                       style:UIAlertActionStyleDefault
+                                                     handler:^(UIAlertAction * _Nonnull action) {
+                                                        NSDictionary *options = [NSDictionary dictionary];
+                                                        NSURL* mailURL = [NSURL URLWithString:@"message://"];
+                                                        if ([[UIApplication sharedApplication] canOpenURL:mailURL]) {
+                                                            [[UIApplication sharedApplication] openURL:mailURL options:options completionHandler:^(BOOL success){
+                                                                
+                                                            }];
+                                                        }
+                                                        self.schoolEmailField.text = @"";
+                                                        self.usernameField.text = @"";
+                                                        self.passwordField.text = @"";
+                                                        self.collegeTextField.text = @"";
+                                                        [self performSegueWithIdentifier:@"SuccessfulRegisterToLogin" sender:nil];
+    
+                                                     }];
+    // add the OK action to the alert controller
+    [successfullyRegisteredAlert addAction:okAction];
+    [self presentViewController:successfullyRegisteredAlert animated:YES completion:^{
+        // optional code for what happens after the alert controller has finished presenting
+    }];
+}
 
 /// API Requests
--(void) getListOfAllUSColleges{
+-(void) updateListOfAllUSColleges{
     NSURL *url = [NSURL URLWithString:@"http://universities.hipolabs.com/search?country=United+States"];
     NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:10.0];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:nil delegateQueue:[NSOperationQueue mainQueue]];
@@ -51,12 +79,13 @@
             //If API call successful, add the college dictionaries result into the array
            else {
                NSArray *dataArray = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+               NSLog(@"%@", dataArray);
                self.arrayOfColleges = dataArray;
            }
        }];
     [task resume];
 }
--(void) getCollegesFromSubstring: (NSString *) universitySubstring{
+-(void) updateCollegesFromSubstring: (NSString *) universitySubstring{
     self.arrayOfCollegesForTableView = [[NSMutableArray alloc] init];
     for (NSDictionary *college in self.arrayOfColleges){
          NSString *collegeName = college[@"name"];
@@ -78,16 +107,16 @@
     schoolEmailDomain = [schoolEmailDomain lowercaseString];
     
     
-    /*if ([self.collegeSelected isEqual:nil]){
+    if ([self.collegeSelected isEqual:nil]){
         return FALSE;
-    }*/
+    }
     
     for (NSString *emailDomain in self.collegeSelected[@"domains"]){
         if ([schoolEmailDomain isEqualToString:[emailDomain lowercaseString]]){
             return TRUE;
         }
     }
-    return TRUE;
+    return TRUE; //change back to FALSE
 }
 - (BOOL)validateEmailWithString:(NSString*)checkString
 {
@@ -114,13 +143,11 @@
             NSLog(@"Error: %@", error.localizedDescription);
         } else {
             NSLog(@"User registered successfully");
-            self.schoolEmailField.text = @"";
-            self.usernameField.text = @"";
-            self.passwordField.text = @"";
-            self.collegeTextField.text = @"";
+            
             NSLog(@"%@", newUser);
             [self addUserToMarketplace:newUser.username school:collegeName];
-            [self performSegueWithIdentifier:@"SuccessfulRegisterToLogin" sender:nil];
+            [self showSuccessAlert];
+            //[self performSegueWithIdentifier:@"SuccessfulRegisterToLogin" sender:@"successfully registered"];
         }
     }];
 }
@@ -190,7 +217,7 @@
     NSString *universitySubstring = self.collegeTextField.text;
     universitySubstring = [universitySubstring lowercaseString];
     self.collegesTableView.hidden = NO;
-    [self getCollegesFromSubstring:universitySubstring];
+    [self updateCollegesFromSubstring:universitySubstring];
 }
 
 
@@ -224,15 +251,6 @@
 
 
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 
 
