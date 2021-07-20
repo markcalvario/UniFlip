@@ -22,6 +22,11 @@
 @property (strong, nonatomic) NSMutableArray *arrayOfCollegesForTableView;
 @property (strong, nonatomic) NSDictionary *collegeSelected;
 
+@property (strong, nonatomic) NSString *schoolEmail;
+@property (strong, nonatomic) NSString *username;
+@property (strong, nonatomic) NSString *password;
+@property (strong, nonatomic) NSString *collegeName;
+
 @end
 
 @implementation NewAccountViewController
@@ -38,7 +43,7 @@
 }
 
 -(void) showSuccessAlert{
-    UIAlertController *successfullyRegisteredAlert = [UIAlertController alertControllerWithTitle:[[@"Hi " stringByAppendingString:self.usernameField.text] stringByAppendingString: @","]
+    UIAlertController *successfullyRegisteredAlert = [UIAlertController alertControllerWithTitle:[[@"Hi " stringByAppendingString:self.username] stringByAppendingString: @","]
                                                                                message:@"Congrats, on successfully registering your account! Please verify your email to start logging in!"
                                                                         preferredStyle:(UIAlertControllerStyleAlert)];
     // create an OK action
@@ -79,7 +84,6 @@
             //If API call successful, add the college dictionaries result into the array
            else {
                NSArray *dataArray = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-               NSLog(@"%@", dataArray);
                self.arrayOfColleges = dataArray;
            }
        }];
@@ -132,9 +136,9 @@
 ///Create User
 -(void) createUserAccount: (NSString *) collegeName{
     PFUser *newUser = [PFUser user];
-    newUser.email = self.schoolEmailField.text;
-    newUser.username = self.usernameField.text;
-    newUser.password = self.passwordField.text;
+    newUser.email = self.schoolEmail;
+    newUser.username = self.username;
+    newUser.password = self.password;
     newUser[@"biography"] = @"";
     newUser[@"university"] = collegeName;
     // call sign up function on the object
@@ -191,17 +195,17 @@
 
 /// ACTIONS
 - (IBAction)didTapRegister:(id)sender {
-    NSString *schoolEmail = self.schoolEmailField.text;
-    NSString *username = self.usernameField.text;
-    NSString *password = self.passwordField.text;
-    NSString *collegeName = self.collegeTextField.text;
-    if ( ([schoolEmail length] == 0) || ( [username length] == 0) || ([password length]== 0) || ([collegeName length]==0) || (![self validateEmailWithString:schoolEmail])){
+    self.schoolEmail = [self.schoolEmailField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    self.username = [self.usernameField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    self.password = [self.passwordField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    self.collegeName = [self.collegeTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    if ( ([self.schoolEmail length] == 0) || ( [self.username length] == 0) || ([self.password length]== 0) || ([self.collegeName length]==0) || (![self validateEmailWithString:self.schoolEmail])){
         NSLog(@"%@", @"incomplete fields");
         return;
     }
 
-    if ([self doesEmailDomainMatchUniversity:schoolEmail schoolName:collegeName]){
-        [self createUserAccount:collegeName];
+    if ([self doesEmailDomainMatchUniversity:self.schoolEmail schoolName:self.collegeName]){
+        [self createUserAccount:self.collegeName];
     }
     else{
         NSLog(@"%@", @"No match");
@@ -214,7 +218,7 @@
 }
 
 - (IBAction)didEditUniversityField:(id)sender {
-    NSString *universitySubstring = self.collegeTextField.text;
+    NSString *universitySubstring = [self.collegeTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     universitySubstring = [universitySubstring lowercaseString];
     self.collegesTableView.hidden = NO;
     [self updateCollegesFromSubstring:universitySubstring];

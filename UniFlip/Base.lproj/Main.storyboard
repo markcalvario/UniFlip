@@ -147,7 +147,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="IIf-rw-qWN">
+                            <searchBar contentMode="redraw" placeholder="Search for listings" showsCancelButton="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IIf-rw-qWN">
                                 <rect key="frame" x="0.0" y="88" width="414" height="51"/>
                                 <textInputTraits key="textInputTraits"/>
                             </searchBar>
@@ -292,6 +292,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="listingCategoryTableView" destination="TUQ-ol-6UX" id="pVx-IO-Ugg"/>
+                        <outlet property="searchListingsBar" destination="IIf-rw-qWN" id="VlD-l7-Hf0"/>
                         <segue destination="Ydr-sh-TIk" kind="show" identifier="HomeToListingDetail" id="nHl-qN-Fv6"/>
                     </connections>
                 </viewController>
@@ -1244,7 +1245,7 @@ Cg
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="jy6-i8-Qry"/>
+        <segue reference="nHl-qN-Fv6"/>
         <segue reference="VAk-SO-nHF"/>
         <segue reference="yJF-wa-pAP"/>
     </inferredMetricsTieBreakers>
