@@ -55,6 +55,7 @@
     PFRelation *relation = [listing relationForKey:@"savedBy"];
     [relation addObject:user];
     [listing incrementKey:@"saveCount" byAmount:@(1)];
+    listing.isSaved = TRUE;
     [listing saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
         if (succeeded){
             completion(TRUE, nil);
@@ -68,6 +69,7 @@
     PFRelation *relation = [listing relationForKey:@"savedBy"];
     [relation removeObject:user];
     [listing incrementKey:@"saveCount" byAmount:@(-1)];
+    listing.isSaved = FALSE;
     [listing saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
         if (succeeded){
             completion(TRUE, nil);

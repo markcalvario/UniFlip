@@ -8,6 +8,7 @@
 #import "ListingDetailViewController.h"
 #import "ProfileViewController.h"
 #import <MessageUI/MessageUI.h>
+#import "User.h"
 
 @interface ListingDetailViewController ()<MFMailComposeViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIImageView *listingImage;
@@ -17,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
 @property (strong, nonatomic) IBOutlet UIButton *saveButton;
 @property (strong, nonatomic) IBOutlet UILabel *priceLabel;
+@property (strong, nonatomic) User *currentUser;
 
 @end
 
@@ -25,6 +27,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.currentUser = [User currentUser];
     [self loadListingScreenDetais];
 }
 -(void) viewWillAppear:(BOOL)animated{
@@ -123,9 +126,10 @@
     // be a good memory manager and release mc, as you are responsible for it because your alloc/init
 }
 - (IBAction)didTapSaveIcon:(id)sender {
+    
     if (self.listing.isSaved){
         NSLog(@"was saved but is now not saved");
-        [Listing postUnsaveListing:self.listing withUser:self.listing.author completion:^(BOOL succeeded, NSError * _Nullable error) {
+        [Listing postUnsaveListing:self.listing withUser:self.currentUser completion:^(BOOL succeeded, NSError * _Nullable error) {
             if (succeeded){
                 self.listing.isSaved = FALSE;
                 [self updateSaveButtonUI:self.listing.isSaved withButton: sender];
@@ -135,7 +139,7 @@
     }
     else{
         NSLog(@"was not saved but now is saved");
-        [Listing postSaveListing:self.listing withUser:self.listing.author completion:^(BOOL succeeded, NSError * _Nullable error) {
+        [Listing postSaveListing:self.listing withUser:self.currentUser completion:^(BOOL succeeded, NSError * _Nullable error) {
             if (succeeded){
                 self.listing.isSaved = TRUE;
                 [self updateSaveButtonUI:self.listing.isSaved withButton: sender];

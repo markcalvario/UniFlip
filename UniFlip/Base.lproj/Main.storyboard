@@ -776,6 +776,7 @@
                                     <state key="normal" image="profile_settings_icon"/>
                                     <connections>
                                         <action selector="didTapSettingButton:" destination="RaW-Wm-Soe" eventType="touchUpInside" id="Ufq-sr-4g1"/>
+                                        <segue destination="HTU-AL-sfM" kind="show" id="Sb0-Zw-326"/>
                                     </connections>
                                 </button>
                             </barButtonItem>
@@ -807,6 +808,22 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7yj-uN-cU0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="4762.3188405797109" y="912.72321428571422"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="MfU-8b-Uuf">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dgd-Yi-qaG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <viewController modalPresentationStyle="fullScreen" id="HTU-AL-sfM" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="nY1-9n-8e8">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="6fA-En-b5u"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="bDm-dJ-3RX"/>
+                </viewController>
+            </objects>
+            <point key="canvasLocation" x="5493" y="907"/>
         </scene>
         <!--New Account View Controller-->
         <scene sceneID="XYS-bH-KxP">
@@ -1068,8 +1085,8 @@
                                                     <action selector="didTapComposeMail:" destination="Ydr-sh-TIk" eventType="touchUpInside" id="hLT-03-BtR"/>
                                                 </connections>
                                             </button>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lNs-cD-jBU">
-                                                <rect key="frame" x="22" y="396" width="373" height="172"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lNs-cD-jBU">
+                                                <rect key="frame" x="22" y="380" width="373" height="172"/>
                                                 <string key="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
                                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                 <nil key="textColor"/>
@@ -1178,8 +1195,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="nHl-qN-Fv6"/>
-        <segue reference="1cV-ZD-tXO"/>
+        <segue reference="jy6-i8-Qry"/>
+        <segue reference="VAk-SO-nHF"/>
         <segue reference="yJF-wa-pAP"/>
     </inferredMetricsTieBreakers>
     <resources>

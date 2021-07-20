@@ -21,37 +21,83 @@
 @property (strong, nonatomic) NSMutableArray *arrayOfCategories;
 @property (strong, nonatomic) NSArray *arrayOfListings;
 @property (strong, nonatomic) User *currentUser;
-
+@property (nonatomic) BOOL hasCalledViewDidLoad;
 @end
 
 @implementation HomeViewController
 
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.currentUser = [User currentUser];
+    self.listingCategoryTableView.delegate = self;
+    self.listingCategoryTableView.dataSource = self;
+    self.hasCalledViewDidLoad = TRUE;
     [self updateListingsByCategory];
 }
 -(void) viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    if (!self.hasCalledViewDidLoad){
+        [self updateListingsByCategory];
+    }
+    self.hasCalledViewDidLoad = FALSE;
+
+        //-> call updateListingsByCategory function
 }
+
+
 -(void) updateListingsByCategory{
-    self.currentUser = [User currentUser];
-    self.listingCategoryTableView.delegate = self;
-    self.listingCategoryTableView.dataSource = self;
+    dispatch_group_t dispatchGroup = dispatch_group_create();
+
+    
     self.categoryToArrayOfPosts = [NSMutableDictionary dictionary];
     self.arrayOfCategories = [NSMutableArray array];
-    dispatch_group_t dispatchGroup = dispatch_group_create();
+
     PFQuery *query = [Listing query];
     [query includeKey:@"savedBy"];
     [query orderByDescending:@"createdAt"];
     [query includeKey:@"author"];
+    NSMutableDictionary *categoryToListings = [NSMutableDictionary dictionary];
     [query findObjectsInBackgroundWithBlock:^(NSArray<Listing *> * _Nullable listings, NSError * _Nullable error) {
         if (listings) {
-            
+            //NSLog(@"%@", self.categoryToArrayOfPosts);
             for (Listing *listing in listings){
+                /*dispatch_group_enter(dispatchGroup);
                 __block BOOL isListingSaved = FALSE;
-                dispatch_group_enter(dispatchGroup);
-                
+                //checking for saved listings by user
+                NSString *category = listing.listingCategory;
+                PFRelation *relation = [listing relationForKey:@"savedBy"];
+                PFQuery *query = [relation query];
+                [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable arrayOfUsers, NSError * _Nullable error) {
+                  if (arrayOfUsers){
+                      for (User *user in arrayOfUsers){
+                          if ([user.username isEqualToString: self.currentUser.username]){
+                              listing.isSaved = TRUE;
+                              isListingSaved = TRUE;
+                          }
+                      }
+                      if (!isListingSaved){
+                          listing.isSaved = FALSE;
+                      }
+                      if ([categoryToListings objectForKey:category]){
+                          NSMutableArray *arrayOfListingsValue = [categoryToListings objectForKey:category];
+                          [arrayOfListingsValue addObject:listing];
+                          [categoryToListings setObject:arrayOfListingsValue forKey:category];
+                      }
+                      else{
+                         NSMutableArray *arrayOfListingsValue = [[NSMutableArray alloc] init];
+                         [arrayOfListingsValue addObject:listing];
+                         [self.arrayOfCategories addObject: category];
+                         [categoryToListings setObject:arrayOfListingsValue forKey:category];
+                      }
+                      self.categoryToArrayOfPosts = categoryToListings;
+                  }else{
+                      NSLog(@"Could not load saved listings");
+                  }
+                  dispatch_group_leave(dispatchGroup);
+                }];*/
+                __block BOOL isListingSaved = FALSE;
                 //Adding listing to appropiate dictionary key
                 NSString *category = listing.listingCategory;
                 if ( [self.categoryToArrayOfPosts objectForKey:listing.listingCategory]){
@@ -65,6 +111,7 @@
                     [self.arrayOfCategories addObject: category];
                     [self.categoryToArrayOfPosts setObject:arrayOfListingsValue forKey:category];
                 }
+                dispatch_group_enter(dispatchGroup);
                 //checking for saved listings by user
                 PFRelation *relation = [listing relationForKey:@"savedBy"];
                 PFQuery *query = [relation query];
@@ -84,6 +131,7 @@
                     }
                     dispatch_group_leave(dispatchGroup);
                 }];
+
             }
         }
         else{
@@ -112,7 +160,6 @@
     tableViewCell.listingCollectionView.delegate = self;
     tableViewCell.listingCollectionView.dataSource = self;
     [tableViewCell.listingCollectionView reloadData];
-
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -128,7 +175,7 @@
     NSInteger tableViewIndex = collectionView.tag;
     NSString *tableViewCategory = self.arrayOfCategories[tableViewIndex];
     NSArray *currentCategoryArray = self.categoryToArrayOfPosts[tableViewCategory];
-    
+    //NSLog(@"%@", currentCategoryArray);
     return currentCategoryArray.count;
 }
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{

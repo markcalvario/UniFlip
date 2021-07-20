@@ -42,9 +42,9 @@ BOOL showUserListings = TRUE;
     [self setProfileScreen];
     
 }
-/*- (void)viewWillAppear:(BOOL)animated{
+- (void)viewWillAppear:(BOOL)animated{
     [self setProfileScreen];
-}*/
+}
 
 -(void) setProfileScreen{
     User *currentUser = [User currentUser];
@@ -178,7 +178,7 @@ BOOL showUserListings = TRUE;
     [self showSettingsIcon];
 
 }
-- (IBAction)saveSettingsButton:(id)sender {
+- (IBAction) saveSettingsButton:(id)sender {
     self.saveSettingsButton.hidden = YES;
     self.cancelButton.hidden = YES;
     [self showSettingsIcon];
