@@ -19,6 +19,7 @@
 @property (strong, nonatomic) IBOutlet UIButton *saveButton;
 @property (strong, nonatomic) IBOutlet UILabel *priceLabel;
 @property (strong, nonatomic) User *currentUser;
+@property (strong, nonatomic) IBOutlet UITapGestureRecognizer *listingImageTapGesture;
 
 @end
 
@@ -27,6 +28,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.listingImageTapGesture.numberOfTapsRequired = 2;
+    self.listingImage.userInteractionEnabled = YES;
+
     self.currentUser = [User currentUser];
     [self loadListingScreenDetais];
 }
@@ -126,7 +130,6 @@
     // be a good memory manager and release mc, as you are responsible for it because your alloc/init
 }
 - (IBAction)didTapSaveIcon:(id)sender {
-    
     if (self.listing.isSaved){
         NSLog(@"was saved but is now not saved");
         [Listing postUnsaveListing:self.listing withUser:self.currentUser completion:^(BOOL succeeded, NSError * _Nullable error) {
@@ -151,7 +154,28 @@
 - (IBAction)didTapViewProfileButton:(id)sender {
     [self performSegueWithIdentifier:@"ListingDetailToProfile" sender:self.listing.author];
 }
+- (IBAction)didTapImageTwice:(id)sender {
+    NSLog(@"tapped twice");
+    if (self.listing.isSaved){
+        NSLog(@"was saved but is now not saved");
+        [Listing postUnsaveListing:self.listing withUser:self.currentUser completion:^(BOOL succeeded, NSError * _Nullable error) {
+            if (succeeded){
+                self.listing.isSaved = FALSE;
+                [self updateSaveButtonUI:self.listing.isSaved withButton: self.saveButton];
 
+            }
+        }];
+    }
+    else{
+        NSLog(@"was not saved but now is saved");
+        [Listing postSaveListing:self.listing withUser:self.currentUser completion:^(BOOL succeeded, NSError * _Nullable error) {
+            if (succeeded){
+                self.listing.isSaved = TRUE;
+                [self updateSaveButtonUI:self.listing.isSaved withButton: self.saveButton];
+            }
+        }];
+    }
+}
 
 
 

@@ -248,6 +248,7 @@ BOOL isFiltered;
     NSString *price = listing.listingPrice;
     listingCell.priceLabel.text = [@"$" stringByAppendingString: price];
     listingCell.profileListingTitleLabel.text = listing.listingTitle;
+    
     PFFileObject *listingImageFile = listing.listingImage;
     [listingImageFile getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
                 if (!error) {
@@ -255,6 +256,11 @@ BOOL isFiltered;
                     [listingCell.listingImage setImage:image];
                 }
         }];
+    
+    /*UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapSaveIcon:)];
+    tapGesture.numberOfTapsRequired = 2;
+    [listingCell.listingImage addGestureRecognizer:tapGesture];*/
+    
     listingCell.saveButton.tag = indexPath.row;
     [listingCell.saveButton setTitle: listing.listingCategory forState:UIControlStateNormal];
     listingCell.saveButton.titleLabel.font = [UIFont systemFontOfSize:0];
@@ -333,6 +339,7 @@ BOOL isFiltered;
         [saveButton setImage:[UIImage imageNamed:@"unsaved_icon"] forState:UIControlStateNormal];
     }
 }
+
 
 
 #pragma mark - Navigation

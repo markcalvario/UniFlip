@@ -210,6 +210,7 @@
                                                                     </button>
                                                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="0tF-Bq-fQ3">
                                                                         <rect key="frame" x="5" y="4" width="160" height="166"/>
+                                                                        <gestureRecognizers/>
                                                                     </imageView>
                                                                 </subviews>
                                                                 <constraints>
@@ -297,7 +298,6 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="baD-wp-Qky" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="5g5-i9-R80"/>
             </objects>
             <point key="canvasLocation" x="161" y="907"/>
         </scene>
@@ -1098,9 +1098,13 @@ Cg
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="image_placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="K7g-Qh-ATF">
                                                 <rect key="frame" x="0.0" y="0.0" width="414" height="280"/>
+                                                <gestureRecognizers/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="280" id="8Z5-id-Zea"/>
                                                 </constraints>
+                                                <connections>
+                                                    <outletCollection property="gestureRecognizers" destination="CaQ-fW-h7R" appends="YES" id="smr-hl-xOJ"/>
+                                                </connections>
                                             </imageView>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hdC-lu-ffu">
                                                 <rect key="frame" x="8" y="305" width="72" height="72"/>
@@ -1211,6 +1215,7 @@ Cg
                         <outlet property="descriptionLabel" destination="lNs-cD-jBU" id="GIT-un-CfY"/>
                         <outlet property="imageOfAuthorButton" destination="hdC-lu-ffu" id="0nA-J2-Lcp"/>
                         <outlet property="listingImage" destination="K7g-Qh-ATF" id="CLq-nf-LAl"/>
+                        <outlet property="listingImageTapGesture" destination="CaQ-fW-h7R" id="dOL-C1-gBY"/>
                         <outlet property="priceLabel" destination="lAR-Rn-RUS" id="0Qc-qd-0yz"/>
                         <outlet property="saveButton" destination="od2-Mu-fOo" id="g8M-iK-8ff"/>
                         <outlet property="titleLabel" destination="ilc-zu-VZy" id="uR0-2y-93E"/>
@@ -1218,6 +1223,11 @@ Cg
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vVK-eD-Jsx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="CaQ-fW-h7R">
+                    <connections>
+                        <action selector="didTapImageTwice:" destination="Ydr-sh-TIk" id="2ub-zF-TV9"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="2669.5652173913045" y="1780.5803571428571"/>
         </scene>
@@ -1246,7 +1256,7 @@ Cg
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="nHl-qN-Fv6"/>
-        <segue reference="VAk-SO-nHF"/>
+        <segue reference="1cV-ZD-tXO"/>
         <segue reference="yJF-wa-pAP"/>
     </inferredMetricsTieBreakers>
     <resources>
