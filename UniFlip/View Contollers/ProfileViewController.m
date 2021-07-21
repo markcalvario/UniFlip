@@ -304,6 +304,8 @@ BOOL showUserListings = TRUE;
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     Listing *listing = self.arrayOfListings[indexPath.row];
     [self updateListingsToClicks: listing];
+    [self updateCategoriesVisitedToClick: listing];
+
 }
 
 -(void) updateListingsToClicks: (Listing *)listing{
@@ -324,6 +326,25 @@ BOOL showUserListings = TRUE;
     }
     
     self.currentUser[@"listingsToClicks"] = listingsToClicks;
+    [self.currentUser saveInBackground];
+}
+
+-(void) updateCategoriesVisitedToClick: (Listing *)listing{
+    NSMutableDictionary *categoriesVisitedToClick = self.currentUser[@"categoriesVisitedToClick"];
+    if (!categoriesVisitedToClick){
+        categoriesVisitedToClick = [NSMutableDictionary dictionary];
+    }
+    if ([categoriesVisitedToClick objectForKey:listing.listingCategory]){
+        //increment
+        NSNumber *clicks = [categoriesVisitedToClick valueForKey:listing.listingCategory];
+        int value = [clicks intValue];
+        clicks = [NSNumber numberWithInt:value + 1];
+        [categoriesVisitedToClick setValue:clicks forKey:listing.listingCategory];
+    }
+    else{
+        [categoriesVisitedToClick setValue:@(1) forKey:listing.listingCategory];
+    }
+    self.currentUser[@"categoriesVisitedToClick"] = categoriesVisitedToClick;
     [self.currentUser saveInBackground];
 }
 

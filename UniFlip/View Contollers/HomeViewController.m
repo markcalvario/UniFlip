@@ -322,6 +322,7 @@ BOOL isFiltered;
     NSString *category = self.arrayOfCategories[collectionView.tag];
     Listing *listing = self.categoryToArrayOfPosts[category][indexPath.row];
     [self updateListingsToClicks:listing];
+    [self updateCategoriesVisitedToClick:listing];
     if (isFiltered){
         category = self.filteredArrayOfCategories[collectionView.tag];
         listing = self.filteredCategoryToArrayOfPosts[category][indexPath.row];
@@ -405,6 +406,25 @@ BOOL isFiltered;
         [listingsToClicks setValue:@(1) forKey:listing.objectId];
     }
     self.currentUser[@"listingsToClicks"] = listingsToClicks;
+    [self.currentUser saveInBackground];
+}
+
+-(void) updateCategoriesVisitedToClick: (Listing *)listing{
+    NSMutableDictionary *categoriesVisitedToClick = self.currentUser[@"categoriesVisitedToClick"];
+    if (!categoriesVisitedToClick){
+        categoriesVisitedToClick = [NSMutableDictionary dictionary];
+    }
+    if ([categoriesVisitedToClick objectForKey:listing.listingCategory]){
+        //increment
+        NSNumber *clicks = [categoriesVisitedToClick valueForKey:listing.listingCategory];
+        int value = [clicks intValue];
+        clicks = [NSNumber numberWithInt:value + 1];
+        [categoriesVisitedToClick setValue:clicks forKey:listing.listingCategory];
+    }
+    else{
+        [categoriesVisitedToClick setValue:@(1) forKey:listing.listingCategory];
+    }
+    self.currentUser[@"categoriesVisitedToClick"] = categoriesVisitedToClick;
     [self.currentUser saveInBackground];
 }
 
