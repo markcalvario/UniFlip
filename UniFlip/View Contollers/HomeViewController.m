@@ -321,6 +321,7 @@ BOOL isFiltered;
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     NSString *category = self.arrayOfCategories[collectionView.tag];
     Listing *listing = self.categoryToArrayOfPosts[category][indexPath.row];
+    [self updateListingsToClicks:listing];
     if (isFiltered){
         category = self.filteredArrayOfCategories[collectionView.tag];
         listing = self.filteredCategoryToArrayOfPosts[category][indexPath.row];
@@ -387,6 +388,25 @@ BOOL isFiltered;
     else{
         [saveButton setImage:[UIImage imageNamed:@"unsaved_icon"] forState:UIControlStateNormal];
     }
+}
+-(void) updateListingsToClicks: (Listing *)listing{
+    NSMutableDictionary *listingsToClicks = self.currentUser[@"listingsToClicks"];
+    if (!listingsToClicks){
+        listingsToClicks = [NSMutableDictionary dictionary];
+    }
+    if ([listingsToClicks objectForKey:listing.objectId]){
+        //increment
+        NSNumber *clicks = [listingsToClicks valueForKey:listing.objectId];
+        int value = [clicks intValue];
+        clicks = [NSNumber numberWithInt:value + 1];
+        [listingsToClicks setValue:clicks forKey:listing.objectId];
+    }
+    else{
+        [listingsToClicks setValue:@(1) forKey:listing.objectId];
+    }
+    
+    self.currentUser[@"listingsToClicks"] = listingsToClicks;
+    [self.currentUser saveInBackground];
 }
 
 

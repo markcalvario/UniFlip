@@ -13,6 +13,9 @@
 #import "ListingDetailViewController.h"
 #import <SystemConfiguration/SystemConfiguration.h>
 
+#import <objc/runtime.h>
+
+
 
 @interface ProfileViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIButton *profilePicButton;
@@ -112,14 +115,14 @@ BOOL showUserListings = TRUE;
                         if (getAllUserListings && ([listing.author.username isEqualToString: self.user.username])){
                             for (User *user in arrayOfUsers){
                                 if ([user.username isEqualToString: self.currentUser.username]){
-                                    NSLog(@"user has saved this listing");
+                                    //NSLog(@"user has saved this listing");
                                     listing.isSaved = TRUE;
                                     isSaved = TRUE;
                                     [savedListings addObject:listing];
                                 }
                             }
                             if (getAllUserListings && (!isSaved)){
-                                NSLog(@"user has not saved this listing");
+                                //NSLog(@"user has not saved this listing");
                                 listing.isSaved = FALSE;
                                 [savedListings addObject:listing];
                             }
@@ -127,12 +130,12 @@ BOOL showUserListings = TRUE;
                         }else{
                             for (User *user in arrayOfUsers){
                                 if ([user.username isEqualToString: self.user.username]){
-                                    NSLog(@"user has saved this listing");
+                                    //NSLog(@"user has saved this listing");
                                     //listing.isSaved = TRUE;
                                     [savedListings addObject:listing];
                                 }
                                 if ([user.username isEqualToString: self.currentUser.username]){
-                                    NSLog(@"user has saved this listing");
+                                    //NSLog(@"user has saved this listing");
                                     listing.isSaved = TRUE;
                                 }
                             }
@@ -297,6 +300,31 @@ BOOL showUserListings = TRUE;
     CGFloat itemHeight = itemWidth *1.25;
     return CGSizeMake(itemWidth, itemHeight);
     
+}
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+    Listing *listing = self.arrayOfListings[indexPath.row];
+    [self updateListingsToClicks: listing];
+}
+
+-(void) updateListingsToClicks: (Listing *)listing{
+    NSMutableDictionary *listingsToClicks = self.currentUser[@"listingsToClicks"];
+    if (!listingsToClicks){
+        listingsToClicks = [NSMutableDictionary dictionary];
+    }
+    if ([listingsToClicks objectForKey:listing.objectId]){
+        //increment
+        NSNumber *clicks = [listingsToClicks valueForKey:listing.objectId];
+        int value = [clicks intValue];
+        clicks = [NSNumber numberWithInt:value + 1];
+        [listingsToClicks setValue:clicks forKey:listing.objectId];
+    }
+    else{
+        
+        [listingsToClicks setValue:@(1) forKey:listing.objectId];
+    }
+    
+    self.currentUser[@"listingsToClicks"] = listingsToClicks;
+    [self.currentUser saveInBackground];
 }
 
 #pragma mark - Navigation
