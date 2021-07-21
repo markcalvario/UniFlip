@@ -12,6 +12,7 @@
 #import "MaterialActionSheet.h"
 #import "MaterialTextControls+OutlinedTextAreas.h"
 #import "MaterialTextControls+OutlinedTextFields.h"
+#import "ReportListingViewController.h"
 
 
 @interface ListingDetailViewController ()<MFMailComposeViewControllerDelegate>
@@ -193,7 +194,9 @@
                                         image:[UIImage imageNamed:@"flag_outline"]
                                         handler:^(MDCActionSheetAction *action){
         [self dismissViewControllerAnimated:TRUE completion:^{
-            //MDCActionSheetController *
+            //ReportListingViewController * reportViewController = [[ReportListingViewController alloc] init];
+            //[self presentViewController:reportViewController animated:TRUE completion:nil];
+            [self performSegueWithIdentifier:@"ListingDetailToReport" sender:nil];
         }];
         
     }];

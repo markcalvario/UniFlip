@@ -1089,6 +1089,64 @@ Cg
             </objects>
             <point key="canvasLocation" x="1035" y="907"/>
         </scene>
+        <!--Report Listing View Controller-->
+        <scene sceneID="T1p-Dg-9OD">
+            <objects>
+                <viewController id="u61-ey-GT3" customClass="ReportListingViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Lbj-1c-BXy">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="bS3-wh-TvL">
+                                <rect key="frame" x="87" y="211" width="240" height="102"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="102" id="TLj-1R-4LN"/>
+                                </constraints>
+                                <color key="textColor" systemColor="labelColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OdS-Dv-Ef1">
+                                <rect key="frame" x="87" y="336" width="240" height="30"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="Report">
+                                    <color key="titleColor" systemColor="systemBackgroundColor"/>
+                                </state>
+                                <connections>
+                                    <action selector="didTapReport:" destination="u61-ey-GT3" eventType="touchUpInside" id="H39-X1-0IF"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Report" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="63A-GD-oDB">
+                                <rect key="frame" x="156" y="109" width="94" height="36"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Q9w-iV-Tai"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="bS3-wh-TvL" firstAttribute="leading" secondItem="Q9w-iV-Tai" secondAttribute="leading" constant="87" id="3bs-Pm-XdG"/>
+                            <constraint firstItem="Q9w-iV-Tai" firstAttribute="trailing" secondItem="OdS-Dv-Ef1" secondAttribute="trailing" constant="87" id="6GM-jR-7fc"/>
+                            <constraint firstItem="63A-GD-oDB" firstAttribute="top" secondItem="Q9w-iV-Tai" secondAttribute="top" constant="109" id="A1B-Kb-oqo"/>
+                            <constraint firstItem="bS3-wh-TvL" firstAttribute="top" secondItem="63A-GD-oDB" secondAttribute="bottom" constant="66" id="Eac-PB-B48"/>
+                            <constraint firstItem="OdS-Dv-Ef1" firstAttribute="top" secondItem="bS3-wh-TvL" secondAttribute="bottom" constant="23" id="SXe-5l-PAw"/>
+                            <constraint firstItem="OdS-Dv-Ef1" firstAttribute="leading" secondItem="Q9w-iV-Tai" secondAttribute="leading" constant="87" id="TQg-xp-KTW"/>
+                            <constraint firstItem="63A-GD-oDB" firstAttribute="leading" secondItem="Q9w-iV-Tai" secondAttribute="leading" constant="156" id="Y0O-UY-Bro"/>
+                            <constraint firstItem="Q9w-iV-Tai" firstAttribute="trailing" secondItem="bS3-wh-TvL" secondAttribute="trailing" constant="87" id="pew-Nn-Ddt"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="cMP-GS-a6z"/>
+                    <connections>
+                        <outlet property="reportButton" destination="OdS-Dv-Ef1" id="020-vG-mHI"/>
+                        <outlet property="reportTextView" destination="bS3-wh-TvL" id="7lf-fy-HFd"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6Nu-fc-2CD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1689.8550724637682" y="1780.5803571428571"/>
+        </scene>
         <!--Listing Detail View Controller-->
         <scene sceneID="gNN-0C-BWh">
             <objects>
@@ -1240,6 +1298,7 @@ Cg
                         <outlet property="saveButton" destination="od2-Mu-fOo" id="g8M-iK-8ff"/>
                         <outlet property="titleLabel" destination="ilc-zu-VZy" id="uR0-2y-93E"/>
                         <segue destination="RaW-Wm-Soe" kind="show" identifier="ListingDetailToProfile" id="1cV-ZD-tXO"/>
+                        <segue destination="u61-ey-GT3" kind="presentation" identifier="ListingDetailToReport" id="Ung-zE-JzI"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vVK-eD-Jsx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
