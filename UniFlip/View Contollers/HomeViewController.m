@@ -14,6 +14,7 @@
 #import "User.h"
 #import "ListingDetailViewController.h"
 #import <SystemConfiguration/SystemConfiguration.h>
+#import "Reachability.h"
 
 @interface HomeViewController ()<UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchBarDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *listingCategoryTableView;
@@ -25,6 +26,7 @@
 @property (strong, nonatomic) NSMutableDictionary *filteredCategoryToArrayOfPosts;
 @property (strong, nonatomic) NSMutableArray *filteredArrayOfCategories;
 @property (strong, nonatomic) NSMutableArray *allListings;
+
 @end
 
 @implementation HomeViewController
@@ -45,80 +47,100 @@ BOOL isFiltered;
 -(void) viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     isFiltered = NO;
-    if (!self.hasCalledViewDidLoad){
+    if (!self.hasCalledViewDidLoad && [self isConnectedToInternet]){
         [self updateListingsByCategory];
+    }
+    else if (![self isConnectedToInternet]){
+        [self displayConnectionErrorAlert];
     }
     self.hasCalledViewDidLoad = FALSE;
 
         //-> call updateListingsByCategory function
 }
+- (BOOL) isConnectedToInternet{
+    Reachability *reach = [Reachability reachabilityForInternetConnection];
+    return [reach isReachable];
+}
 
-
+-(void) displayConnectionErrorAlert{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Unable to connect to the internet" message:@"Please check your internet connection and try again." preferredStyle:(UIAlertControllerStyleAlert)];
+    // create an OK action
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Try again" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {}];
+    // add the OK action to the alert controller
+    [alert addAction:okAction];
+    [self presentViewController:alert animated:YES completion:^{ }];
+}
 -(void) updateListingsByCategory{
-    dispatch_group_t dispatchGroup = dispatch_group_create();
+    if (![self isConnectedToInternet]){
+        [self displayConnectionErrorAlert];
+    }
+    else{
+        dispatch_group_t dispatchGroup = dispatch_group_create();
 
-    
-    self.categoryToArrayOfPosts = [NSMutableDictionary dictionary];
-    self.arrayOfCategories = [NSMutableArray array];
-    
+        
+        self.categoryToArrayOfPosts = [NSMutableDictionary dictionary];
+        self.arrayOfCategories = [NSMutableArray array];
+        
 
-    self.allListings = [NSMutableArray array];
+        self.allListings = [NSMutableArray array];
 
-    PFQuery *query = [Listing query];
-    [query includeKey:@"savedBy"];
-    [query orderByDescending:@"createdAt"];
-    [query includeKey:@"author"];
-    //NSMutableDictionary *categoryToListings = [NSMutableDictionary dictionary];
-    [query findObjectsInBackgroundWithBlock:^(NSArray<Listing *> * _Nullable listings, NSError * _Nullable error) {
-        if (listings) {
-            //NSLog(@"%@", self.categoryToArrayOfPosts);
-            for (Listing *listing in listings){
-                if ([listing.author.university isEqualToString: self.currentUser.university]){
-                    __block BOOL isListingSaved = FALSE;
-                    //Adding listing to appropiate dictionary key
-                    NSString *category = listing.listingCategory;
-                    if ( [self.categoryToArrayOfPosts objectForKey:listing.listingCategory]){
-                        NSMutableArray *arrayOfListingsValue = [self.categoryToArrayOfPosts objectForKey:category];
-                        [arrayOfListingsValue addObject:listing];
-                        [self.categoryToArrayOfPosts setObject:arrayOfListingsValue forKey:category];
-                    }
-                    else{
-                        NSMutableArray *arrayOfListingsValue = [[NSMutableArray alloc] init];
-                        [arrayOfListingsValue addObject:listing];
-                        [self.arrayOfCategories addObject: category];
-                        [self.categoryToArrayOfPosts setObject:arrayOfListingsValue forKey:category];
-                    }
-                    [self.allListings addObject:listing];
-                    dispatch_group_enter(dispatchGroup);
-                    //checking for saved listings by user
-                    PFRelation *relation = [listing relationForKey:@"savedBy"];
-                    PFQuery *query = [relation query];
-                    [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable arrayOfUsers, NSError * _Nullable error) {
-                        if (arrayOfUsers){
-                            for (User *user in arrayOfUsers){
-                                if ([user.username isEqualToString: self.currentUser.username]){
-                                    listing.isSaved = TRUE;
-                                    isListingSaved = TRUE;
-                                }
-                            }
-                            if (!isListingSaved){
-                                listing.isSaved = FALSE;
-                            }
-                        }else{
-                            NSLog(@"Could not load saved listings");
+        PFQuery *query = [Listing query];
+        [query includeKey:@"savedBy"];
+        [query orderByDescending:@"createdAt"];
+        [query includeKey:@"author"];
+        //NSMutableDictionary *categoryToListings = [NSMutableDictionary dictionary];
+        [query findObjectsInBackgroundWithBlock:^(NSArray<Listing *> * _Nullable listings, NSError * _Nullable error) {
+            if (listings) {
+                //NSLog(@"%@", self.categoryToArrayOfPosts);
+                for (Listing *listing in listings){
+                    if ([listing.author.university isEqualToString: self.currentUser.university]){
+                        __block BOOL isListingSaved = FALSE;
+                        //Adding listing to appropiate dictionary key
+                        NSString *category = listing.listingCategory;
+                        if ( [self.categoryToArrayOfPosts objectForKey:listing.listingCategory]){
+                            NSMutableArray *arrayOfListingsValue = [self.categoryToArrayOfPosts objectForKey:category];
+                            [arrayOfListingsValue addObject:listing];
+                            [self.categoryToArrayOfPosts setObject:arrayOfListingsValue forKey:category];
                         }
-                        dispatch_group_leave(dispatchGroup);
-                    }];
+                        else{
+                            NSMutableArray *arrayOfListingsValue = [[NSMutableArray alloc] init];
+                            [arrayOfListingsValue addObject:listing];
+                            [self.arrayOfCategories addObject: category];
+                            [self.categoryToArrayOfPosts setObject:arrayOfListingsValue forKey:category];
+                        }
+                        [self.allListings addObject:listing];
+                        dispatch_group_enter(dispatchGroup);
+                        //checking for saved listings by user
+                        PFRelation *relation = [listing relationForKey:@"savedBy"];
+                        PFQuery *query = [relation query];
+                        [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable arrayOfUsers, NSError * _Nullable error) {
+                            if (arrayOfUsers){
+                                for (User *user in arrayOfUsers){
+                                    if ([user.username isEqualToString: self.currentUser.username]){
+                                        listing.isSaved = TRUE;
+                                        isListingSaved = TRUE;
+                                    }
+                                }
+                                if (!isListingSaved){
+                                    listing.isSaved = FALSE;
+                                }
+                            }else{
+                                NSLog(@"Could not load saved listings");
+                            }
+                            dispatch_group_leave(dispatchGroup);
+                        }];
+                    }
                 }
             }
-        }
-        else{
-            NSLog(@"%@", error.localizedDescription);
-        }
-        dispatch_group_notify(dispatchGroup, dispatch_get_main_queue(), ^(void){
-            [self.listingCategoryTableView reloadData];
-        });
-    }];
+            else{
+                NSLog(@"%@", error.localizedDescription);
+            }
+            dispatch_group_notify(dispatchGroup, dispatch_get_main_queue(), ^(void){
+                [self.listingCategoryTableView reloadData];
+            });
+        }];
+    }
+    
 }
 #pragma mark - Search Bar
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
@@ -306,28 +328,33 @@ BOOL isFiltered;
 }
 
 - (IBAction)didTapSaveIcon:(UIButton *)sender {
-    Listing *listing = self.categoryToArrayOfPosts[[sender currentTitle]][sender.tag];
-    if (listing.isSaved){
-        NSLog(@"was saved but is now not saved");
-        [Listing postUnsaveListing:listing withUser:self.currentUser completion:^(BOOL succeeded, NSError * _Nullable error) {
-            if (succeeded){
-                listing.isSaved = FALSE;
-                [self updateSaveButtonUI:listing.isSaved withButton: sender];
-                [self.listingCategoryTableView reloadData];
-
-            }
-        }];
+    if (![self isConnectedToInternet]){
+        [self displayConnectionErrorAlert];
     }
     else{
-        NSLog(@"was not saved but now is saved");
-        [Listing postSaveListing:listing withUser:self.currentUser completion:^(BOOL succeeded, NSError * _Nullable error) {
-            if (succeeded){
-                listing.isSaved = TRUE;
-                [self updateSaveButtonUI:listing.isSaved withButton: sender];
-                [self.listingCategoryTableView reloadData];
+        Listing *listing = self.categoryToArrayOfPosts[[sender currentTitle]][sender.tag];
+        if (listing.isSaved){
+            NSLog(@"was saved but is now not saved");
+            [Listing postUnsaveListing:listing withUser:self.currentUser completion:^(BOOL succeeded, NSError * _Nullable error) {
+                if (succeeded){
+                    listing.isSaved = FALSE;
+                    [self updateSaveButtonUI:listing.isSaved withButton: sender];
+                    [self.listingCategoryTableView reloadData];
 
-            }
-        }];
+                }
+            }];
+        }
+        else{
+            NSLog(@"was not saved but now is saved");
+            [Listing postSaveListing:listing withUser:self.currentUser completion:^(BOOL succeeded, NSError * _Nullable error) {
+                if (succeeded){
+                    listing.isSaved = TRUE;
+                    [self updateSaveButtonUI:listing.isSaved withButton: sender];
+                    [self.listingCategoryTableView reloadData];
+
+                }
+            }];
+        }
     }
     
 }

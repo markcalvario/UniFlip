@@ -10,6 +10,8 @@
 #import <MessageUI/MessageUI.h>
 #import "User.h"
 #import "MaterialActionSheet.h"
+#import "MaterialTextControls+OutlinedTextAreas.h"
+#import "MaterialTextControls+OutlinedTextFields.h"
 
 
 @interface ListingDetailViewController ()<MFMailComposeViewControllerDelegate>
@@ -23,6 +25,8 @@
 @property (strong, nonatomic) User *currentUser;
 @property (strong, nonatomic) IBOutlet UITapGestureRecognizer *listingImageTapGesture;
 @property (strong, nonatomic) IBOutlet UIButton *menuButton;
+
+
 
 @end
 
@@ -187,7 +191,12 @@
         [MDCActionSheetController actionSheetControllerWithTitle:@""];
     MDCActionSheetAction *homeAction = [MDCActionSheetAction actionWithTitle:@"Report"
                                         image:[UIImage imageNamed:@"flag_outline"]
-                                      handler:nil];
+                                        handler:^(MDCActionSheetAction *action){
+        [self dismissViewControllerAnimated:TRUE completion:^{
+            //MDCActionSheetController *
+        }];
+        
+    }];
     MDCActionSheetAction *favoriteAction =
         [MDCActionSheetAction actionWithTitle:@"Email"
                                         image:[UIImage imageNamed:@"envelope_icon"]

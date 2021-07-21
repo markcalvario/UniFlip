@@ -32,6 +32,8 @@
 		D0B7A65026A144A70029D204 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B7A64F26A144A70029D204 /* User.m */; };
 		D0B7A65326A4DEBF0029D204 /* ListingDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B7A65226A4DEBF0029D204 /* ListingDetailViewController.m */; };
 		D0B7A65626A6A9540029D204 /* EditProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B7A65526A6A9540029D204 /* EditProfileViewController.m */; };
+		D0B7A65A26A7FC1D0029D204 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B7A65926A7FC1D0029D204 /* Reachability.m */; };
+		D0B7A65C26A7FD850029D204 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0B7A65B26A7FD850029D204 /* SystemConfiguration.framework */; };
 		D56325CDB651DCF1D6E74995 /* Pods_UniFlip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 896002A9551245D6FC5C1603 /* Pods_UniFlip.framework */; };
 		EEF5230230B5B4982AA7A2F1 /* Pods_UniFlipTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E75917EC6DEA44684821653 /* Pods_UniFlipTests.framework */; };
 /* End PBXBuildFile section */
@@ -110,6 +112,9 @@
 		D0B7A65226A4DEBF0029D204 /* ListingDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ListingDetailViewController.m; sourceTree = "<group>"; };
 		D0B7A65426A6A9540029D204 /* EditProfileViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EditProfileViewController.h; sourceTree = "<group>"; };
 		D0B7A65526A6A9540029D204 /* EditProfileViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EditProfileViewController.m; sourceTree = "<group>"; };
+		D0B7A65826A7FC0F0029D204 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Reachability.h; path = ../../../Downloads/Reachability/Reachability.h; sourceTree = "<group>"; };
+		D0B7A65926A7FC1D0029D204 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Reachability.m; path = ../../../Downloads/Reachability/Reachability.m; sourceTree = "<group>"; };
+		D0B7A65B26A7FD850029D204 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +122,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0B7A65C26A7FD850029D204 /* SystemConfiguration.framework in Frameworks */,
 				D56325CDB651DCF1D6E74995 /* Pods_UniFlip.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -143,6 +149,7 @@
 		5FEBF2F486C97D6D63C9978B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D0B7A65B26A7FD850029D204 /* SystemConfiguration.framework */,
 				896002A9551245D6FC5C1603 /* Pods_UniFlip.framework */,
 				12E62F05025D37B8BE7A4EA6 /* Pods_UniFlip_UniFlipUITests.framework */,
 				0E75917EC6DEA44684821653 /* Pods_UniFlipTests.framework */,
@@ -188,6 +195,7 @@
 		D09FFDA2269C2174008B33B5 /* UniFlip */ = {
 			isa = PBXGroup;
 			children = (
+				D0B7A65726A7FB700029D204 /* Network */,
 				D0B7A62B269E59A60029D204 /* Models */,
 				D09FFDE2269CDE4C008B33B5 /* Views */,
 				D09FFDD8269C2180008B33B5 /* View Contollers */,
@@ -272,6 +280,15 @@
 				D0B7A64F26A144A70029D204 /* User.m */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		D0B7A65726A7FB700029D204 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				D0B7A65926A7FC1D0029D204 /* Reachability.m */,
+				D0B7A65826A7FC0F0029D204 /* Reachability.h */,
+			);
+			path = Network;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -558,6 +575,7 @@
 				D09FFDB6269C2176008B33B5 /* main.m in Sources */,
 				D0B7A641269FD5710029D204 /* CategoryCell.m in Sources */,
 				D0B7A65326A4DEBF0029D204 /* ListingDetailViewController.m in Sources */,
+				D0B7A65A26A7FC1D0029D204 /* Reachability.m in Sources */,
 				D09FFDA8269C2174008B33B5 /* SceneDelegate.m in Sources */,
 				D0B7A63E269FB3E30029D204 /* Listing.m in Sources */,
 				D0B7A627269D5A6D0029D204 /* HomeViewController.m in Sources */,
