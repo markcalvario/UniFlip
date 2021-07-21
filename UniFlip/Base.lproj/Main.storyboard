@@ -266,11 +266,7 @@
                                 </prototypes>
                             </tableView>
                             <activityIndicatorView opaque="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="q5b-RP-dss">
-                                <rect key="frame" x="181" y="421" width="53" height="55"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="55" id="qdh-YO-52H"/>
-                                    <constraint firstAttribute="width" constant="53" id="t9e-CD-9tm"/>
-                                </constraints>
+                                <rect key="frame" x="181" y="439" width="53" height="37"/>
                             </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="dZs-BV-x54"/>

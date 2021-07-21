@@ -19,6 +19,7 @@
 @interface HomeViewController ()<UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchBarDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *listingCategoryTableView;
 @property (strong, nonatomic) IBOutlet UISearchBar *searchListingsBar;
+@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *loadingSpinner;
 @property (strong, nonatomic) NSMutableDictionary *categoryToArrayOfPosts;
 @property (strong, nonatomic) NSMutableArray *arrayOfCategories;
 @property (strong, nonatomic) User *currentUser;
@@ -26,7 +27,8 @@
 @property (strong, nonatomic) NSMutableDictionary *filteredCategoryToArrayOfPosts;
 @property (strong, nonatomic) NSMutableArray *filteredArrayOfCategories;
 @property (strong, nonatomic) NSMutableArray *allListings;
-@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *loadingSpinner;
+@property (strong, nonatomic) UIRefreshControl *refreshControl;
+
 
 @end
 
@@ -43,6 +45,10 @@ BOOL isFiltered;
     self.listingCategoryTableView.dataSource = self;
     self.searchListingsBar.delegate = self;
     self.hasCalledViewDidLoad = TRUE;
+    
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    [self.refreshControl addTarget:self action:@selector(updateListingsByCategory) forControlEvents:UIControlEventValueChanged];
+    [self.listingCategoryTableView insertSubview:self.refreshControl atIndex:0];
     [self updateListingsByCategory];
 }
 -(void) viewWillAppear:(BOOL)animated{
@@ -78,6 +84,7 @@ BOOL isFiltered;
     else{
         dispatch_group_t dispatchGroup = dispatch_group_create();
         [self.loadingSpinner startAnimating];
+        NSLog(@"updating listings");
         self.loadingSpinner.hidden = NO;
         [self.view setAlpha:0.75];
 
@@ -143,6 +150,7 @@ BOOL isFiltered;
                 [self.loadingSpinner stopAnimating];
                 self.loadingSpinner.hidden = YES;
                 [self.view setAlpha:1];
+                [self.refreshControl endRefreshing];
                 [self.listingCategoryTableView reloadData];
             });
         }];
