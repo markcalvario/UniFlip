@@ -196,7 +196,7 @@
         [self dismissViewControllerAnimated:TRUE completion:^{
             //ReportListingViewController * reportViewController = [[ReportListingViewController alloc] init];
             //[self presentViewController:reportViewController animated:TRUE completion:nil];
-            [self performSegueWithIdentifier:@"ListingDetailToReport" sender:nil];
+            [self performSegueWithIdentifier:@"ListingDetailToReport" sender:self.listing];
         }];
         
     }];
@@ -228,6 +228,10 @@
     if ([[segue identifier] isEqualToString:@"ListingDetailToProfile"]){
         ProfileViewController *profileViewController = [segue destinationViewController];
         profileViewController.user = sender;
+    }
+    else{
+        ReportListingViewController *reportViewController = [segue destinationViewController];
+        reportViewController.listing = sender;
     }
 }
 

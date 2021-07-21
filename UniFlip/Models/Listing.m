@@ -80,6 +80,10 @@
     }];
 }
 
++ (void) postReportToListing:(Report *)report{
+    
+}
+
 + (PFFileObject *)getPFFileFromImage: (UIImage * _Nullable)image {
  
     // check if image is not nil

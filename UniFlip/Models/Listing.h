@@ -7,6 +7,7 @@
 
 #import <Parse/Parse.h>
 #import "User.h"
+#import "Report.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -33,6 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (void) postSaveListing: (Listing *)listing withUser: (PFUser *)user completion:(void(^)(BOOL , NSError *))completion;
 + (void) postUnsaveListing: (Listing *)listing withUser: (PFUser *)user completion:(void(^)(BOOL , NSError *))completion;
 + (void) PFFileToUIImage: (PFFileObject *)imageFile completion:(void(^)(UIImage *, NSError *))completion;
++ (void) postReportToListing:(Report *)report;
 
 + (PFFileObject *)getPFFileFromImage: (UIImage * _Nullable)image;
 - (UIImage *)resizeImage:(UIImage *)image withSize:(CGSize)size;
