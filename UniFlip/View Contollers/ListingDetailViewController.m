@@ -13,6 +13,7 @@
 #import "MaterialTextControls+OutlinedTextAreas.h"
 #import "MaterialTextControls+OutlinedTextFields.h"
 #import "ReportListingViewController.h"
+#import "MaterialSnackbar.h"
 
 
 @interface ListingDetailViewController ()<MFMailComposeViewControllerDelegate>
@@ -194,9 +195,19 @@
                                         image:[UIImage imageNamed:@"flag_outline"]
                                         handler:^(MDCActionSheetAction *action){
         [self dismissViewControllerAnimated:TRUE completion:^{
-            //ReportListingViewController * reportViewController = [[ReportListingViewController alloc] init];
-            //[self presentViewController:reportViewController animated:TRUE completion:nil];
-            [self performSegueWithIdentifier:@"ListingDetailToReport" sender:self.listing];
+
+            [self hasUserReportedListing:^(BOOL hasReported, NSError *error) {
+                if (!hasReported){
+                    [self performSegueWithIdentifier:@"ListingDetailToReport" sender:self.listing];
+                }
+                else{
+                    MDCSnackbarMessage *message = [[MDCSnackbarMessage alloc] init];
+                    //MDCSnackbarMessageView *messageView = [[MDCSnackbarMessageView alloc] init];
+                    [message setText:@"You have already reported this listing"];
+                    message.duration = 1;
+                    [MDCSnackbarManager.defaultManager showMessage:message];
+                }
+            }];
         }];
         
     }];
@@ -213,7 +224,28 @@
 
 
 
+-(void) hasUserReportedListing:(void(^)(BOOL, NSError *))hasReported{
+    PFRelation *relation = [self.listing relationForKey:@"reportedBy"];
+    PFQuery *query = [relation query];
+    __block BOOL reported = FALSE;
+    [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable arrayOfUsers, NSError * _Nullable error) {
+        if (arrayOfUsers){
+            for (User *user in arrayOfUsers){
+                if ([user.username isEqualToString: self.currentUser.username]){
+                    hasReported(TRUE, nil);
+                    reported = TRUE;
+                }
+            }
+            if (!reported){
+                hasReported(FALSE, nil);
+            }
 
+        }else{
+            NSLog(@"Could not load saved listings");
+            hasReported(nil, error);
+        }
+    }];
+}
 
 
 
