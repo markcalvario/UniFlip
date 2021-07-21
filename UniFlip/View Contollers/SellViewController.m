@@ -176,10 +176,6 @@
             [message setText:errorMessage];
             message.duration = 1;
             [MDCSnackbarManager.defaultManager showMessage:message];
-       
-           
-
-            
         }
     }];
     

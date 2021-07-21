@@ -127,7 +127,7 @@ BOOL isFiltered;
     if (searchText.length == 0){
         self.filteredCategoryToArrayOfPosts[@"Suggested Listings"] = [NSArray array];
         [self.filteredArrayOfCategories addObject:@"Suggested Listings"];
-        self.filteredCategoryToArrayOfPosts = self.filteredCategoryToArrayOfPosts;
+        //self.filteredCategoryToArrayOfPosts = self.filteredCategoryToArrayOfPosts;
         isFiltered = YES;
     }
     else{
@@ -158,7 +158,7 @@ BOOL isFiltered;
     if (searchBar.text.length == 0){
         self.filteredCategoryToArrayOfPosts[@"Suggested Listings"] = [NSArray array];
         [self.filteredArrayOfCategories addObject:@"Suggested Listings"];
-        self.filteredCategoryToArrayOfPosts = self.filteredCategoryToArrayOfPosts;
+        //self.filteredCategoryToArrayOfPosts = self.filteredCategoryToArrayOfPosts;
         isFiltered = YES;
     }
     [self.listingCategoryTableView reloadData];

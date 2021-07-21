@@ -9,6 +9,8 @@
 #import "ProfileViewController.h"
 #import <MessageUI/MessageUI.h>
 #import "User.h"
+#import "MaterialActionSheet.h"
+
 
 @interface ListingDetailViewController ()<MFMailComposeViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIImageView *listingImage;
@@ -20,6 +22,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *priceLabel;
 @property (strong, nonatomic) User *currentUser;
 @property (strong, nonatomic) IBOutlet UITapGestureRecognizer *listingImageTapGesture;
+@property (strong, nonatomic) IBOutlet UIButton *menuButton;
 
 @end
 
@@ -114,8 +117,7 @@
     }
 }
 
-#pragma mark - Action Handlers
-- (IBAction)didTapComposeMail:(id)sender {
+-(void) openComposeMailViewController{
     // get a new new MailComposeViewController object
     MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
 
@@ -128,6 +130,10 @@
     // displaying our modal view controller on the screen with standard transition
     [self presentViewController:mc animated:true completion:nil];
     // be a good memory manager and release mc, as you are responsible for it because your alloc/init
+}
+#pragma mark - Action Handlers
+- (IBAction)didTapComposeMail:(id)sender {
+    [self openComposeMailViewController];
 }
 - (IBAction)didTapSaveIcon:(id)sender {
     if (self.listing.isSaved){
@@ -175,6 +181,22 @@
             }
         }];
     }
+}
+- (IBAction)didTapMenuButton:(id)sender {
+    MDCActionSheetController *actionSheet =
+        [MDCActionSheetController actionSheetControllerWithTitle:@""];
+    MDCActionSheetAction *homeAction = [MDCActionSheetAction actionWithTitle:@"Report"
+                                        image:[UIImage imageNamed:@"flag_outline"]
+                                      handler:nil];
+    MDCActionSheetAction *favoriteAction =
+        [MDCActionSheetAction actionWithTitle:@"Email"
+                                        image:[UIImage imageNamed:@"envelope_icon"]
+                                      handler:^(MDCActionSheetAction *action){
+                    [self openComposeMailViewController];
+        }];
+    [actionSheet addAction:homeAction];
+    [actionSheet addAction:favoriteAction];
+    [self presentViewController:actionSheet animated:YES completion:nil];
 }
 
 

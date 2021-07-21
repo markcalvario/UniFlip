@@ -18,6 +18,8 @@ target 'UniFlip' do
 
   pod 'MaterialComponents/Snackbar'
 
+  pod 'MaterialComponents/ActionSheet'
+
   target 'UniFlipTests' do
     inherit! :search_paths
     # Pods for testing

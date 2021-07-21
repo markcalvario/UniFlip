@@ -2,8 +2,25 @@ PODS:
   - Bolts/Tasks (1.9.1)
   - DateTools (2.0.0)
   - GooglePlaces (5.0.0)
+  - MaterialComponents/ActionSheet (124.2.0):
+    - MaterialComponents/Availability
+    - MaterialComponents/BottomSheet
+    - MaterialComponents/Elevation
+    - MaterialComponents/Ink
+    - MaterialComponents/private/Math
+    - MaterialComponents/Ripple
+    - MaterialComponents/ShadowElevations
+    - MaterialComponents/Typography
   - MaterialComponents/AnimationTiming (124.2.0)
   - MaterialComponents/Availability (124.2.0)
+  - MaterialComponents/BottomSheet (124.2.0):
+    - MaterialComponents/Elevation
+    - MaterialComponents/private/KeyboardWatcher
+    - MaterialComponents/private/Math
+    - MaterialComponents/ShadowElevations
+    - MaterialComponents/ShadowLayer
+    - MaterialComponents/ShapeLibrary
+    - MaterialComponents/Shapes
   - MaterialComponents/Buttons (124.2.0):
     - MaterialComponents/Elevation
     - MaterialComponents/Ink
@@ -133,6 +150,7 @@ PODS:
 DEPENDENCIES:
   - DateTools
   - GooglePlaces
+  - MaterialComponents/ActionSheet
   - MaterialComponents/Snackbar
   - "MaterialComponents/TextControls+FilledTextAreas"
   - "MaterialComponents/TextControls+FilledTextFields"
@@ -162,6 +180,6 @@ SPEC CHECKSUMS:
   Parse: 081fb8755c3000fd11df817eec235def233d0af3
   "UITextView+Placeholder": d7b0c400921f66523f3a85d74f774512e14f6502
 
-PODFILE CHECKSUM: 66871376b4cc1e69f45c26b865fbc5ddca28bc27
+PODFILE CHECKSUM: 48e48f762844cdcb270f04e997061163da23a3e2
 
 COCOAPODS: 1.10.1

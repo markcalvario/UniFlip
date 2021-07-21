@@ -1199,16 +1199,28 @@ Cg
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="qlv-mE-44u">
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="7pJ-if-ZWw">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="od2-Mu-fOo">
-                                <rect key="frame" x="298" y="0.0" width="96" height="44"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" image="unsaved_icon"/>
-                                <connections>
-                                    <action selector="didTapSaveIcon:" destination="Ydr-sh-TIk" eventType="touchUpInside" id="SJI-dl-BLF"/>
-                                </connections>
-                            </button>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem style="plain" id="6si-ai-iur">
+                                <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="ohF-QF-Od7">
+                                    <rect key="frame" x="358" y="4" width="36" height="36"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <state key="normal" image="dots-3_horizontal"/>
+                                    <connections>
+                                        <action selector="didTapMenuButton:" destination="Ydr-sh-TIk" eventType="touchUpInside" id="zZh-zr-yGd"/>
+                                    </connections>
+                                </button>
+                            </barButtonItem>
+                            <barButtonItem style="plain" id="7pJ-if-ZWw">
+                                <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="od2-Mu-fOo">
+                                    <rect key="frame" x="254" y="0.0" width="96" height="44"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <state key="normal" image="unsaved_icon"/>
+                                    <connections>
+                                        <action selector="didTapSaveIcon:" destination="Ydr-sh-TIk" eventType="touchUpInside" id="SJI-dl-BLF"/>
+                                    </connections>
+                                </button>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
                         <outlet property="categoryLabel" destination="o7R-pQ-1vG" id="arT-ue-PkE"/>
@@ -1216,6 +1228,7 @@ Cg
                         <outlet property="imageOfAuthorButton" destination="hdC-lu-ffu" id="0nA-J2-Lcp"/>
                         <outlet property="listingImage" destination="K7g-Qh-ATF" id="CLq-nf-LAl"/>
                         <outlet property="listingImageTapGesture" destination="CaQ-fW-h7R" id="dOL-C1-gBY"/>
+                        <outlet property="menuButton" destination="ohF-QF-Od7" id="jFC-Nq-AAX"/>
                         <outlet property="priceLabel" destination="lAR-Rn-RUS" id="0Qc-qd-0yz"/>
                         <outlet property="saveButton" destination="od2-Mu-fOo" id="g8M-iK-8ff"/>
                         <outlet property="titleLabel" destination="ilc-zu-VZy" id="uR0-2y-93E"/>
@@ -1262,6 +1275,7 @@ Cg
     <resources>
         <image name="checkmark_bold" width="24" height="24"/>
         <image name="default_profile_pic" width="360" height="360"/>
+        <image name="dots-3_horizontal" width="24" height="24"/>
         <image name="envelope_icon" width="24" height="24"/>
         <image name="home_icon" width="72" height="77.666664123535156"/>
         <image name="image_placeholder" width="375" height="375"/>

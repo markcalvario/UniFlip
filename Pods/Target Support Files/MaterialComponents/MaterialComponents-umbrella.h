@@ -10,11 +10,23 @@
 #endif
 #endif
 
+#import "MaterialActionSheet.h"
+#import "MDCActionSheetAction.h"
+#import "MDCActionSheetController.h"
+#import "MDCActionSheetControllerDelegate.h"
 #import "CAMediaTimingFunction+MDCAnimationTiming.h"
 #import "MaterialAnimationTiming.h"
 #import "UIView+MDCTimingFunction.h"
 #import "MaterialAvailability.h"
 #import "MDCAvailability.h"
+#import "MaterialBottomSheet.h"
+#import "MDCBottomSheetController.h"
+#import "MDCBottomSheetControllerDelegate.h"
+#import "MDCBottomSheetPresentationController.h"
+#import "MDCBottomSheetPresentationControllerDelegate.h"
+#import "MDCBottomSheetTransitionController.h"
+#import "MDCSheetState.h"
+#import "UIViewController+MaterialBottomSheet.h"
 #import "MaterialButtons.h"
 #import "MDCButton.h"
 #import "MDCFlatButton.h"
