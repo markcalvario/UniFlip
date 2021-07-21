@@ -26,6 +26,7 @@
 @property (strong, nonatomic) NSMutableDictionary *filteredCategoryToArrayOfPosts;
 @property (strong, nonatomic) NSMutableArray *filteredArrayOfCategories;
 @property (strong, nonatomic) NSMutableArray *allListings;
+@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *loadingSpinner;
 
 @end
 
@@ -76,6 +77,9 @@ BOOL isFiltered;
     }
     else{
         dispatch_group_t dispatchGroup = dispatch_group_create();
+        [self.loadingSpinner startAnimating];
+        self.loadingSpinner.hidden = NO;
+        [self.view setAlpha:0.75];
 
         
         self.categoryToArrayOfPosts = [NSMutableDictionary dictionary];
@@ -136,6 +140,9 @@ BOOL isFiltered;
                 NSLog(@"%@", error.localizedDescription);
             }
             dispatch_group_notify(dispatchGroup, dispatch_get_main_queue(), ^(void){
+                [self.loadingSpinner stopAnimating];
+                self.loadingSpinner.hidden = YES;
+                [self.view setAlpha:1];
                 [self.listingCategoryTableView reloadData];
             });
         }];
@@ -332,6 +339,9 @@ BOOL isFiltered;
         [self displayConnectionErrorAlert];
     }
     else{
+        [self.loadingSpinner startAnimating];
+        self.loadingSpinner.hidden = NO;
+        [self.view setAlpha:0.75];
         Listing *listing = self.categoryToArrayOfPosts[[sender currentTitle]][sender.tag];
         if (listing.isSaved){
             NSLog(@"was saved but is now not saved");
@@ -340,7 +350,9 @@ BOOL isFiltered;
                     listing.isSaved = FALSE;
                     [self updateSaveButtonUI:listing.isSaved withButton: sender];
                     [self.listingCategoryTableView reloadData];
-
+                    [self.loadingSpinner stopAnimating];
+                    self.loadingSpinner.hidden = YES;
+                    [self.view setAlpha:1];
                 }
             }];
         }
@@ -351,7 +363,9 @@ BOOL isFiltered;
                     listing.isSaved = TRUE;
                     [self updateSaveButtonUI:listing.isSaved withButton: sender];
                     [self.listingCategoryTableView reloadData];
-
+                    [self.loadingSpinner stopAnimating];
+                    self.loadingSpinner.hidden = YES;
+                    [self.view setAlpha:1];
                 }
             }];
         }

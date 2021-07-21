@@ -265,14 +265,24 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="q5b-RP-dss">
+                                <rect key="frame" x="181" y="421" width="53" height="55"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="55" id="qdh-YO-52H"/>
+                                    <constraint firstAttribute="width" constant="53" id="t9e-CD-9tm"/>
+                                </constraints>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="dZs-BV-x54"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="TUQ-ol-6UX" firstAttribute="trailing" secondItem="dZs-BV-x54" secondAttribute="trailing" id="0c7-Pw-hyY"/>
+                            <constraint firstItem="q5b-RP-dss" firstAttribute="leading" secondItem="dZs-BV-x54" secondAttribute="leading" constant="181" id="9Mq-1n-awm"/>
                             <constraint firstItem="IIf-rw-qWN" firstAttribute="top" secondItem="dZs-BV-x54" secondAttribute="top" id="Caz-CL-E2c"/>
                             <constraint firstItem="IIf-rw-qWN" firstAttribute="trailing" secondItem="dZs-BV-x54" secondAttribute="trailing" id="OP5-Cg-b6b"/>
+                            <constraint firstItem="dZs-BV-x54" firstAttribute="trailing" secondItem="q5b-RP-dss" secondAttribute="trailing" constant="180" id="YYt-wK-dgf"/>
+                            <constraint firstItem="dZs-BV-x54" firstAttribute="bottom" secondItem="q5b-RP-dss" secondAttribute="bottom" constant="337" id="hJZ-4i-jyH"/>
                             <constraint firstItem="TUQ-ol-6UX" firstAttribute="top" secondItem="IIf-rw-qWN" secondAttribute="bottom" id="kB4-wQ-ms1"/>
                             <constraint firstItem="IIf-rw-qWN" firstAttribute="leading" secondItem="dZs-BV-x54" secondAttribute="leading" id="m5P-NN-SEx"/>
                             <constraint firstItem="TUQ-ol-6UX" firstAttribute="leading" secondItem="dZs-BV-x54" secondAttribute="leading" id="m84-hP-5MG"/>
@@ -293,13 +303,14 @@
                     </navigationItem>
                     <connections>
                         <outlet property="listingCategoryTableView" destination="TUQ-ol-6UX" id="pVx-IO-Ugg"/>
+                        <outlet property="loadingSpinner" destination="q5b-RP-dss" id="uC9-mS-jgc"/>
                         <outlet property="searchListingsBar" destination="IIf-rw-qWN" id="VlD-l7-Hf0"/>
                         <segue destination="Ydr-sh-TIk" kind="show" identifier="HomeToListingDetail" id="nHl-qN-Fv6"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="baD-wp-Qky" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="161" y="907"/>
+            <point key="canvasLocation" x="160.86956521739131" y="906.69642857142856"/>
         </scene>
         <!--Sell-->
         <scene sceneID="K7y-Ie-smk">
