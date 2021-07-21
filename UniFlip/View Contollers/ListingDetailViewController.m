@@ -164,6 +164,9 @@
     
 }
 - (IBAction)didTapViewProfileButton:(id)sender {
+    if (![self.listing.author.objectId isEqual:self.currentUser.objectId]){
+        [self updateVisitedProfileToCounter];
+    }
     [self performSegueWithIdentifier:@"ListingDetailToProfile" sender:self.listing.author];
 }
 - (IBAction)didTapImageTwice:(id)sender {
@@ -222,6 +225,25 @@
     [self presentViewController:actionSheet animated:YES completion:nil];
 }
 
+-(void) updateVisitedProfileToCounter{
+    NSMutableDictionary *visitedProfileToCounter = self.currentUser[@"visitedProfileToCounter"];
+    if (!visitedProfileToCounter){
+        visitedProfileToCounter = [NSMutableDictionary dictionary];
+    }
+    if ([visitedProfileToCounter objectForKey:self.listing.author.objectId]){
+        //increment
+        NSNumber *clicks = [visitedProfileToCounter valueForKey:self.listing.author.objectId];
+        int value = [clicks intValue];
+        clicks = [NSNumber numberWithInt:value + 1];
+        [visitedProfileToCounter setValue:clicks forKey:self.listing.author.objectId];
+    }
+    else{
+        [visitedProfileToCounter setValue:@(1) forKey:self.listing.author.objectId];
+    }
+    
+    self.currentUser[@"visitedProfileToCounter"] = visitedProfileToCounter;
+    [self.currentUser saveInBackground];
+}
 
 
 -(void) hasUserReportedListing:(void(^)(BOOL, NSError *))hasReported{

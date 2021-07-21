@@ -404,7 +404,6 @@ BOOL isFiltered;
     else{
         [listingsToClicks setValue:@(1) forKey:listing.objectId];
     }
-    
     self.currentUser[@"listingsToClicks"] = listingsToClicks;
     [self.currentUser saveInBackground];
 }
