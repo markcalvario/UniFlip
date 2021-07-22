@@ -623,8 +623,11 @@
                                                 <state key="normal" image="default_profile_pic"/>
                                             </button>
                                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ump-lS-Fur">
-                                                <rect key="frame" x="0.0" y="195.5" width="414" height="531.5"/>
+                                                <rect key="frame" x="0.0" y="281" width="414" height="444"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="444" id="wgN-Tr-yKE"/>
+                                                </constraints>
                                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="FFb-Mk-NwE">
                                                     <size key="itemSize" width="128" height="128"/>
                                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -695,62 +698,33 @@
                                                     </collectionViewCell>
                                                 </cells>
                                             </collectionView>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FzF-Lw-tBN">
-                                                <rect key="frame" x="8" y="157.5" width="197" height="30"/>
-                                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="197" id="JAR-E6-6Mt"/>
-                                                </constraints>
-                                                <state key="normal" title="Your Listings">
-                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="didTapGetOwnListings:" destination="RaW-Wm-Soe" eventType="touchUpInside" id="jzd-am-rJp"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i6B-VY-SgN">
-                                                <rect key="frame" x="209" y="157.5" width="197" height="30"/>
-                                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="197" id="dcW-fr-DQZ"/>
-                                                </constraints>
-                                                <state key="normal" title="Saved">
-                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="didTapGetSavedListings:" destination="RaW-Wm-Soe" eventType="touchUpInside" id="gVx-kZ-tbk"/>
-                                                </connections>
-                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
                                             <constraint firstItem="ump-lS-Fur" firstAttribute="leading" secondItem="4b4-Tg-lbI" secondAttribute="leading" id="7HJ-DN-9Om"/>
-                                            <constraint firstAttribute="bottom" secondItem="ump-lS-Fur" secondAttribute="bottom" constant="-2" id="7RB-jr-xCz"/>
+                                            <constraint firstAttribute="bottom" secondItem="ump-lS-Fur" secondAttribute="bottom" id="7RB-jr-xCz"/>
                                             <constraint firstItem="YXr-ek-GJ3" firstAttribute="top" secondItem="Cvb-Rs-t7A" secondAttribute="bottom" constant="8" id="CPH-Dy-5BD"/>
                                             <constraint firstItem="YXr-ek-GJ3" firstAttribute="leading" secondItem="nD5-vE-Lv2" secondAttribute="leading" id="DRB-sM-7go"/>
                                             <constraint firstItem="nD5-vE-Lv2" firstAttribute="leading" secondItem="4b4-Tg-lbI" secondAttribute="leading" constant="8" id="DW4-eI-uFs"/>
                                             <constraint firstAttribute="trailing" secondItem="Cvb-Rs-t7A" secondAttribute="trailing" constant="8" id="Nmq-1p-MGL"/>
-                                            <constraint firstItem="ump-lS-Fur" firstAttribute="top" secondItem="FzF-Lw-tBN" secondAttribute="bottom" constant="8" symbolic="YES" id="OSV-uD-tV2"/>
-                                            <constraint firstItem="i6B-VY-SgN" firstAttribute="top" secondItem="FzF-Lw-tBN" secondAttribute="top" id="U14-zm-gtH"/>
-                                            <constraint firstAttribute="trailing" secondItem="i6B-VY-SgN" secondAttribute="trailing" constant="8" id="Vts-dt-Fux"/>
                                             <constraint firstItem="Cvb-Rs-t7A" firstAttribute="top" secondItem="nD5-vE-Lv2" secondAttribute="bottom" constant="8" symbolic="YES" id="Z17-ao-P8M"/>
                                             <constraint firstAttribute="trailing" secondItem="ump-lS-Fur" secondAttribute="trailing" id="Zux-jl-gJH"/>
-                                            <constraint firstItem="i6B-VY-SgN" firstAttribute="leading" secondItem="FzF-Lw-tBN" secondAttribute="trailing" constant="4" id="dMc-Hc-gGO"/>
                                             <constraint firstItem="Cvb-Rs-t7A" firstAttribute="leading" secondItem="nD5-vE-Lv2" secondAttribute="leading" id="euL-Py-p3M"/>
                                             <constraint firstAttribute="trailing" secondItem="YXr-ek-GJ3" secondAttribute="trailing" constant="8" id="kk8-0x-yq9"/>
-                                            <constraint firstItem="FzF-Lw-tBN" firstAttribute="leading" secondItem="YXr-ek-GJ3" secondAttribute="leading" id="lEg-gI-PwA"/>
                                             <constraint firstItem="nD5-vE-Lv2" firstAttribute="top" secondItem="4b4-Tg-lbI" secondAttribute="top" constant="8" id="siP-x5-K7e"/>
-                                            <constraint firstItem="FzF-Lw-tBN" firstAttribute="top" secondItem="YXr-ek-GJ3" secondAttribute="bottom" constant="12" id="vgK-xf-e9S"/>
                                         </constraints>
                                     </view>
                                 </subviews>
                                 <constraints>
+                                    <constraint firstItem="4b4-Tg-lbI" firstAttribute="trailing" secondItem="oCd-fU-Eyw" secondAttribute="trailing" id="8IX-DN-Bgc"/>
                                     <constraint firstItem="4b4-Tg-lbI" firstAttribute="height" secondItem="Dr4-ac-JeE" secondAttribute="height" priority="250" id="8SV-gb-Dgu"/>
-                                    <constraint firstItem="4b4-Tg-lbI" firstAttribute="top" secondItem="Dr4-ac-JeE" secondAttribute="top" id="B1q-Js-2mP"/>
+                                    <constraint firstItem="4b4-Tg-lbI" firstAttribute="top" secondItem="oCd-fU-Eyw" secondAttribute="top" id="F9f-NB-o8k"/>
                                     <constraint firstItem="4b4-Tg-lbI" firstAttribute="width" secondItem="Dr4-ac-JeE" secondAttribute="width" id="IDw-rN-SOO"/>
                                     <constraint firstAttribute="trailing" secondItem="4b4-Tg-lbI" secondAttribute="trailing" id="O49-31-uiK"/>
+                                    <constraint firstItem="4b4-Tg-lbI" firstAttribute="bottom" secondItem="oCd-fU-Eyw" secondAttribute="bottom" id="YkK-Sh-h1I"/>
                                     <constraint firstAttribute="bottom" secondItem="4b4-Tg-lbI" secondAttribute="bottom" id="iAr-Ln-dqf"/>
                                     <constraint firstItem="4b4-Tg-lbI" firstAttribute="leading" secondItem="Dr4-ac-JeE" secondAttribute="leading" id="p8S-h0-3xO"/>
+                                    <constraint firstItem="4b4-Tg-lbI" firstAttribute="leading" secondItem="oCd-fU-Eyw" secondAttribute="leading" id="y9W-8F-xLN"/>
                                 </constraints>
                                 <viewLayoutGuide key="contentLayoutGuide" id="70g-BY-aiN"/>
                                 <viewLayoutGuide key="frameLayoutGuide" id="oCd-fU-Eyw"/>
@@ -783,12 +757,11 @@
                         <outlet property="listingsCollectionView" destination="ump-lS-Fur" id="nIU-Xi-fEs"/>
                         <outlet property="navigationBar" destination="Z1p-Qd-MGY" id="2Ur-vZ-sv7"/>
                         <outlet property="profilePicButton" destination="nD5-vE-Lv2" id="HzL-Gb-VgB"/>
-                        <outlet property="savedButton" destination="i6B-VY-SgN" id="CNl-Tg-nM1"/>
+                        <outlet property="profileView" destination="4b4-Tg-lbI" id="nRi-p6-5wE"/>
                         <outlet property="settingsBarButton" destination="sbw-Cx-B5S" id="3Sm-OP-2JJ"/>
                         <outlet property="settingsButton" destination="Nat-Jh-uLw" id="pms-mj-0Bv"/>
                         <outlet property="userBioLabel" destination="YXr-ek-GJ3" id="VaH-d1-WgM"/>
                         <outlet property="usernameLabel" destination="Cvb-Rs-t7A" id="u58-WW-pUA"/>
-                        <outlet property="usersListingsButton" destination="FzF-Lw-tBN" id="3J9-CH-xqq"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7yj-uN-cU0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1334,8 +1307,8 @@ Cg
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="nHl-qN-Fv6"/>
-        <segue reference="1cV-ZD-tXO"/>
+        <segue reference="jy6-i8-Qry"/>
+        <segue reference="VAk-SO-nHF"/>
         <segue reference="yJF-wa-pAP"/>
     </inferredMetricsTieBreakers>
     <resources>

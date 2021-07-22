@@ -9,12 +9,16 @@
 #import "ProfileViewController.h"
 #import <MessageUI/MessageUI.h>
 #import "User.h"
-#import "MaterialActionSheet.h"
 #import "MaterialTextControls+OutlinedTextAreas.h"
 #import "MaterialTextControls+OutlinedTextFields.h"
 #import "ReportListingViewController.h"
 #import "MaterialSnackbar.h"
-
+#import <MaterialComponents/MaterialTabs+TabBarView.h>
+#import "MaterialActionSheet.h"
+#import "MDCSnackbarManager.h"
+#import "MDCSnackbarManagerDelegate.h"
+#import "MDCSnackbarMessage.h"
+#import "MDCSnackbarMessageView.h"
 
 
 @interface ListingDetailViewController ()<MFMailComposeViewControllerDelegate>

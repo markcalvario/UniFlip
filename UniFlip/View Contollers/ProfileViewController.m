@@ -14,10 +14,12 @@
 #import <SystemConfiguration/SystemConfiguration.h>
 
 #import <objc/runtime.h>
+#import <MaterialComponents/MaterialTabs+TabBarView.h>
 
 
 
-@interface ProfileViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
+
+@interface ProfileViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UINavigationControllerDelegate, MDCTabBarViewDelegate>
 @property (weak, nonatomic) IBOutlet UIButton *profilePicButton;
 @property (weak, nonatomic) IBOutlet UILabel *usernameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *userBioLabel;
@@ -25,14 +27,14 @@
 @property (strong, nonatomic) NSMutableArray *arrayOfListings;
 @property (weak, nonatomic) IBOutlet UINavigationItem *navigationBar;
 @property (strong, nonatomic) NSMutableArray *toolbarButtons;
-
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *settingsBarButton;
 @property (strong, nonatomic) IBOutlet UIButton *settingsButton;
 @property (strong, nonatomic) UIAlertController *photoSelectorAlert;
 @property (strong, nonatomic) User *currentUser;
-@property (strong, nonatomic) IBOutlet UIButton *savedButton;
-@property (strong, nonatomic) IBOutlet UIButton *usersListingsButton;
 
+@property (strong, nonatomic) IBOutlet UIView *profileView;
+@property (strong, nonatomic) MDCTabBarView *tabBarView;
+@property (readwrite, strong, nonatomic, nullable) UITabBarItem *selectedItem;
 
 @end
 
@@ -42,7 +44,10 @@ BOOL showUserListings = TRUE;
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
     self.currentUser = [User currentUser];
+    [self displayTabBar];
+    
     [self setProfileScreen];
     
 }
@@ -51,7 +56,6 @@ BOOL showUserListings = TRUE;
 }
 
 -(void) setProfileScreen{
-    
     if (!self.user){
         self.user = self.currentUser;
     }
@@ -62,9 +66,7 @@ BOOL showUserListings = TRUE;
     //User is viewing a different user
     else{
         self.settingsButton.hidden = YES;
-        //[self.savedButton removeFromSuperview];
-        [self.usersListingsButton setTitle:@"Listings Posted" forState:UIControlStateNormal];
-        /*self.usersListingsButton.frame = CGRectMake(self.usersListingsButton.frame.origin.x, self.usersListingsButton.frame.origin.y, self.usersListingsButton.frame.size.width*2, self.usersListingsButton.frame.size.height);*/
+        //[self.usersListingsButton setTitle:@"Listings Posted" forState:UIControlStateNormal];
     }
     
     self.toolbarButtons = [self.navigationItem.rightBarButtonItems mutableCopy];
@@ -158,12 +160,7 @@ BOOL showUserListings = TRUE;
         });
     }];
 }
--(void) showSettingsIcon{
-    if (![self.toolbarButtons containsObject:self.settingsBarButton]) {
-        [self.toolbarButtons insertObject:self.settingsBarButton atIndex:0];
-        [self.navigationItem setRightBarButtonItems:self.toolbarButtons animated:YES];
-    }
-}
+
 -(void) updateSaveButtonUI:(BOOL )isSaved withButton:(UIButton *)saveButton{
     if (isSaved){
         [saveButton setImage:[UIImage imageNamed:@"saved_icon"] forState:UIControlStateNormal];
@@ -173,17 +170,6 @@ BOOL showUserListings = TRUE;
     }
 }
 #pragma mark - Action Handlers
-- (IBAction)didTapGetOwnListings:(id)sender {
-    showUserListings = TRUE;
-    [self showSettingsIcon];
-    [self setProfileScreen];
-    
-}
-- (IBAction)didTapGetSavedListings:(id)sender {
-    showUserListings = FALSE;
-    [self showSettingsIcon];
-    [self setProfileScreen];
-}
 - (IBAction)didTapSettingButton:(id)sender {
 }
 - (void) didTapSaveIcon:(UIButton *)sender {
@@ -212,55 +198,6 @@ BOOL showUserListings = TRUE;
     }
     
 }
--(void) didTapChangeProfilePic: (UIButton *) profileButton{
-    [self showPhotoAlert];
-}
-- (void)showPhotoAlert {
-    // Add code to be run periodically
-     UIImagePickerController *imagePickerVC = [UIImagePickerController new];
-     imagePickerVC.delegate = self;
-     imagePickerVC.allowsEditing = YES;
-     self.photoSelectorAlert = [UIAlertController alertControllerWithTitle:@"Select a photo" message:@""
-                                preferredStyle:UIAlertControllerStyleActionSheet];
-
-     
-     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-         UIAlertAction *didSelectCamera = [UIAlertAction actionWithTitle:@"Camera"
-                                                       style:UIAlertActionStyleDefault
-                                           
-                                     handler:^(UIAlertAction * _Nonnull action) {
-                                            // handle cancel response here. Doing nothing will dismiss the view.
-                                         imagePickerVC.sourceType = UIImagePickerControllerSourceTypeCamera;
-             [self presentViewController:imagePickerVC animated:YES completion:nil];
-                                         
-                             }];
-         [self.photoSelectorAlert addAction:didSelectCamera];
-     }
-     UIAlertAction *didSelectCameraRoll = [UIAlertAction actionWithTitle:@"Camera Roll"
-                                                   style:UIAlertActionStyleDefault
-                                 handler:^(UIAlertAction * _Nonnull action) {
-                                        // handle cancel response here. Doing nothing will dismiss the view.
-                                     imagePickerVC.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-                                     [self presentViewController:imagePickerVC animated:YES completion:nil];
-         
-                                 }];
-     [self.photoSelectorAlert addAction:didSelectCameraRoll];
-  
-     [self presentViewController:self.photoSelectorAlert animated:YES completion:^{
-         // optional code for what happens after the alert controller has finished presenting
-     }];
-}
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
-    // Get the image captured by the UIImagePickerController
-    UIImage *originalImage = info[UIImagePickerControllerOriginalImage];
-    //UIImage *editedImage = info[UIImagePickerControllerEditedImage];
-    // Do something with the images (based on your use case)
-    [self.profilePicButton setImage:originalImage forState:UIControlStateNormal];
-    // Dismiss UIImagePickerController to go back to your original view controller
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-
 
 
 #pragma mark - Collection View
@@ -358,6 +295,66 @@ BOOL showUserListings = TRUE;
         listingDetailViewController.listing = listing;
         
     }
+}
+
+- (void)tabBarView:(MDCTabBarView *)tabBarView didSelectItem:(UITabBarItem *)item{
+    if ([item.title isEqualToString:@"Listings"]){
+        showUserListings = TRUE;
+    }
+    else{
+        showUserListings = FALSE;
+    }
+    [self setProfileScreen];
+}
+
+-(void) displayTabBar{
+    self.tabBarView = [[MDCTabBarView alloc] init];
+    
+    self.tabBarView.items = @[
+        [[UITabBarItem alloc] initWithTitle:@"Listings" image:nil tag:0],
+        [[UITabBarItem alloc] initWithTitle:@"Saved" image:nil tag:0],
+    ];
+    self.tabBarView.preferredLayoutStyle = MDCTabBarViewLayoutStyleFixed; // or MDCTabBarViewLayoutStyleFixed
+    self.tabBarView.frame = CGRectMake(8, 157.5, 394, 15);
+    self.tabBarView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.profileView addSubview:self.tabBarView];
+    //[self.tabBarView setBarTintColor:[UIColor blackColor]];
+    //[self.tabBarView setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    //[self.tabBarView setSelectionIndicatorStrokeColor:[UIColor whiteColor]];
+    self.tabBarView.tabBarDelegate = self;
+    [self.tabBarView setSelectedItem:[self.tabBarView.items objectAtIndex:0]];
+
+    /* Leading space to superview */
+    NSLayoutConstraint *trailing =[NSLayoutConstraint
+                                    constraintWithItem: self.tabBarView
+                                    attribute:NSLayoutAttributeTrailing
+                                    relatedBy:NSLayoutRelationEqual
+                                    toItem: self.userBioLabel.superview
+                                    attribute:NSLayoutAttributeTrailing
+                                    multiplier:1.0
+                                    constant:0];
+    NSLayoutConstraint *leading = [NSLayoutConstraint
+                                       constraintWithItem:self.tabBarView
+                                       attribute:NSLayoutAttributeLeading
+                                       relatedBy:NSLayoutRelationEqual
+                                       toItem: self.userBioLabel.superview
+                                       attribute:NSLayoutAttributeLeading
+                                       multiplier:1.0
+                                       constant:0];
+    /* Top space to superview Y*/
+    NSLayoutConstraint *top = [NSLayoutConstraint constraintWithItem:self.tabBarView attribute:NSLayoutAttributeTop
+                                                 relatedBy:NSLayoutRelationEqual toItem:self.userBioLabel attribute:
+                                                 NSLayoutAttributeBottom multiplier:1.0 constant:4];
+    /* Bottom space to superview Y*/
+    NSLayoutConstraint *bottom = [NSLayoutConstraint constraintWithItem:self.tabBarView attribute:NSLayoutAttributeBottom
+                                                 relatedBy:NSLayoutRelationEqual toItem:self.listingsCollectionView attribute:
+                                                 NSLayoutAttributeTop multiplier:1.0 constant:-4];
+    
+    /* 4. Add the constraints to button's superview*/
+    [self.profileView addConstraint:leading];
+    [self.profileView addConstraint:trailing];
+    [self.profileView addConstraint:top];
+    [self.profileView addConstraint:bottom];
 }
 
 

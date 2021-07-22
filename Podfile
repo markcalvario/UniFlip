@@ -20,6 +20,8 @@ target 'UniFlip' do
 
   pod 'MaterialComponents/ActionSheet'
 
+  pod 'MaterialComponents/Tabs+TabBarView'
+
   target 'UniFlipTests' do
     inherit! :search_paths
     # Pods for testing
