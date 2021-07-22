@@ -80,23 +80,27 @@
     }];
 }
 
-+ (void) postReportToListing:(Report *)report{
-    
++ (void) deleteListing:(Listing *)listing completion:(void(^)(BOOL , NSError *))completion{
+    [listing deleteInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+            if (succeeded){
+                completion(TRUE, nil);
+            }
+            else{
+                completion(FALSE, nil);
+            }
+    }];
 }
 
 + (PFFileObject *)getPFFileFromImage: (UIImage * _Nullable)image {
- 
     // check if image is not nil
     if (!image) {
         return nil;
     }
-    
     NSData *imageData = UIImagePNGRepresentation(image);
     // get image data and check if that is not nil
     if (!imageData) {
         return nil;
     }
-    
     return [PFFileObject fileObjectWithName:@"image.jpeg" data:imageData];
 }
 

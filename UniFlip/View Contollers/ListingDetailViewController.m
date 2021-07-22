@@ -196,9 +196,17 @@
     MDCActionSheetController *actionSheet =
         [MDCActionSheetController actionSheetControllerWithTitle:@""];
     MDCActionSheetAction *deleteAction =
-        [MDCActionSheetAction actionWithTitle:@"Delete"
+        [MDCActionSheetAction actionWithTitle:@"Delete Listing"
                                         image:[UIImage systemImageNamed:@"trash"]
                                       handler:^(MDCActionSheetAction *action){
+            [Listing deleteListing: self.listing completion:^(BOOL isDeleted, NSError *error) {
+                if (isDeleted){
+                    [self dismissViewControllerAnimated:TRUE completion:nil];
+                }
+                else{
+                    NSLog(@"%@", error);
+                }
+            }];
         }];
     MDCActionSheetAction *reportAction = [MDCActionSheetAction actionWithTitle:@"Report"
                                         image:[UIImage imageNamed:@"flag_outline"]
@@ -227,6 +235,7 @@
                     [self openComposeMailViewController];
         }];
     if ([self.listing.author.username isEqualToString:self.currentUser.username]){
+        [deleteAction setTitleColor:[UIColor redColor]];
         [actionSheet addAction:deleteAction];
     }
     [actionSheet addAction:reportAction];
@@ -277,6 +286,7 @@
         }
     }];
 }
+
 
 
 

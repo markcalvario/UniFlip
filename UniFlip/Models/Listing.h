@@ -34,7 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (void) postSaveListing: (Listing *)listing withUser: (PFUser *)user completion:(void(^)(BOOL , NSError *))completion;
 + (void) postUnsaveListing: (Listing *)listing withUser: (PFUser *)user completion:(void(^)(BOOL , NSError *))completion;
 + (void) PFFileToUIImage: (PFFileObject *)imageFile completion:(void(^)(UIImage *, NSError *))completion;
-+ (void) postReportToListing:(Report *)report;
++ (void) deleteListing:(Listing *)listing completion:(void(^)(BOOL , NSError *))completion;
 
 + (PFFileObject *)getPFFileFromImage: (UIImage * _Nullable)image;
 - (UIImage *)resizeImage:(UIImage *)image withSize:(CGSize)size;
