@@ -16,6 +16,7 @@
 #import "MaterialSnackbar.h"
 
 
+
 @interface ListingDetailViewController ()<MFMailComposeViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIImageView *listingImage;
 @property (weak, nonatomic) IBOutlet UIButton *imageOfAuthorButton;
@@ -39,8 +40,8 @@
     // Do any additional setup after loading the view.
     self.listingImageTapGesture.numberOfTapsRequired = 2;
     self.listingImage.userInteractionEnabled = YES;
-
     self.currentUser = [User currentUser];
+    
     [self loadListingScreenDetais];
 }
 -(void) viewWillAppear:(BOOL)animated{
@@ -194,7 +195,12 @@
 - (IBAction)didTapMenuButton:(id)sender {
     MDCActionSheetController *actionSheet =
         [MDCActionSheetController actionSheetControllerWithTitle:@""];
-    MDCActionSheetAction *homeAction = [MDCActionSheetAction actionWithTitle:@"Report"
+    MDCActionSheetAction *deleteAction =
+        [MDCActionSheetAction actionWithTitle:@"Delete"
+                                        image:[UIImage systemImageNamed:@"trash"]
+                                      handler:^(MDCActionSheetAction *action){
+        }];
+    MDCActionSheetAction *reportAction = [MDCActionSheetAction actionWithTitle:@"Report"
                                         image:[UIImage imageNamed:@"flag_outline"]
                                         handler:^(MDCActionSheetAction *action){
         [self dismissViewControllerAnimated:TRUE completion:^{
@@ -214,14 +220,17 @@
         }];
         
     }];
-    MDCActionSheetAction *favoriteAction =
+    MDCActionSheetAction *emailAction =
         [MDCActionSheetAction actionWithTitle:@"Email"
                                         image:[UIImage imageNamed:@"envelope_icon"]
                                       handler:^(MDCActionSheetAction *action){
                     [self openComposeMailViewController];
         }];
-    [actionSheet addAction:homeAction];
-    [actionSheet addAction:favoriteAction];
+    if ([self.listing.author.username isEqualToString:self.currentUser.username]){
+        [actionSheet addAction:deleteAction];
+    }
+    [actionSheet addAction:reportAction];
+    [actionSheet addAction:emailAction];
     [self presentViewController:actionSheet animated:YES completion:nil];
 }
 
