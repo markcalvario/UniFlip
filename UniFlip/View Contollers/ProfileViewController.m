@@ -43,7 +43,6 @@ BOOL showUserListings = TRUE;
     
     self.currentUser = [User currentUser];
     [self displayTabBar];
-    
     [self setProfileScreen];
     
 }
@@ -100,12 +99,13 @@ BOOL showUserListings = TRUE;
     if (getAllUserListings){
         [query whereKey:@"author" equalTo:self.user];
     }
+    self.arrayOfListings = [NSMutableArray array];
     NSMutableArray *savedListings = [NSMutableArray array];
     [query findObjectsInBackgroundWithBlock:^(NSArray *listings, NSError *error) {
         if (listings) {
             for (Listing *listing in listings){
-                __block BOOL isSaved = FALSE;
                 dispatch_group_enter(dispatchGroup);
+                __block BOOL isSaved = FALSE;
                 PFRelation *relation = [listing relationForKey:@"savedBy"];
                 PFQuery *query = [relation query];
                 [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable arrayOfUsers, NSError * _Nullable error) {
@@ -116,13 +116,13 @@ BOOL showUserListings = TRUE;
                                     //NSLog(@"user has saved this listing");
                                     listing.isSaved = TRUE;
                                     isSaved = TRUE;
-                                    [savedListings addObject:listing];
+                                    [self.arrayOfListings addObject:listing];
                                 }
                             }
                             if (getAllUserListings && (!isSaved)){
                                 //NSLog(@"user has not saved this listing");
                                 listing.isSaved = FALSE;
-                                [savedListings addObject:listing];
+                                [self.arrayOfListings addObject:listing];
                             }
 
                         }else{
@@ -130,7 +130,7 @@ BOOL showUserListings = TRUE;
                                 if ([user.username isEqualToString: self.user.username]){
                                     //NSLog(@"user has saved this listing");
                                     //listing.isSaved = TRUE;
-                                    [savedListings addObject:listing];
+                                    [self.arrayOfListings addObject:listing];
                                 }
                                 if ([user.username isEqualToString: self.currentUser.username]){
                                     //NSLog(@"user has saved this listing");
@@ -139,7 +139,7 @@ BOOL showUserListings = TRUE;
                             }
         
                         }
-                        self.arrayOfListings = savedListings;
+                        
                     }else{
                         NSLog(@"Could not load saved listings");
                     }
@@ -152,6 +152,7 @@ BOOL showUserListings = TRUE;
             NSLog(@"%@", error.localizedDescription);
         }
         dispatch_group_notify(dispatchGroup, dispatch_get_main_queue(), ^(void){
+            //self.arrayOfListings = savedListings;
              [self.listingsCollectionView reloadData];
         });
     }];
@@ -201,10 +202,7 @@ BOOL showUserListings = TRUE;
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     ListingCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ListingCell" forIndexPath:indexPath];
     Listing *listing = self.arrayOfListings[indexPath.row];
-    PFFileObject *listingImageFile = [listing.listingImages objectAtIndex:0];
-    if (!listingImageFile){
-        listingImageFile = listing.listingImage;
-    }
+    PFFileObject *listingImageFile = [listing.photos objectAtIndex:0];
     [Listing PFFileToUIImage: listingImageFile completion:^(UIImage* image, NSError * error) {
         [cell.profileListingImage setImage:image];
     }];

@@ -308,28 +308,14 @@ BOOL isFiltered;
     listingCell.priceLabel.text = [@"$" stringByAppendingString: price];
     listingCell.profileListingTitleLabel.text = listing.listingTitle;
     
-    PFFileObject *listingImageFile = [listing.listingImages objectAtIndex:0];
-    if (listingImageFile){
-        [listingImageFile getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
-            if (!error) {
-                UIImage *image = [UIImage imageWithData:imageData];
-                [listingCell.listingImage setImage:image];
-               
-            }
-        }];
-    }
-    else{
-        listingImageFile = listing.listingImage;
-        [listingImageFile getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
-            if (!error) {
-                UIImage *image = [UIImage imageWithData:imageData];
-                [listingCell.listingImage setImage:image];
-               
-            }
-        }];
-    }
-    
-    
+    PFFileObject *listingImageFile = [listing.photos objectAtIndex:0];
+    [listingImageFile getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
+        if (!error) {
+            UIImage *image = [UIImage imageWithData:imageData];
+            [listingCell.listingImage setImage:image];
+           
+        }
+    }];
     listingCell.saveButton.tag = indexPath.row;
     [listingCell.saveButton setTitle: listing.listingCategory forState:UIControlStateNormal];
     listingCell.saveButton.titleLabel.font = [UIFont systemFontOfSize:0];

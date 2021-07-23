@@ -19,10 +19,11 @@
 #import "MDCSnackbarManagerDelegate.h"
 #import "MDCSnackbarMessage.h"
 #import "MDCSnackbarMessageView.h"
+#import "PhotoCell.h"
 
 
-@interface ListingDetailViewController ()<MFMailComposeViewControllerDelegate>
-@property (weak, nonatomic) IBOutlet UIImageView *listingImage;
+@interface ListingDetailViewController ()<MFMailComposeViewControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource>
+//@property (weak, nonatomic) IBOutlet UIImageView *listingImage;
 @property (weak, nonatomic) IBOutlet UIButton *imageOfAuthorButton;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *categoryLabel;
@@ -33,7 +34,9 @@
 @property (strong, nonatomic) IBOutlet UITapGestureRecognizer *listingImageTapGesture;
 @property (strong, nonatomic) IBOutlet UIButton *menuButton;
 
-
+@property (strong, nonatomic) IBOutlet UICollectionView *photosCollectionView;
+@property (strong, nonatomic) NSArray *photos;
+@property (strong, nonatomic) IBOutlet UIPageControl *photoIndicator;
 
 @end
 
@@ -42,10 +45,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.listingImageTapGesture.numberOfTapsRequired = 2;
-    self.listingImage.userInteractionEnabled = YES;
+    /*self.listingImageTapGesture.numberOfTapsRequired = 2;
+    self.listingImage.userInteractionEnabled = YES;*/
     self.currentUser = [User currentUser];
-    
+    self.photosCollectionView.delegate = self;
+    self.photosCollectionView.dataSource = self;
+    self.photos = self.listing.photos;
+    self.photoIndicator.numberOfPages = self.photos.count;
     [self loadListingScreenDetais];
 }
 -(void) viewWillAppear:(BOOL)animated{
@@ -58,12 +64,12 @@
     self.categoryLabel.text = self.listing.listingCategory;
     self.descriptionLabel.text = self.listing.listingDescription;
     self.priceLabel.text = [@"$" stringByAppendingString:self.listing.listingPrice];
-    PFFileObject *listingImageObject = [self.listing.listingImages objectAtIndex:0];
+    /*PFFileObject *listingImageObject = [self.listing.listingImages objectAtIndex:0];
     [Listing PFFileToUIImage:listingImageObject completion:^(UIImage * image, NSError * error) {
         if (image){
             [self.listingImage setImage: [ListingDetailViewController imageWithImage:image scaledToWidth:414] ];
         }
-    }];
+    }];*/
     PFFileObject *userProfilePicture = self.listing.author.profilePicture;
     if (userProfilePicture){
         [Listing PFFileToUIImage:userProfilePicture completion:^(UIImage * image, NSError * error) {
@@ -292,9 +298,66 @@
 }
 
 
+#pragma mark - Collection View
+- (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    PhotoCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"SlidePhotoCell" forIndexPath:indexPath];
+    PFFileObject *listingImageObject = [self.photos objectAtIndex:indexPath.row];
+    [Listing PFFileToUIImage:listingImageObject completion:^(UIImage * image, NSError * error) {
+        if (image){
+            
+            [cell.detailPhoto setImage: [self scaleImageToSize:image withSize:CGSizeMake(cell.frame.size.width, cell.frame.size.height)]];
+            
+            /*if (image.size.width > image.size.height) {
+                cell.detailPhoto.contentMode = UIViewContentModeScaleAspectFit;
+                //since the width > height we may fit it and we'll have bands on top/bottom
+            } else {
+                cell.detailPhoto.contentMode = UIViewContentModeScaleAspectFill;
+              //width < height we fill it until width is taken up and clipped on top/bottom
+            }*/
+        }
+    }];
+    NSLog(@"%ld", (long) cell.detailPhoto.frame.size.width);
+    return cell;
+}
 
-
-
+- (NSInteger)collectionView:(nonnull UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return self.photos.count;
+}
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    self.photoIndicator.currentPage = scrollView.contentOffset.x/ scrollView.frame.size.width;
+}
+- (UIImage *)resizeImage:(UIImage *)image withSize:(CGSize)size {
+    UIImageView *resizeImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
+    
+    resizeImageView.contentMode = UIViewContentModeScaleAspectFill;
+    resizeImageView.image = image;
+    
+    UIGraphicsBeginImageContext(size);
+    [resizeImageView.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return newImage;
+}
+- (UIImage *)scaleImageToSize:(UIImage *)image withSize:(CGSize)size {
+    CGRect scaledImageRect = CGRectZero;
+      
+      CGFloat aspectWidth = size.width / image.size.width;
+      CGFloat aspectHeight = size.height / image.size.height;
+      CGFloat aspectRatio = MAX ( aspectWidth, aspectHeight );
+      
+      scaledImageRect.size.width = image.size.width * aspectRatio;
+      scaledImageRect.size.height = image.size.height * aspectRatio;
+      scaledImageRect.origin.x = (size.width - scaledImageRect.size.width) / 2.0f;
+      scaledImageRect.origin.y = (size.height - scaledImageRect.size.height) / 2.0f;
+      
+      UIGraphicsBeginImageContextWithOptions( size, NO, 0 );
+      [image drawInRect:scaledImageRect];
+      UIImage* scaledImage = UIGraphicsGetImageFromCurrentImageContext();
+      UIGraphicsEndImageContext();
+      
+      return scaledImage;
+}
 
 #pragma mark - Navigation
 
@@ -311,6 +374,8 @@
         reportViewController.listing = sender;
     }
 }
+
+
 
 
 @end

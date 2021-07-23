@@ -12,6 +12,7 @@
 @dynamic postID;
 @dynamic author;
 @dynamic listingImages;
+@dynamic photos;
 @dynamic listingImage;
 @dynamic listingTitle;
 @dynamic typeOfListing;
@@ -37,9 +38,10 @@
     newListing.author = [User currentUser];
     NSMutableArray *mutableImages = [NSMutableArray array];
     for (UIImage *image in images){
-        [mutableImages addObject:[self getPFFileFromImage: [newListing resizeImage: image withSize: CGSizeMake(300, 300)]]];
+        //[mutableImages addObject:[self getPFFileFromImage: [newListing resizeImage: image withSize: CGSizeMake(300, 300)]]];
+        [mutableImages addObject:[self getPFFileFromImage: image]];
     }
-    newListing.listingImages = [NSArray arrayWithArray:mutableImages];
+    newListing.photos = [NSArray arrayWithArray:mutableImages];
     newListing.listingTitle = title;
     newListing.typeOfListing = type;
     newListing.listingDescription = description;
