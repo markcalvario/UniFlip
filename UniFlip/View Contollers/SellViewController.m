@@ -74,9 +74,9 @@
     [[self.categoryButton layer] setBorderWidth:1];
     [[self.categoryButton layer] setCornerRadius:5];
     
-    CGFloat widthOfButton = self.postListingButton.layer.frame.size.height/ 2;
+  /*  CGFloat widthOfButton = self.postListingButton.layer.frame.size.height/ 2;
     [[self.postListingButton layer] setCornerRadius: widthOfButton];
-    [self.postListingButton setClipsToBounds:TRUE];
+    [self.postListingButton setClipsToBounds:TRUE];*/
 }
 
 

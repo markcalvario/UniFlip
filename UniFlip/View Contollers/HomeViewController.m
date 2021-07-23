@@ -48,13 +48,13 @@ BOOL isFiltered;
     self.searchListingsBar.delegate = self;
     [self.searchListingsBar setUserInteractionEnabled:NO];
     self.hasCalledViewDidLoad = TRUE;
-    /*[self updateSuggestedListings:^(BOOL completed) {
+    [self updateSuggestedListings:^(BOOL completed) {
         if (completed){
             [self updateListingsByCategory];
             [self.searchListingsBar setUserInteractionEnabled:YES];
 
         }
-    }];*/
+    }];
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(updateListingsByCategory) forControlEvents:UIControlEventValueChanged];
     [self.listingCategoryTableView insertSubview:self.refreshControl atIndex:0];
@@ -64,11 +64,19 @@ BOOL isFiltered;
     [super viewWillAppear:animated];
     isFiltered = NO;
     if (!self.hasCalledViewDidLoad && [self isConnectedToInternet]){
-        [self updateListingsByCategory];
+        //[self updateListingsByCategory];
+        [self updateSuggestedListings:^(BOOL completed) {
+            if (completed){
+                [self updateListingsByCategory];
+                [self.searchListingsBar setUserInteractionEnabled:YES];
+
+            }
+        }];
     }
     else if (![self isConnectedToInternet]){
         [self displayConnectionErrorAlert];
     }
+    
     self.hasCalledViewDidLoad = FALSE;
 }
 - (BOOL) isConnectedToInternet{
@@ -301,12 +309,26 @@ BOOL isFiltered;
     listingCell.profileListingTitleLabel.text = listing.listingTitle;
     
     PFFileObject *listingImageFile = [listing.listingImages objectAtIndex:0];
-    [listingImageFile getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
-                if (!error) {
-                    UIImage *image = [UIImage imageWithData:imageData];
-                    [listingCell.listingImage setImage:image];
-                }
+    if (listingImageFile){
+        [listingImageFile getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
+            if (!error) {
+                UIImage *image = [UIImage imageWithData:imageData];
+                [listingCell.listingImage setImage:image];
+               
+            }
         }];
+    }
+    else{
+        listingImageFile = listing.listingImage;
+        [listingImageFile getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
+            if (!error) {
+                UIImage *image = [UIImage imageWithData:imageData];
+                [listingCell.listingImage setImage:image];
+               
+            }
+        }];
+    }
+    
     
     listingCell.saveButton.tag = indexPath.row;
     [listingCell.saveButton setTitle: listing.listingCategory forState:UIControlStateNormal];

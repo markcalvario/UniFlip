@@ -201,9 +201,16 @@ BOOL showUserListings = TRUE;
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     ListingCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ListingCell" forIndexPath:indexPath];
     Listing *listing = self.arrayOfListings[indexPath.row];
-    [Listing PFFileToUIImage: [listing.listingImages objectAtIndex:0] completion:^(UIImage* image, NSError * error) {
+    PFFileObject *listingImageFile = [listing.listingImages objectAtIndex:0];
+    if (!listingImageFile){
+        listingImageFile = listing.listingImage;
+    }
+    [Listing PFFileToUIImage: listingImageFile completion:^(UIImage* image, NSError * error) {
         [cell.profileListingImage setImage:image];
     }];
+    
+   
+    
     NSString *price = [@"$" stringByAppendingString:listing.listingPrice];
     cell.profileListingPriceLabel.text = price;
     cell.profileListingTitleLabel.text = listing.listingTitle;

@@ -12,6 +12,7 @@
 @dynamic postID;
 @dynamic author;
 @dynamic listingImages;
+@dynamic listingImage;
 @dynamic listingTitle;
 @dynamic typeOfListing;
 @dynamic listingDescription;

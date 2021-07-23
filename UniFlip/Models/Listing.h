@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *postID;
 @property (nonatomic, strong) User *author;
 @property (nonatomic, strong) NSArray<PFFileObject *> *listingImages;
+@property (nonatomic, strong) PFFileObject *listingImage;
 @property (nonatomic, strong) NSString *listingTitle;
 @property (nonatomic, strong) NSString *typeOfListing;
 @property (nonatomic, strong) NSString *listingDescription;
