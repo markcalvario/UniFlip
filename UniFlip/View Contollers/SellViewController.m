@@ -11,13 +11,14 @@
 #import "PlaceAutocompleteViewController.h"
 #import "Listing.h"
 #import "MaterialSnackbar.h"
+#import "PhotoCell.h"
 
 @import UITextView_Placeholder;
 
-@interface SellViewController ()<UINavigationControllerDelegate, UIImagePickerControllerDelegate, SelectOptionViewControllerDelege, PlaceAutocompleteDelege>
+@interface SellViewController ()<UINavigationControllerDelegate, UIImagePickerControllerDelegate, SelectOptionViewControllerDelege, PlaceAutocompleteDelege, UICollectionViewDelegate, UICollectionViewDataSource>
 @property (strong, nonatomic) UIAlertController *alert;
 @property (strong, nonatomic) UIImage *imagePlaceHolder;
-@property (weak, nonatomic) IBOutlet UIButton *imageOfProductButton;
+//@property (weak, nonatomic) IBOutlet UIButton *imageOfProductButton;
 @property (weak, nonatomic) IBOutlet UITextField *listingTitleField;
 @property (weak, nonatomic) IBOutlet UITextView *listingDescriptionView;
 @property (weak, nonatomic) IBOutlet UIButton *locationButton;
@@ -27,8 +28,9 @@
 @property (weak, nonatomic) IBOutlet UIButton *categoryButton;
 @property (weak, nonatomic) IBOutlet UITextField *listingTypeField;
 @property (weak, nonatomic) IBOutlet UITextField *priceField;
+@property (strong, nonatomic) IBOutlet UITapGestureRecognizer *exitKeyboardGesture;
 
-@property (strong, nonatomic) UIImage *image;
+@property (strong, nonatomic) NSArray *photosToUpload;
 @property (strong, nonatomic) NSString *listingTitle;
 @property (strong, nonatomic) NSString *type;
 @property (strong, nonatomic) NSString *listingDescription;
@@ -38,7 +40,9 @@
 @property (strong, nonatomic) NSString *condition;
 @property (strong, nonatomic) NSString *price;
 
-
+@property (strong, nonatomic) IBOutlet UICollectionView *photosCollectionView;
+@property (strong, nonatomic) NSMutableArray<UIImage *> *photos;
+@property (nonatomic) NSInteger indexOfPhoto;
 
 @end
 
@@ -47,10 +51,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.photosCollectionView.delegate = self;
+    self.photosCollectionView.dataSource = self;
     [self setSellViewControllerStyling];
-    self.imagePlaceHolder = [self.imageOfProductButton currentImage];
+    self.photos = [NSMutableArray array];
     self.listingDescriptionView.placeholder = @"Description of your listing";
-
+    [self.exitKeyboardGesture setCancelsTouchesInView:NO];
 
     
 }
@@ -80,7 +86,6 @@
      UIImagePickerController *imagePickerVC = [UIImagePickerController new];
      imagePickerVC.delegate = self;
      imagePickerVC.allowsEditing = YES;
-
      self.alert = [UIAlertController alertControllerWithTitle:@"Select a photo" message:@""
                                 preferredStyle:UIAlertControllerStyleActionSheet];
 
@@ -117,10 +122,12 @@
     // Get the image captured by the UIImagePickerController
     UIImage *originalImage = info[UIImagePickerControllerOriginalImage];
     //UIImage *editedImage = info[UIImagePickerControllerEditedImage];
+    [self.photos insertObject:originalImage atIndex:self.indexOfPhoto];
     // Do something with the images (based on your use case)
-    [self.imageOfProductButton setImage:originalImage forState:UIControlStateNormal];
+   
     // Dismiss UIImagePickerController to go back to your original view controller
     [self dismissViewControllerAnimated:YES completion:nil];
+    [self.photosCollectionView reloadData];
 }
 
 
@@ -146,7 +153,7 @@
     [self.view endEditing:TRUE];
 }
 - (IBAction)didTapPostListing:(id)sender {
-    self.image = self.imageOfProductButton.currentImage;
+    self.photosToUpload = [NSArray arrayWithArray:self.photos];
     self.listingTitle = [self.listingTitleField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     self.type = [self.listingTypeField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     self.listingDescription = [self.listingDescriptionView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
@@ -158,7 +165,7 @@
     
     [self areFieldsValid:^(BOOL isValid, NSString *errorMessage){
         if (isValid){
-            [Listing postUserListing:self.image withTitle:self.listingTitle withType:self.type withDescription:self.listingDescription withLocation:self.location withCategory:self.category withBrand:self.brand withCondition:self.condition withPrice:self.price withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+            [Listing postUserListing:self.photosToUpload withTitle:self.listingTitle withType:self.type withDescription:self.listingDescription withLocation:self.location withCategory:self.category withBrand:self.brand withCondition:self.condition withPrice:self.price withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
                 if (error == nil){
                     NSLog(@"Listing is posted");
                     [self resetInputFields];
@@ -182,7 +189,7 @@
 }
 
 -(void) areFieldsValid:(void(^)(BOOL, NSString *)) completion{
-    if ([self.imagePlaceHolder isEqual: self.image]){
+    if (self.photosToUpload.count < 1){
         completion(FALSE, @"Missing at least 1 image");
     }
     else if (self.listingTitle.length == 0 || self.listingTitle == nil){
@@ -212,15 +219,40 @@
 
 
 -(void) resetInputFields{
-    [self.imageOfProductButton setImage:self.imagePlaceHolder forState:UIControlStateNormal];
+    //[self.imageOfProductButton setImage:self.imagePlaceHolder forState:UIControlStateNormal];
+    self.imagePlaceHolder = [UIImage imageNamed:@"photo_add_icon"];
     self.listingTitleField.text = @"";
     self.listingTypeField.text = @"";
-    self.listingDescriptionView.text = @"Description of listing";
+    self.listingDescriptionView.placeholder = @"Description of listing";
     [self.locationButton setTitle:@"Location" forState:UIControlStateNormal];
     [self.categoryButton setTitle:@"Category" forState:UIControlStateNormal];
     self.brandField.text = @"";
     self.conditionField.text = @"";
     self.priceField.text = @"";
+}
+
+#pragma mark - Collection View
+- (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    PhotoCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"PhotoCell" forIndexPath:indexPath];
+    NSInteger lengthOfPhotosArray = self.photos.count;
+    if (lengthOfPhotosArray == 0 || (!cell.listingPhoto.image)){
+        [cell.listingPhoto setImage:[UIImage imageNamed:@"photo_add_icon"]];
+    }
+    else{
+        NSInteger index = indexPath.row - 1;
+        UIImage *photoSelected = [self.photos objectAtIndex:indexPath.row];
+        [cell.listingPhoto setImage:photoSelected];
+    }
+    //[cell.listingPhoto setImage:[UIImage imageNamed:@"photo_add_icon"]];
+    return cell;
+}
+
+- (NSInteger)collectionView:(nonnull UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return self.photos.count+1;
+}
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+    self.indexOfPhoto = indexPath.row;
+    [self showPhotoAlert];
 }
 
 #pragma mark - Navigation
@@ -244,4 +276,6 @@
         placeAutocompleteViewController.delegate = self;
     }
 }
+
+
 @end

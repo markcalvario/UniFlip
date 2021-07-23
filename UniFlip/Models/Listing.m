@@ -11,7 +11,7 @@
 
 @dynamic postID;
 @dynamic author;
-@dynamic listingImage;
+@dynamic listingImages;
 @dynamic listingTitle;
 @dynamic typeOfListing;
 @dynamic listingDescription;
@@ -30,11 +30,15 @@
     return @"Listing";
 }
 
-+ (void) postUserListing:(UIImage * _Nullable)image withTitle:(NSString * _Nullable)title withType:(NSString * _Nullable)type withDescription:(NSString * _Nullable)description withLocation:(NSString * _Nullable)location withCategory:(NSString * _Nullable)category withBrand:(NSString * _Nullable)brand withCondition:(NSString * _Nullable)condition withPrice:(NSString * _Nullable)price withCompletion: (PFBooleanResultBlock  _Nullable)completion {
++ (void) postUserListing:(NSArray<UIImage *>*)images withTitle:(NSString * _Nullable)title withType:(NSString * _Nullable)type withDescription:(NSString * _Nullable)description withLocation:(NSString * _Nullable)location withCategory:(NSString * _Nullable)category withBrand:(NSString * _Nullable)brand withCondition:(NSString * _Nullable)condition withPrice:(NSString * _Nullable)price withCompletion: (PFBooleanResultBlock  _Nullable)completion {
     
     Listing *newListing = [Listing new];
     newListing.author = [User currentUser];
-    newListing.listingImage = [self getPFFileFromImage: [newListing resizeImage: image withSize: CGSizeMake(300, 300)]];
+    NSMutableArray *mutableImages = [NSMutableArray array];
+    for (UIImage *image in images){
+        [mutableImages addObject:[self getPFFileFromImage: [newListing resizeImage: image withSize: CGSizeMake(300, 300)]]];
+    }
+    newListing.listingImages = [NSArray arrayWithArray:mutableImages];
     newListing.listingTitle = title;
     newListing.typeOfListing = type;
     newListing.listingDescription = description;

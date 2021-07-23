@@ -58,7 +58,7 @@
     self.categoryLabel.text = self.listing.listingCategory;
     self.descriptionLabel.text = self.listing.listingDescription;
     self.priceLabel.text = [@"$" stringByAppendingString:self.listing.listingPrice];
-    PFFileObject *listingImageObject = self.listing.listingImage;
+    PFFileObject *listingImageObject = [self.listing.listingImages objectAtIndex:0];
     [Listing PFFileToUIImage:listingImageObject completion:^(UIImage * image, NSError * error) {
         if (image){
             [self.listingImage setImage: [ListingDetailViewController imageWithImage:image scaledToWidth:414] ];
