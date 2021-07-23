@@ -28,6 +28,8 @@
 @property (strong, nonatomic) NSMutableArray *filteredArrayOfCategories;
 @property (strong, nonatomic) NSMutableArray *allListings;
 @property (strong, nonatomic) UIRefreshControl *refreshControl;
+@property (strong, nonatomic) NSMutableArray *suggestedListings;
+
 
 
 @end
@@ -44,12 +46,19 @@ BOOL isFiltered;
     self.listingCategoryTableView.delegate = self;
     self.listingCategoryTableView.dataSource = self;
     self.searchListingsBar.delegate = self;
+    [self.searchListingsBar setUserInteractionEnabled:NO];
     self.hasCalledViewDidLoad = TRUE;
-    
+    [self updateSuggestedListings:^(BOOL completed) {
+        if (completed){
+            [self updateListingsByCategory];
+            [self.searchListingsBar setUserInteractionEnabled:YES];
+
+        }
+    }];
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(updateListingsByCategory) forControlEvents:UIControlEventValueChanged];
     [self.listingCategoryTableView insertSubview:self.refreshControl atIndex:0];
-    [self updateListingsByCategory];
+    
 }
 -(void) viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -61,14 +70,11 @@ BOOL isFiltered;
         [self displayConnectionErrorAlert];
     }
     self.hasCalledViewDidLoad = FALSE;
-
-        //-> call updateListingsByCategory function
 }
 - (BOOL) isConnectedToInternet{
     Reachability *reach = [Reachability reachabilityForInternetConnection];
     return [reach isReachable];
 }
-
 -(void) displayConnectionErrorAlert{
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Unable to connect to the internet" message:@"Please check your internet connection and try again." preferredStyle:(UIAlertControllerStyleAlert)];
     // create an OK action
@@ -162,9 +168,8 @@ BOOL isFiltered;
     self.filteredCategoryToArrayOfPosts = [NSMutableDictionary dictionary];
     self.filteredArrayOfCategories = [NSMutableArray array];
     if (searchText.length == 0){
-        self.filteredCategoryToArrayOfPosts[@"Suggested Listings"] = [NSArray array];
+        self.filteredCategoryToArrayOfPosts[@"Suggested Listings"] = self.suggestedListings;
         [self.filteredArrayOfCategories addObject:@"Suggested Listings"];
-        //self.filteredCategoryToArrayOfPosts = self.filteredCategoryToArrayOfPosts;
         isFiltered = YES;
     }
     else{
@@ -193,10 +198,10 @@ BOOL isFiltered;
     self.filteredCategoryToArrayOfPosts = [NSMutableDictionary dictionary];
     self.filteredArrayOfCategories = [NSMutableArray array];
     if (searchBar.text.length == 0){
-        self.filteredCategoryToArrayOfPosts[@"Suggested Listings"] = [NSArray array];
+        self.filteredCategoryToArrayOfPosts[@"Suggested Listings"] = self.suggestedListings;
         [self.filteredArrayOfCategories addObject:@"Suggested Listings"];
-        //self.filteredCategoryToArrayOfPosts = self.filteredCategoryToArrayOfPosts;
         isFiltered = YES;
+        
     }
     [self.listingCategoryTableView reloadData];
 
@@ -242,9 +247,17 @@ BOOL isFiltered;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSString *category = self.arrayOfCategories[indexPath.row];
-    NSArray *listings = self.categoryToArrayOfPosts[category];
-    CGFloat numOfListings = listings.count;
+    NSString *tableViewCategory;
+    NSArray *currentCategoryArray;
+    if (isFiltered){
+        tableViewCategory = self.filteredArrayOfCategories[indexPath.row];
+        currentCategoryArray = self.filteredCategoryToArrayOfPosts[tableViewCategory];
+    }
+    else{
+        tableViewCategory = self.arrayOfCategories[indexPath.row];
+        currentCategoryArray = self.categoryToArrayOfPosts[tableViewCategory];
+    }
+    CGFloat numOfListings = currentCategoryArray.count;
     CGFloat height = (245 * ceil(numOfListings/2)) + 50;
     return height;
 }
@@ -263,6 +276,7 @@ BOOL isFiltered;
         currentCategoryArray = self.categoryToArrayOfPosts[tableViewCategory];
     }
     //NSLog(@"%@", currentCategoryArray);
+    
     return currentCategoryArray.count;
 }
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
@@ -293,10 +307,6 @@ BOOL isFiltered;
                     [listingCell.listingImage setImage:image];
                 }
         }];
-    
-    /*UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapSaveIcon:)];
-    tapGesture.numberOfTapsRequired = 2;
-    [listingCell.listingImage addGestureRecognizer:tapGesture];*/
     
     listingCell.saveButton.tag = indexPath.row;
     [listingCell.saveButton setTitle: listing.listingCategory forState:UIControlStateNormal];
@@ -428,6 +438,138 @@ BOOL isFiltered;
     [self.currentUser saveInBackground];
 }
 
+-(void) updateSuggestedListings:(void (^)(BOOL))completion{
+    if (![self isConnectedToInternet]){
+        [self displayConnectionErrorAlert];
+    }
+    else{
+        dispatch_group_t dispatchGroup = dispatch_group_create();
+
+        NSDictionary *categoriesVisitedToCount = self.currentUser[@"categoriesVisitedToClick"];
+        //NSLog(@"%@", categoriesVisitedToCount);
+        NSNumber *highestCount = 0;
+        NSString *mostViewedCategory = @"";
+        for (NSString *category in categoriesVisitedToCount){
+            NSNumber *count = categoriesVisitedToCount[category];
+            if ([count doubleValue] > [highestCount doubleValue]){
+                highestCount = count;
+                mostViewedCategory = category;
+            }
+        }
+        NSDictionary *usersVisitedToCounter = self.currentUser[@"visitedProfileToCounter"];
+        //NSLog(@"%@", usersVisitedToCounter);
+        highestCount = 0;
+        NSString *mostViewedUser = @"";
+        for (NSString *user in usersVisitedToCounter){
+            NSNumber *count = usersVisitedToCounter[user];
+            if ([count doubleValue] > [highestCount doubleValue]){
+                highestCount = count;
+                mostViewedUser = user;
+            }
+        }
+        PFQuery *query = [Listing query];
+        [query includeKey:@"savedBy"];
+        [query orderByDescending:@"saveCount"];
+        [query includeKey:@"author"];
+        //__block NSMutableArray *mutableArrayOfAllListings = [NSMutableArray array];
+        __block NSMutableArray *sortedListings = [NSMutableArray array];
+        dispatch_group_enter(dispatchGroup);
+        [query findObjectsInBackgroundWithBlock:^(NSArray<Listing *> * _Nullable allListings, NSError * _Nullable error) {
+            if (allListings) {
+                //mutableArrayOfAllListings = [NSMutableArray arrayWithArray:allListings];
+                sortedListings = [NSMutableArray array];
+                NSInteger numberOfListingsWithHighestCategory = 0;
+                for (Listing *listing in allListings){
+                    if (![listing.author.objectId isEqualToString:self.currentUser.objectId]){
+                        [sortedListings addObject:listing];
+                        if ([listing.listingCategory isEqualToString:mostViewedCategory]){
+                            numberOfListingsWithHighestCategory++;
+                        }
+                    }
+                    
+                }
+                
+                NSInteger length_of_array = (NSInteger) sortedListings.count;
+                NSInteger starting_index = 0;
+                NSInteger ending_index = (length_of_array - 1);
+
+                while (ending_index > starting_index){
+                    
+                    Listing *starting_listing = [sortedListings objectAtIndex:starting_index];
+                    Listing *ending_listing = [sortedListings objectAtIndex:ending_index];
+                    //NSLog(@"%@", starting_listing[@"savedBy"]);
+                    if ([starting_listing.listingCategory isEqualToString:mostViewedCategory]){
+                        starting_index += 1;
+                    }
+                    else if (![starting_listing.listingCategory isEqualToString:mostViewedCategory] && [ending_listing.listingCategory isEqualToString:mostViewedCategory]){
+                        [sortedListings exchangeObjectAtIndex:starting_index withObjectAtIndex:ending_index];
+                        starting_index += 1;
+                        ending_index -= 1;
+                        
+                    }
+                    else{
+                        //starting_index
+                        ending_index -= 1;
+                    }
+                    
+
+                }
+
+                NSArray *mostViewedCategorySubarray = [sortedListings subarrayWithRange:NSMakeRange(0, numberOfListingsWithHighestCategory)];
+                length_of_array = (NSInteger) mostViewedCategorySubarray.count;
+                starting_index = 0;
+                ending_index = (length_of_array - 1);
+                while (ending_index > starting_index){
+                    
+                    Listing *starting_listing = [sortedListings objectAtIndex:starting_index];
+                    Listing *ending_listing = [sortedListings objectAtIndex:ending_index];
+                    //NSLog(@"%@", starting_listing[@"savedBy"]);
+                    if ([starting_listing.author.objectId isEqualToString:mostViewedUser]){
+                        starting_index += 1;
+                    }
+                    else if (![starting_listing.author.objectId isEqualToString:mostViewedUser] && [ending_listing.author.objectId isEqualToString:mostViewedUser]){
+                        [sortedListings exchangeObjectAtIndex:starting_index withObjectAtIndex:ending_index];
+                        starting_index += 1;
+                        ending_index -= 1;
+                    }
+                    else{
+                        //starting_index
+                        ending_index -= 1;
+                    }
+                }
+                
+                
+                
+            }
+            else{
+                NSLog(@"%@", error.localizedDescription);
+            }
+            dispatch_group_leave(dispatchGroup);
+        }];
+        dispatch_group_notify(dispatchGroup, dispatch_get_main_queue(), ^(void){
+            //NSLog(@"updated listings: %@", sortedListings);
+            self.suggestedListings  = sortedListings;
+            completion(TRUE);
+        });
+        //NSLog(@"%@ %@", mostViewedUser, mostViewedCategory);
+        
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 #pragma mark - Navigation
@@ -440,6 +582,7 @@ BOOL isFiltered;
         ListingDetailViewController *listingDetailViewController = [segue destinationViewController];
         listingDetailViewController.listing = sender;
     }
+    
 }
 
 

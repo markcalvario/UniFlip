@@ -12,12 +12,8 @@
 #import "ListingCell.h"
 #import "ListingDetailViewController.h"
 #import <SystemConfiguration/SystemConfiguration.h>
-
 #import <objc/runtime.h>
 #import <MaterialComponents/MaterialTabs+TabBarView.h>
-
-
-
 
 @interface ProfileViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UINavigationControllerDelegate, MDCTabBarViewDelegate>
 @property (weak, nonatomic) IBOutlet UIButton *profilePicButton;
