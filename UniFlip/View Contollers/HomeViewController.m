@@ -48,13 +48,13 @@ BOOL isFiltered;
     self.searchListingsBar.delegate = self;
     [self.searchListingsBar setUserInteractionEnabled:NO];
     self.hasCalledViewDidLoad = TRUE;
-    [self updateSuggestedListings:^(BOOL completed) {
+    /*[self updateSuggestedListings:^(BOOL completed) {
         if (completed){
             [self updateListingsByCategory];
             [self.searchListingsBar setUserInteractionEnabled:YES];
 
         }
-    }];
+    }];*/
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(updateListingsByCategory) forControlEvents:UIControlEventValueChanged];
     [self.listingCategoryTableView insertSubview:self.refreshControl atIndex:0];
@@ -63,7 +63,7 @@ BOOL isFiltered;
 -(void) viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     isFiltered = NO;
-    if (!self.hasCalledViewDidLoad && [self isConnectedToInternet]){
+    /*if (!self.hasCalledViewDidLoad && [self isConnectedToInternet]){
         //[self updateListingsByCategory];
         [self updateSuggestedListings:^(BOOL completed) {
             if (completed){
@@ -76,7 +76,7 @@ BOOL isFiltered;
     else if (![self isConnectedToInternet]){
         [self displayConnectionErrorAlert];
     }
-    
+    */
     self.hasCalledViewDidLoad = FALSE;
 }
 - (BOOL) isConnectedToInternet{

@@ -73,25 +73,25 @@ BOOL showUserListings = TRUE;
     self.profilePicButton.layer.cornerRadius = self.profilePicButton.frame.size.width / 2;
     self.profilePicButton.clipsToBounds = YES;
     
-    PFFileObject *userProfilePicture = self.user.profilePicture;
-    if (userProfilePicture){
-        [Listing PFFileToUIImage:userProfilePicture completion:^(UIImage * image, NSError * error) {
-            if (image){
-                [self.profilePicButton setImage: [ListingDetailViewController imageWithImage:image scaledToWidth:414] forState:UIControlStateNormal];
-            }
-            else{
-                [self.profilePicButton setImage: [UIImage imageNamed:@"default_profile_pic"] forState:UIControlStateNormal];
-                
-            }
-        }];
-    }
+    PFFileObject *userProfilePicture = self.currentUser.profilePicture;
+    [userProfilePicture getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
+        if (imageData) {
+            UIImage *image = [UIImage imageWithData:imageData];
+            [self.profilePicButton setImage:image forState:UIControlStateNormal];
+        }
+        else{
+            [self.profilePicButton setImage: [UIImage imageNamed:@"default_profile_pic"] forState:UIControlStateNormal];
+        }
+    }];
     showUserListings ? [self getListingsBasedOnSavedButton:TRUE] : [self getListingsBasedOnSavedButton:FALSE];
    
 }
 
 #pragma mark - If User wants their saved listings
 -(void) getListingsBasedOnSavedButton: (BOOL) getAllUserListings {
-    dispatch_group_t dispatchGroup = dispatch_group_create();
+    //dispatch_group_t dispatchGroup = dispatch_group_create();
+    self.arrayOfListings = [NSMutableArray array];
+    __block NSMutableArray *usersListings = [NSMutableArray array];
     PFQuery *query = [Listing query];
     [query includeKey:@"savedBy"];
     [query orderByDescending:@"createdAt"];
@@ -99,62 +99,38 @@ BOOL showUserListings = TRUE;
     if (getAllUserListings){
         [query whereKey:@"author" equalTo:self.user];
     }
-    self.arrayOfListings = [NSMutableArray array];
-    NSMutableArray *savedListings = [NSMutableArray array];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *listings, NSError *error) {
-        if (listings) {
-            for (Listing *listing in listings){
-                dispatch_group_enter(dispatchGroup);
-                __block BOOL isSaved = FALSE;
-                PFRelation *relation = [listing relationForKey:@"savedBy"];
-                PFQuery *query = [relation query];
-                [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable arrayOfUsers, NSError * _Nullable error) {
-                    if (arrayOfUsers){
-                        if (getAllUserListings && ([listing.author.username isEqualToString: self.user.username])){
-                            for (User *user in arrayOfUsers){
-                                if ([user.username isEqualToString: self.currentUser.username]){
-                                    //NSLog(@"user has saved this listing");
-                                    listing.isSaved = TRUE;
-                                    isSaved = TRUE;
-                                    [self.arrayOfListings addObject:listing];
-                                }
-                            }
-                            if (getAllUserListings && (!isSaved)){
-                                //NSLog(@"user has not saved this listing");
-                                listing.isSaved = FALSE;
-                                [self.arrayOfListings addObject:listing];
-                            }
-
-                        }else{
-                            for (User *user in arrayOfUsers){
-                                if ([user.username isEqualToString: self.user.username]){
-                                    //NSLog(@"user has saved this listing");
-                                    //listing.isSaved = TRUE;
-                                    [self.arrayOfListings addObject:listing];
-                                }
-                                if ([user.username isEqualToString: self.currentUser.username]){
-                                    //NSLog(@"user has saved this listing");
-                                    listing.isSaved = TRUE;
-                                }
-                            }
-        
-                        }
-                        
-                    }else{
-                        NSLog(@"Could not load saved listings");
-                    }
-                    dispatch_group_leave(dispatchGroup);
-                }];
-            
-            }
-            
-        } else {
-            NSLog(@"%@", error.localizedDescription);
+    [query findObjectsInBackgroundWithBlock:^(NSArray * listings, NSError * _Nullable error) {
+        if (listings){
+            usersListings = [NSMutableArray arrayWithArray:listings];
         }
-        dispatch_group_notify(dispatchGroup, dispatch_get_main_queue(), ^(void){
-            //self.arrayOfListings = savedListings;
-             [self.listingsCollectionView reloadData];
-        });
+        for (Listing *listing in listings){
+            __block BOOL isSaved = FALSE;
+            PFRelation *relation = [listing relationForKey:@"savedBy"];
+            PFQuery *query = [relation query];
+            __block NSArray *savedByUsers = [NSArray array];
+            [query findObjectsInBackgroundWithBlock:^(NSArray * users, NSError * _Nullable error) {
+                if (!error){
+                    savedByUsers = users;
+                }
+                //dispatch_group_leave(dispatchGroup);
+                for (User *user in savedByUsers){
+                    if ([user.username isEqualToString:self.currentUser.username]){
+                        isSaved = TRUE;
+                        listing.isSaved = TRUE;
+                    }
+                }
+                if (!isSaved){
+                    listing.isSaved = FALSE;
+                    if (!getAllUserListings){
+                        [usersListings removeObject:listing];
+                    }
+                }
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    self.arrayOfListings = [NSMutableArray arrayWithArray:usersListings];
+                    [self.listingsCollectionView reloadData];
+                });
+            }];
+        }
     }];
 }
 
@@ -212,6 +188,7 @@ BOOL showUserListings = TRUE;
     NSString *price = [@"$" stringByAppendingString:listing.listingPrice];
     cell.profileListingPriceLabel.text = price;
     cell.profileListingTitleLabel.text = listing.listingTitle;
+    cell.profileListingImage.image = nil;
     if (listing.isSaved){
         [cell.profileListingSaveButton setImage:[UIImage imageNamed:@"saved_icon"] forState:UIControlStateNormal];
     }
@@ -245,6 +222,9 @@ BOOL showUserListings = TRUE;
     [self updateCategoriesVisitedToClick: listing];
 
 }
+
+
+///
 
 -(void) updateListingsToClicks: (Listing *)listing{
     NSMutableDictionary *listingsToClicks = self.currentUser[@"listingsToClicks"];
