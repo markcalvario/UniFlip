@@ -31,7 +31,7 @@
 @property (strong, nonatomic) NSMutableArray *suggestedListings;
 
 
-
+@property (strong, nonatomic) NSString *searchText;
 @end
 
 @implementation HomeViewController
@@ -48,13 +48,7 @@ BOOL isFiltered;
     self.searchListingsBar.delegate = self;
     [self.searchListingsBar setUserInteractionEnabled:NO];
     self.hasCalledViewDidLoad = TRUE;
-    /*[self updateSuggestedListings:^(BOOL completed) {
-        if (completed){
-            [self updateListingsByCategory];
-            [self.searchListingsBar setUserInteractionEnabled:YES];
-
-        }
-    }];*/
+    [self updateListingsByCategory];
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(updateListingsByCategory) forControlEvents:UIControlEventValueChanged];
     [self.listingCategoryTableView insertSubview:self.refreshControl atIndex:0];
@@ -63,20 +57,13 @@ BOOL isFiltered;
 -(void) viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     isFiltered = NO;
-    /*if (!self.hasCalledViewDidLoad && [self isConnectedToInternet]){
-        //[self updateListingsByCategory];
-        [self updateSuggestedListings:^(BOOL completed) {
-            if (completed){
-                [self updateListingsByCategory];
-                [self.searchListingsBar setUserInteractionEnabled:YES];
-
-            }
-        }];
+    if (!self.hasCalledViewDidLoad && [self isConnectedToInternet]){
+        [self updateListingsByCategory];
     }
     else if (![self isConnectedToInternet]){
         [self displayConnectionErrorAlert];
     }
-    */
+    
     self.hasCalledViewDidLoad = FALSE;
 }
 - (BOOL) isConnectedToInternet{
@@ -96,77 +83,74 @@ BOOL isFiltered;
         [self displayConnectionErrorAlert];
     }
     else{
-        dispatch_group_t dispatchGroup = dispatch_group_create();
         [self.loadingSpinner startAnimating];
-        NSLog(@"updating listings");
         self.loadingSpinner.hidden = NO;
         [self.view setAlpha:0.75];
 
         
         self.categoryToArrayOfPosts = [NSMutableDictionary dictionary];
         self.arrayOfCategories = [NSMutableArray array];
-        
-
         self.allListings = [NSMutableArray array];
-
+        
+        __block NSMutableArray *allListings = [NSMutableArray array];
         PFQuery *query = [Listing query];
         [query includeKey:@"savedBy"];
         [query orderByDescending:@"createdAt"];
         [query includeKey:@"author"];
-        //NSMutableDictionary *categoryToListings = [NSMutableDictionary dictionary];
         [query findObjectsInBackgroundWithBlock:^(NSArray<Listing *> * _Nullable listings, NSError * _Nullable error) {
             if (listings) {
-                //NSLog(@"%@", self.categoryToArrayOfPosts);
-                for (Listing *listing in listings){
-                    if ([listing.author.university isEqualToString: self.currentUser.university]){
-                        __block BOOL isListingSaved = FALSE;
-                        //Adding listing to appropiate dictionary key
-                        NSString *category = listing.listingCategory;
-                        if ( [self.categoryToArrayOfPosts objectForKey:listing.listingCategory]){
-                            NSMutableArray *arrayOfListingsValue = [self.categoryToArrayOfPosts objectForKey:category];
-                            [arrayOfListingsValue addObject:listing];
-                            [self.categoryToArrayOfPosts setObject:arrayOfListingsValue forKey:category];
-                        }
-                        else{
-                            NSMutableArray *arrayOfListingsValue = [[NSMutableArray alloc] init];
-                            [arrayOfListingsValue addObject:listing];
-                            [self.arrayOfCategories addObject: category];
-                            [self.categoryToArrayOfPosts setObject:arrayOfListingsValue forKey:category];
-                        }
-                        [self.allListings addObject:listing];
-                        dispatch_group_enter(dispatchGroup);
-                        //checking for saved listings by user
-                        PFRelation *relation = [listing relationForKey:@"savedBy"];
-                        PFQuery *query = [relation query];
-                        [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable arrayOfUsers, NSError * _Nullable error) {
-                            if (arrayOfUsers){
-                                for (User *user in arrayOfUsers){
-                                    if ([user.username isEqualToString: self.currentUser.username]){
-                                        listing.isSaved = TRUE;
-                                        isListingSaved = TRUE;
-                                    }
-                                }
-                                if (!isListingSaved){
-                                    listing.isSaved = FALSE;
-                                }
-                            }else{
-                                NSLog(@"Could not load saved listings");
-                            }
-                            dispatch_group_leave(dispatchGroup);
-                        }];
-                    }
-                }
+                allListings = [NSMutableArray arrayWithArray:listings];
             }
             else{
                 NSLog(@"%@", error.localizedDescription);
             }
-            dispatch_group_notify(dispatchGroup, dispatch_get_main_queue(), ^(void){
-                [self.loadingSpinner stopAnimating];
-                self.loadingSpinner.hidden = YES;
-                [self.view setAlpha:1];
-                [self.refreshControl endRefreshing];
-                [self.listingCategoryTableView reloadData];
-            });
+            for (Listing *listing in allListings){
+                if ([listing.author.university isEqualToString: self.currentUser.university]){
+                    __block BOOL isListingSaved = FALSE;
+                    //Adding listing to appropiate dictionary key
+                    NSString *category = listing.listingCategory;
+                    if ( [self.categoryToArrayOfPosts objectForKey:listing.listingCategory]){
+                        NSMutableArray *arrayOfListingsValue = [self.categoryToArrayOfPosts objectForKey:category];
+                        [arrayOfListingsValue addObject:listing];
+                        [self.categoryToArrayOfPosts setObject:arrayOfListingsValue forKey:category];
+                    }
+                    else{
+                        NSMutableArray *arrayOfListingsValue = [[NSMutableArray alloc] init];
+                        [arrayOfListingsValue addObject:listing];
+                        [self.arrayOfCategories addObject: category];
+                        [self.categoryToArrayOfPosts setObject:arrayOfListingsValue forKey:category];
+                    }
+                    [self.allListings addObject:listing];
+                    //checking for saved listings by user
+                    PFRelation *relation = [listing relationForKey:@"savedBy"];
+                    PFQuery *query = [relation query];
+                    __block NSArray *savedByUsers = [NSArray array];
+                    [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable arrayOfUsers, NSError * _Nullable error) {
+                        if (arrayOfUsers){
+                            savedByUsers = arrayOfUsers;
+                        }else{
+                            NSLog(@"Could not load saved listings");
+                        }
+                        for (User *user in savedByUsers){
+                            if ([user.username isEqualToString: self.currentUser.username]){
+                                listing.isSaved = TRUE;
+                                isListingSaved = TRUE;
+                            }
+                        }
+                        if (!isListingSaved){
+                            listing.isSaved = FALSE;
+                        }
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [self.loadingSpinner stopAnimating];
+                            self.loadingSpinner.hidden = YES;
+                            [self.view setAlpha:1];
+                            [self.refreshControl endRefreshing];
+                            [self.listingCategoryTableView reloadData];
+                            [self updateSuggestedListings];
+                        });
+                    }];
+                }
+            }
         }];
     }
     
@@ -182,6 +166,7 @@ BOOL isFiltered;
     }
     else{
         isFiltered = YES;
+        self.searchText = searchText;
         for (Listing *listing in self.allListings){
             NSRange listingTitleRange = [listing.listingTitle rangeOfString:searchText options:NSCaseInsensitiveSearch];
             if (listingTitleRange.location != NSNotFound){
@@ -301,9 +286,18 @@ BOOL isFiltered;
         currentCategoryArray = self.categoryToArrayOfPosts[tableViewCategory];
     }
     Listing *listing = currentCategoryArray[indexPath.row];
-    
-    //Setting up cell
     listingCell.titleLabel.text = listing.listingTitle;
+    
+    if (isFiltered && self.searchText.length > 0){
+        NSRange listingTitleRange = [listing.listingTitle rangeOfString:self.searchText options:NSCaseInsensitiveSearch];
+        NSMutableAttributedString *substring = [[NSMutableAttributedString alloc] initWithString:listing.listingTitle];
+        [substring addAttribute:NSForegroundColorAttributeName value:[UIColor blueColor] range:listingTitleRange];
+        listingCell.titleLabel.attributedText = substring;
+    }
+    else{
+        listingCell.titleLabel.text = listing.listingTitle;
+    }
+    
     NSString *price = listing.listingPrice;
     listingCell.priceLabel.text = [@"$" stringByAppendingString: price];
     listingCell.profileListingTitleLabel.text = listing.listingTitle;
@@ -446,7 +440,7 @@ BOOL isFiltered;
     [self.currentUser saveInBackground];
 }
 
--(void) updateSuggestedListings:(void (^)(BOOL))completion{
+-(void) updateSuggestedListings{
     if (![self isConnectedToInternet]){
         [self displayConnectionErrorAlert];
     }
@@ -545,9 +539,6 @@ BOOL isFiltered;
                         ending_index -= 1;
                     }
                 }
-                
-                
-                
             }
             else{
                 NSLog(@"%@", error.localizedDescription);
@@ -555,30 +546,17 @@ BOOL isFiltered;
             dispatch_group_leave(dispatchGroup);
         }];
         dispatch_group_notify(dispatchGroup, dispatch_get_main_queue(), ^(void){
-            //NSLog(@"updated listings: %@", sortedListings);
             self.suggestedListings  = sortedListings;
-            completion(TRUE);
+            [self.searchListingsBar setUserInteractionEnabled:YES];
         });
-        //NSLog(@"%@ %@", mostViewedUser, mostViewedCategory);
         
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-(void) highlightText:(NSString *)value withSubstring:(NSString *)text {
+    NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString:value];
+    
+}
 
 #pragma mark - Navigation
 
