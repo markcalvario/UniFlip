@@ -23,6 +23,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UILabel *profileListingTitleLabel;
 @property (weak, nonatomic) IBOutlet UIButton *profileListingSaveButton;
 
+//ListingsByCategoryController
+@property (strong, nonatomic) IBOutlet UIImageView *listingByCategoryImage;
+@property (strong, nonatomic) IBOutlet UILabel *listingByCategoryPriceLabel;
+@property (strong, nonatomic) IBOutlet UILabel *listingByCategoryTitleLabel;
+@property (strong, nonatomic) IBOutlet UIButton *listingByCategorySaveButton;
+
+
 @end
 
 NS_ASSUME_NONNULL_END

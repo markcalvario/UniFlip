@@ -37,6 +37,7 @@
 		D0B7A66226A898AC0029D204 /* ReportListingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B7A66126A898AC0029D204 /* ReportListingViewController.m */; };
 		D0B7A66526A89FD30029D204 /* Report.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B7A66426A89FD30029D204 /* Report.m */; };
 		D0B7A66826AA94860029D204 /* PhotoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B7A66726AA94860029D204 /* PhotoCell.m */; };
+		D0B7A66B26AD45580029D204 /* CategoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B7A66A26AD45580029D204 /* CategoryViewController.m */; };
 		D56325CDB651DCF1D6E74995 /* Pods_UniFlip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 896002A9551245D6FC5C1603 /* Pods_UniFlip.framework */; };
 		EEF5230230B5B4982AA7A2F1 /* Pods_UniFlipTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E75917EC6DEA44684821653 /* Pods_UniFlipTests.framework */; };
 /* End PBXBuildFile section */
@@ -124,6 +125,8 @@
 		D0B7A66426A89FD30029D204 /* Report.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Report.m; sourceTree = "<group>"; };
 		D0B7A66626AA94860029D204 /* PhotoCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotoCell.h; sourceTree = "<group>"; };
 		D0B7A66726AA94860029D204 /* PhotoCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotoCell.m; sourceTree = "<group>"; };
+		D0B7A66926AD45580029D204 /* CategoryViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CategoryViewController.h; sourceTree = "<group>"; };
+		D0B7A66A26AD45580029D204 /* CategoryViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CategoryViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -263,6 +266,8 @@
 				D0B7A65526A6A9540029D204 /* EditProfileViewController.m */,
 				D0B7A66026A898AC0029D204 /* ReportListingViewController.h */,
 				D0B7A66126A898AC0029D204 /* ReportListingViewController.m */,
+				D0B7A66926AD45580029D204 /* CategoryViewController.h */,
+				D0B7A66A26AD45580029D204 /* CategoryViewController.m */,
 			);
 			path = "View Contollers";
 			sourceTree = "<group>";
@@ -595,6 +600,7 @@
 				D0B7A65A26A7FC1D0029D204 /* Reachability.m in Sources */,
 				D09FFDA8269C2174008B33B5 /* SceneDelegate.m in Sources */,
 				D0B7A63E269FB3E30029D204 /* Listing.m in Sources */,
+				D0B7A66B26AD45580029D204 /* CategoryViewController.m in Sources */,
 				D0B7A627269D5A6D0029D204 /* HomeViewController.m in Sources */,
 				D0B7A66526A89FD30029D204 /* Report.m in Sources */,
 				D0B7A62A269DEE470029D204 /* SellViewController.m in Sources */,

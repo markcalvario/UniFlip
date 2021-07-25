@@ -15,6 +15,7 @@
 #import "ListingDetailViewController.h"
 #import <SystemConfiguration/SystemConfiguration.h>
 #import "Reachability.h"
+#import "CategoryViewController.h"
 
 @interface HomeViewController ()<UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchBarDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *listingCategoryTableView;
@@ -234,6 +235,8 @@ BOOL isFiltered;
     cell.categoryLabel.text = category;
     cell.listingCollectionView.tag = indexPath.row;
     cell.listingCollectionView.scrollEnabled = NO;
+    cell.viewAllButton.tag = indexPath.row;
+    [cell.viewAllButton addTarget:self action:@selector(didTapViewAll:) forControlEvents:UIControlEventTouchUpInside];
     return cell;
 }
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -313,6 +316,7 @@ BOOL isFiltered;
     listingCell.profileListingTitleLabel.text = listing.listingTitle;
     
     PFFileObject *listingImageFile = [listing.photos objectAtIndex:0];
+    [listingCell.listingImage setImage:nil];
     [listingImageFile getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
         if (!error) {
             UIImage *image = [UIImage imageWithData:imageData];
@@ -402,6 +406,22 @@ BOOL isFiltered;
             }];
         }
     }
+    
+}
+-(void) didTapViewAll: (UIButton *)button{
+    NSArray *listings;
+    NSString *category;
+    if (!isFiltered){
+        category = [self.arrayOfCategories objectAtIndex:button.tag];
+        listings = self.categoryToArrayOfPosts[category];
+    }
+    else{
+        category = [self.filteredArrayOfCategories objectAtIndex:button.tag];
+        listings = self.filteredCategoryToArrayOfPosts[category];
+
+    }
+    [self performSegueWithIdentifier:@"HomeToViewByCategory" sender:listings];
+
     
 }
 -(void) updateSaveButtonUI:(BOOL )isSaved withButton:(UIButton *)saveButton{
@@ -573,7 +593,13 @@ BOOL isFiltered;
         ListingDetailViewController *listingDetailViewController = [segue destinationViewController];
         listingDetailViewController.listing = sender;
     }
-    
+    if ([[segue identifier] isEqualToString:@"HomeToViewByCategory"]){
+        CategoryViewController *listingDetailViewController = [segue destinationViewController];
+        listingDetailViewController.listings = sender;
+        Listing *listing = [sender objectAtIndex:0];
+        listingDetailViewController.category = listing.listingCategory;
+    }
+        
 }
 
 

@@ -14,6 +14,14 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UICollectionView *listingCollectionView;
 @property (strong, nonatomic) NSIndexPath *tableViewIndexPath;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *listingCollectionViewHeight;
+@property (strong, nonatomic) IBOutlet UIButton *viewAllButton;
+
+
+
+
+//OTHER SCREEN
+@property (strong, nonatomic) IBOutlet UICollectionView *listingsByCategoryCollectionView;
+
 
 
 @end
