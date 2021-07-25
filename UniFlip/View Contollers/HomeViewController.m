@@ -161,7 +161,12 @@ BOOL isFiltered;
     self.filteredArrayOfCategories = [NSMutableArray array];
     if (searchText.length == 0){
         self.filteredCategoryToArrayOfPosts[@"Suggested Listings"] = self.suggestedListings;
+        if (self.suggestedListings.count > 5){
+            self.filteredCategoryToArrayOfPosts[@"Suggested Listings"] = [self.suggestedListings subarrayWithRange:NSMakeRange(0, 5)];
+        }
+        self.filteredCategoryToArrayOfPosts[@"Users"] = [NSMutableArray array];
         [self.filteredArrayOfCategories addObject:@"Suggested Listings"];
+        [self.filteredArrayOfCategories addObject:@"Users"];
         isFiltered = YES;
     }
     else{
@@ -192,7 +197,12 @@ BOOL isFiltered;
     self.filteredArrayOfCategories = [NSMutableArray array];
     if (searchBar.text.length == 0){
         self.filteredCategoryToArrayOfPosts[@"Suggested Listings"] = self.suggestedListings;
+        if (self.suggestedListings.count > 5){
+            self.filteredCategoryToArrayOfPosts[@"Suggested Listings"] = [self.suggestedListings subarrayWithRange:NSMakeRange(0, 5)];
+        }
+        self.filteredCategoryToArrayOfPosts[@"Users"] = [NSMutableArray array];
         [self.filteredArrayOfCategories addObject:@"Suggested Listings"];
+        [self.filteredArrayOfCategories addObject:@"Users"];
         isFiltered = YES;
         
     }
@@ -551,11 +561,6 @@ BOOL isFiltered;
         });
         
     }
-}
-
--(void) highlightText:(NSString *)value withSubstring:(NSString *)text {
-    NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString:value];
-    
 }
 
 #pragma mark - Navigation

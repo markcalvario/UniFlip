@@ -40,7 +40,6 @@ BOOL showUserListings = TRUE;
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
     self.currentUser = [User currentUser];
     [self displayTabBar];
     [self setProfileScreen];
@@ -51,6 +50,14 @@ BOOL showUserListings = TRUE;
 }
 
 -(void) setProfileScreen{
+    
+    if ([self.tabBarView.selectedItem.title isEqualToString:@"Listings"]){
+        showUserListings = TRUE;
+    }
+    else{
+        showUserListings = FALSE;
+    }
+    
     if (!self.user){
         self.user = self.currentUser;
     }
@@ -73,7 +80,7 @@ BOOL showUserListings = TRUE;
     self.profilePicButton.layer.cornerRadius = self.profilePicButton.frame.size.width / 2;
     self.profilePicButton.clipsToBounds = YES;
     
-    PFFileObject *userProfilePicture = self.currentUser.profilePicture;
+    PFFileObject *userProfilePicture = self.user.profilePicture;
     [userProfilePicture getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
         if (imageData) {
             UIImage *image = [UIImage imageWithData:imageData];
@@ -83,12 +90,12 @@ BOOL showUserListings = TRUE;
             [self.profilePicButton setImage: [UIImage imageNamed:@"default_profile_pic"] forState:UIControlStateNormal];
         }
     }];
-    showUserListings ? [self getListingsBasedOnSavedButton:TRUE] : [self getListingsBasedOnSavedButton:FALSE];
+    showUserListings ? [self updateListingsBasedOnTabBar:TRUE] : [self updateListingsBasedOnTabBar:FALSE];
    
 }
 
 #pragma mark - If User wants their saved listings
--(void) getListingsBasedOnSavedButton: (BOOL) getAllUserListings {
+-(void) updateListingsBasedOnTabBar: (BOOL) getAllUserListings {
     //dispatch_group_t dispatchGroup = dispatch_group_create();
     self.arrayOfListings = [NSMutableArray array];
     __block NSMutableArray *usersListings = [NSMutableArray array];
@@ -112,9 +119,8 @@ BOOL showUserListings = TRUE;
                 if (!error){
                     savedByUsers = users;
                 }
-                //dispatch_group_leave(dispatchGroup);
                 for (User *user in savedByUsers){
-                    if ([user.username isEqualToString:self.currentUser.username]){
+                    if ([user.username isEqualToString:self.user.username]){
                         isSaved = TRUE;
                         listing.isSaved = TRUE;
                     }
@@ -274,6 +280,7 @@ BOOL showUserListings = TRUE;
         Listing *listing = self.arrayOfListings[indexPath.row];
         ListingDetailViewController *listingDetailViewController = [segue destinationViewController];
         listingDetailViewController.listing = listing;
+        //showUserListings = TRUE;
         
     }
 }

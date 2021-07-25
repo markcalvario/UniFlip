@@ -22,7 +22,7 @@
 #import "PhotoCell.h"
 
 
-@interface ListingDetailViewController ()<MFMailComposeViewControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource>
+@interface ListingDetailViewController ()<MFMailComposeViewControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 //@property (weak, nonatomic) IBOutlet UIImageView *listingImage;
 @property (weak, nonatomic) IBOutlet UIButton *imageOfAuthorButton;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
@@ -48,6 +48,7 @@
     /*self.listingImageTapGesture.numberOfTapsRequired = 2;
     self.listingImage.userInteractionEnabled = YES;*/
     self.currentUser = [User currentUser];
+    self.listingImageTapGesture.numberOfTapsRequired = 2;
     self.photosCollectionView.delegate = self;
     self.photosCollectionView.dataSource = self;
     self.photos = self.listing.photos;
@@ -316,6 +317,7 @@
             }*/
         }
     }];
+    cell.detailPhoto.userInteractionEnabled = YES;
     NSLog(@"%ld", (long) cell.detailPhoto.frame.size.width);
     return cell;
 }
@@ -323,6 +325,11 @@
 - (NSInteger)collectionView:(nonnull UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     return self.photos.count;
 }
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
+    return CGSizeMake(collectionView.frame.size.width, collectionView.frame.size.height);
+}
+
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     self.photoIndicator.currentPage = scrollView.contentOffset.x/ scrollView.frame.size.width;
 }
@@ -359,6 +366,8 @@
       return scaledImage;
 }
 
+
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -376,6 +385,24 @@
 }
 
 
+-(void)removeImage {
 
+    UIImageView *imgView = (UIImageView*)[self.view viewWithTag:100];
+    [imgView removeFromSuperview];
+}
+
+-(void)addImageViewWithImage:(UIImage*)image {
+    
+
+    UIImageView *imgView = [[UIImageView alloc] initWithFrame:self.view.frame];
+    imgView.contentMode = UIViewContentModeScaleAspectFit;
+    imgView.backgroundColor = [UIColor blackColor];
+    imgView.image = image;
+    imgView.tag = 100;
+    UITapGestureRecognizer *dismissTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(removeImage)];
+    dismissTap.numberOfTapsRequired = 1;
+    [imgView addGestureRecognizer:dismissTap];
+    [self.view addSubview:imgView];
+}
 
 @end
