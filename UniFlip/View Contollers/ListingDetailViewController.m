@@ -168,7 +168,6 @@
     [self performSegueWithIdentifier:@"ListingDetailToProfile" sender:self.listing.author];
 }
 - (IBAction)didTapImageTwice:(id)sender {
-    NSLog(@"tapped twice");
     if (self.listing.isSaved){
         NSLog(@"was saved but is now not saved");
         [Listing postUnsaveListing:self.listing withUser:self.currentUser completion:^(BOOL succeeded, NSError * _Nullable error) {
@@ -295,12 +294,20 @@
         }
     }];
     cell.detailPhoto.userInteractionEnabled = YES;
-    NSLog(@"%ld", (long) cell.detailPhoto.frame.size.width);
     return cell;
 }
 
 - (NSInteger)collectionView:(nonnull UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     return self.photos.count;
+}
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+    PFFileObject *listingImageObject = [self.photos objectAtIndex:indexPath.row];
+    [Listing PFFileToUIImage:listingImageObject completion:^(UIImage * image, NSError * error) {
+        if (image){
+            [self addImageViewWithImage:image];
+            
+        }
+    }];
 }
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
     return CGSizeMake(collectionView.frame.size.width, collectionView.frame.size.height);
@@ -347,8 +354,6 @@
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
     if ([[segue identifier] isEqualToString:@"ListingDetailToProfile"]){
         ProfileViewController *profileViewController = [segue destinationViewController];
         profileViewController.user = sender;
@@ -359,23 +364,21 @@
     }
 }
 
-
--(void)removeImage {
-
-    UIImageView *imgView = (UIImageView*)[self.view viewWithTag:100];
-    [imgView removeFromSuperview];
-}
-
 -(void)addImageViewWithImage:(UIImage*)image {
     UIImageView *imgView = [[UIImageView alloc] initWithFrame:self.view.frame];
     imgView.contentMode = UIViewContentModeScaleAspectFit;
     imgView.backgroundColor = [UIColor blackColor];
+    imgView.userInteractionEnabled = YES;
     imgView.image = image;
     imgView.tag = 100;
     UITapGestureRecognizer *dismissTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(removeImage)];
     dismissTap.numberOfTapsRequired = 1;
     [imgView addGestureRecognizer:dismissTap];
     [self.view addSubview:imgView];
+}
+-(void)removeImage {
+    UIImageView *imgView = (UIImageView*)[self.view viewWithTag:100];
+    [imgView removeFromSuperview];
 }
 
 @end
