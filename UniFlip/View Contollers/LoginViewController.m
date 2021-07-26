@@ -34,20 +34,33 @@
     [self.view endEditing:TRUE];
 }
 
+
 - (IBAction)didTapLogin:(id)sender {
     NSString *username = self.usernameOrEmailLabel.text;
     NSString *password = self.passwordLabel.text;
     [PFUser logInWithUsernameInBackground:username password:password
       block:^(PFUser *user, NSError *error) {
         if (user) {
-          // Do stuff after successful login.
             [self performSegueWithIdentifier:@"LoginToHomeSegue" sender:nil];
             
         } else {
-          // The login failed. Check error to see why.
+            [self showLoginError];
         }
     }];
     
+}
+
+-(void) showLoginError{
+    UIAlertController *loginErrorAlert = [UIAlertController alertControllerWithTitle:@"Login Unsuccessful"
+                                                                               message:@"Your username and/or password do not match with our records."
+                                                                        preferredStyle:(UIAlertControllerStyleAlert)];
+    // create an OK action
+    UIAlertAction *tryAgainAction = [UIAlertAction actionWithTitle:@"Verify"
+                                                       style:UIAlertActionStyleDefault
+                                                     handler:nil];
+    // add the OK action to the alert controller
+    [loginErrorAlert addAction:tryAgainAction];
+    [self presentViewController:loginErrorAlert animated:YES completion:nil];
 }
 /*
 #pragma mark - Navigation
