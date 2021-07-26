@@ -22,7 +22,7 @@
 #import "PhotoCell.h"
 
 
-@interface ListingDetailViewController ()<MFMailComposeViewControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+@interface ListingDetailViewController ()<MFMailComposeViewControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIScrollViewDelegate>
 @property (weak, nonatomic) IBOutlet UIButton *imageOfAuthorButton;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *categoryLabel;
@@ -36,10 +36,11 @@
 @property (strong, nonatomic) IBOutlet UICollectionView *photosCollectionView;
 @property (strong, nonatomic) NSArray *photos;
 @property (strong, nonatomic) IBOutlet UIPageControl *photoIndicator;
-
+@property (strong, nonatomic) UIImageView *imageToZoom;
 @end
 
 @implementation ListingDetailViewController
+CGFloat lastScale;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -312,9 +313,7 @@
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
     return CGSizeMake(collectionView.frame.size.width, collectionView.frame.size.height);
 }
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    self.photoIndicator.currentPage = scrollView.contentOffset.x/ scrollView.frame.size.width;
-}
+
 - (UIImage *)resizeImage:(UIImage *)image withSize:(CGSize)size {
     UIImageView *resizeImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
     
@@ -365,7 +364,9 @@
 }
 
 -(void)addImageViewWithImage:(UIImage*)image {
-    UIImageView *imgView = [[UIImageView alloc] initWithFrame:self.view.frame];
+    UIImageView *imgView = [[UIImageView alloc] init];
+    imgView.frame = CGRectMake(0, self.view.frame.size.height/4, self.view.frame.size.width, self.view.frame.size.height/2);
+    
     imgView.contentMode = UIViewContentModeScaleAspectFit;
     imgView.backgroundColor = [UIColor blackColor];
     imgView.userInteractionEnabled = YES;
@@ -374,11 +375,64 @@
     UITapGestureRecognizer *dismissTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(removeImage)];
     dismissTap.numberOfTapsRequired = 1;
     [imgView addGestureRecognizer:dismissTap];
-    [self.view addSubview:imgView];
+    
+    
+    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:self.view.frame];
+    scrollView.backgroundColor = [UIColor blackColor];
+    scrollView.scrollEnabled = NO;
+    scrollView.contentSize = CGSizeMake(imgView.frame.size.width , imgView.frame.size.height);
+    scrollView.minimumZoomScale=0.5;
+    scrollView.maximumZoomScale=1;
+    scrollView.delegate=self;
+    scrollView.tag = 101;
+    [scrollView addGestureRecognizer:dismissTap];
+    self.imageToZoom = imgView;
+    
+    
+    [scrollView addSubview:imgView];
+    [self.view addSubview:scrollView];
 }
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView{
+    return self.imageToZoom;
+}
+
+
 -(void)removeImage {
     UIImageView *imgView = (UIImageView*)[self.view viewWithTag:100];
+    UIScrollView *scrollView = (UIScrollView*)[self.view viewWithTag:101];
     [imgView removeFromSuperview];
+    [scrollView removeFromSuperview];
+    
+}
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    if (scrollView.tag == 101){
+        
+        if (scrollView.zoomScale > 1){
+            /*UIImageView *imgView =[scrollView.subviews firstObject];
+            UIImage *img = imgView.image;
+            
+            CGFloat ratioW = imgView.frame.size.width / img.size.width;
+            CGFloat ratioH = imgView.frame.size.height  / img.size.height;
+            
+            CGFloat ratio = ratioW < ratioH ? ratioW : ratioH;
+            CGFloat newWidth = img.size.width * ratio;
+            CGFloat newHeight = img.size.height * ratio;
+                        
+            CGFloat left = 0.5 * (newWidth * scrollView.zoomScale > imgView.frame.size.width ? newWidth - imgView.frame.size.width: scrollView.frame.size.width - scrollView.contentSize.width);
+            
+            CGFloat top = 0.5 * (newHeight*scrollView.zoomScale > imgView.frame.size.height ? newHeight - imgView.frame.size.height : scrollView.frame.size.height - scrollView.contentSize.height);
+            
+            [scrollView setContentInset: UIEdgeInsetsMake(top, left, top, left)];*/
+            
+        }
+        else{
+            self.imageToZoom.frame  = CGRectMake(self.imageToZoom.frame.origin.x, self.imageToZoom.frame.origin.y, scrollView.frame.size.heightg, scrollView.frame.size.width);
+            //[scrollView setContentInset: UIEdgeInsetsMake(0, 0, 0, 0)];
+        }
+    }
+    else{
+        self.photoIndicator.currentPage = scrollView.contentOffset.x/ scrollView.frame.size.width;
+    }
 }
 
 @end
