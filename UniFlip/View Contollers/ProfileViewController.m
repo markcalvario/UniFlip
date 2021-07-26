@@ -14,26 +14,29 @@
 #import <SystemConfiguration/SystemConfiguration.h>
 #import <objc/runtime.h>
 #import <MaterialComponents/MaterialTabs+TabBarView.h>
+#import <MessageUI/MessageUI.h>
 
-@interface ProfileViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UINavigationControllerDelegate, MDCTabBarViewDelegate>
+
+@interface ProfileViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UINavigationControllerDelegate, MDCTabBarViewDelegate, MFMailComposeViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIButton *profilePicButton;
 @property (weak, nonatomic) IBOutlet UILabel *usernameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *userBioLabel;
 @property (weak, nonatomic) IBOutlet UICollectionView *listingsCollectionView;
-@property (strong, nonatomic) NSMutableArray *arrayOfListings;
 @property (weak, nonatomic) IBOutlet UINavigationItem *navigationBar;
-@property (strong, nonatomic) NSMutableArray *toolbarButtons;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *settingsBarButton;
 @property (strong, nonatomic) IBOutlet UIButton *settingsButton;
+@property (strong, nonatomic) IBOutlet UIView *profileView;
+@property (strong, nonatomic) IBOutlet UIButton *followingButton;
+@property (strong, nonatomic) IBOutlet UIButton *followersButton;
+@property (strong, nonatomic) IBOutlet UIButton *composeMailButton;
+
+@property (strong, nonatomic) NSMutableArray *arrayOfListings;
+@property (strong, nonatomic) NSMutableArray *toolbarButtons;
 @property (strong, nonatomic) UIAlertController *photoSelectorAlert;
 @property (strong, nonatomic) User *currentUser;
-
-@property (strong, nonatomic) IBOutlet UIView *profileView;
 @property (strong, nonatomic) MDCTabBarView *tabBarView;
 @property (readwrite, strong, nonatomic, nullable) UITabBarItem *selectedItem;
 
-@property (strong, nonatomic) IBOutlet UIButton *followingButton;
-@property (strong, nonatomic) IBOutlet UIButton *followersButton;
 
 @end
 
@@ -71,7 +74,6 @@ BOOL showUserListings = TRUE;
     //User is viewing a different user
     else{
         self.settingsButton.hidden = YES;
-        //[self.usersListingsButton setTitle:@"Listings Posted" forState:UIControlStateNormal];
     }
     
     self.toolbarButtons = [self.navigationItem.rightBarButtonItems mutableCopy];
@@ -95,6 +97,12 @@ BOOL showUserListings = TRUE;
     }];
     showUserListings ? [self updateListingsBasedOnTabBar:TRUE] : [self updateListingsBasedOnTabBar:FALSE];
    
+    CALayer *imageLayer = self.composeMailButton.superview.layer;
+    [imageLayer setCornerRadius:15];
+    [imageLayer setBorderWidth:2];
+    [imageLayer setBorderColor:[[UIColor alloc]initWithRed:0/255.0 green:0/255.0 blue:128/255.0 alpha:1].CGColor];
+    [imageLayer setMasksToBounds:YES];
+    
 }
 
 #pragma mark - If User wants their saved listings
@@ -152,8 +160,6 @@ BOOL showUserListings = TRUE;
     }
 }
 #pragma mark - Action Handlers
-- (IBAction)didTapSettingButton:(id)sender {
-}
 - (void) didTapSaveIcon:(UIButton *)sender {
     Listing *listing = self.arrayOfListings[sender.tag];
     if (listing.isSaved){
@@ -179,6 +185,45 @@ BOOL showUserListings = TRUE;
         }];
     }
     
+}
+- (IBAction)didTapComposeEmail:(id)sender {
+    MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
+    mc.mailComposeDelegate = self;
+    __block NSString *email;
+    [self.user fetchInBackgroundWithBlock:^(PFObject * _Nullable object, NSError * _Nullable error) {
+        User *user = (User *)object;
+        email = user.schoolEmail;
+        [mc setToRecipients:[NSArray arrayWithObjects: email , nil]];
+        // displaying our modal view controller on the screen with standard transition
+        if (mc){
+            [self presentViewController:mc animated:true completion:nil];
+        }
+    }];
+   
+}
+- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(nullable NSError *)error {
+    switch (result) {
+        case MFMailComposeResultCancelled:
+            NSLog(@"Mail cancelled");
+
+            break;
+
+        case MFMailComposeResultSaved:
+            NSLog(@"Mail saved");
+
+            break;
+
+        case MFMailComposeResultSent:
+            NSLog(@"Mail sent");
+
+            break;
+
+        case MFMailComposeResultFailed:
+            NSLog(@"Mail sent failure: %@",error.description);
+            break;
+    }
+    // Dismiss the mail compose view controller.
+    [controller dismissViewControllerAnimated:true completion:nil];
 }
 
 

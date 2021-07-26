@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) NSString *username;
 @property (nonatomic, strong) NSString *email;
+@property (nonatomic, strong) NSString *schoolEmail;
 @property (nonatomic, strong) NSString *university;
 @property (nonatomic, strong) NSString *biography;
 @property (nonatomic) BOOL isReported;

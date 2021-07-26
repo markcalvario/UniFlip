@@ -780,16 +780,16 @@
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="725"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="@markcalvario" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cvb-Rs-t7A">
-                                                <rect key="frame" x="8" y="106" width="398" height="18"/>
+                                                <rect key="frame" x="8" y="106" width="398" height="12"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="18" id="set-J8-fay"/>
+                                                    <constraint firstAttribute="height" constant="12" id="set-J8-fay"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This will be my bio" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YXr-ek-GJ3">
-                                                <rect key="frame" x="8" y="132" width="398" height="13.5"/>
+                                                <rect key="frame" x="8" y="126" width="398" height="13.5"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="13.5" id="MxP-zD-5sM"/>
                                                 </constraints>
@@ -889,7 +889,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="oyy-e4-OwM">
-                                                <rect key="frame" x="76" y="147.5" width="79" height="15"/>
+                                                <rect key="frame" x="76" y="141.5" width="79" height="15"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="15" id="Q0J-vW-poI"/>
                                                 </constraints>
@@ -899,7 +899,7 @@
                                                 </state>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="Pem-pF-6hB">
-                                                <rect key="frame" x="8" y="147.5" width="60" height="15"/>
+                                                <rect key="frame" x="8" y="141.5" width="60" height="15"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="15" id="8RQ-Fo-EDD"/>
                                                 </constraints>
@@ -909,25 +909,50 @@
                                                 </state>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oZQ-73-YSw">
-                                                <rect key="frame" x="304" y="38" width="102" height="30"/>
+                                                <rect key="frame" x="290" y="38" width="116" height="30"/>
                                                 <color key="backgroundColor" systemColor="systemBlueColor"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="102" id="0B5-S5-ZdX"/>
+                                                    <constraint firstAttribute="width" constant="116" id="0B5-S5-ZdX"/>
                                                 </constraints>
                                                 <state key="normal" title="Follow">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
                                             </button>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ws3-T2-d2Q">
+                                                <rect key="frame" x="252" y="38" width="30" height="30"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KXv-nT-dYO">
+                                                        <rect key="frame" x="5" y="5" width="20" height="20"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="20" id="0HM-ao-my3"/>
+                                                            <constraint firstAttribute="width" constant="20" id="spQ-gT-Xtt"/>
+                                                        </constraints>
+                                                        <state key="normal" image="envelope_icon"/>
+                                                        <connections>
+                                                            <action selector="didTapComposeEmail:" destination="RaW-Wm-Soe" eventType="touchUpInside" id="j3H-hl-U89"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <constraints>
+                                                    <constraint firstItem="KXv-nT-dYO" firstAttribute="leading" secondItem="ws3-T2-d2Q" secondAttribute="leading" constant="5" id="8sK-Uh-KOu"/>
+                                                    <constraint firstItem="KXv-nT-dYO" firstAttribute="top" secondItem="ws3-T2-d2Q" secondAttribute="top" constant="5" id="BtB-dG-Dm6"/>
+                                                    <constraint firstAttribute="trailing" secondItem="KXv-nT-dYO" secondAttribute="trailing" constant="5" id="HPl-ag-1ZH"/>
+                                                    <constraint firstAttribute="bottom" secondItem="KXv-nT-dYO" secondAttribute="bottom" constant="5" id="Z82-Cj-yD0"/>
+                                                </constraints>
+                                            </view>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
                                             <constraint firstItem="oZQ-73-YSw" firstAttribute="centerY" secondItem="nD5-vE-Lv2" secondAttribute="centerY" id="2zG-oE-h71"/>
                                             <constraint firstItem="ump-lS-Fur" firstAttribute="leading" secondItem="4b4-Tg-lbI" secondAttribute="leading" id="7HJ-DN-9Om"/>
                                             <constraint firstAttribute="bottom" secondItem="ump-lS-Fur" secondAttribute="bottom" constant="10" id="7RB-jr-xCz"/>
+                                            <constraint firstItem="oZQ-73-YSw" firstAttribute="leading" secondItem="ws3-T2-d2Q" secondAttribute="trailing" constant="8" symbolic="YES" id="8mf-aP-zMa"/>
                                             <constraint firstItem="YXr-ek-GJ3" firstAttribute="top" secondItem="Cvb-Rs-t7A" secondAttribute="bottom" constant="8" id="CPH-Dy-5BD"/>
                                             <constraint firstItem="YXr-ek-GJ3" firstAttribute="leading" secondItem="nD5-vE-Lv2" secondAttribute="leading" id="DRB-sM-7go"/>
                                             <constraint firstItem="nD5-vE-Lv2" firstAttribute="leading" secondItem="4b4-Tg-lbI" secondAttribute="leading" constant="8" id="DW4-eI-uFs"/>
                                             <constraint firstAttribute="trailing" secondItem="oZQ-73-YSw" secondAttribute="trailing" constant="8" id="GZy-bj-8Yu"/>
+                                            <constraint firstItem="ws3-T2-d2Q" firstAttribute="centerY" secondItem="nD5-vE-Lv2" secondAttribute="centerY" id="HHO-6l-dff"/>
                                             <constraint firstAttribute="trailing" secondItem="Cvb-Rs-t7A" secondAttribute="trailing" constant="8" id="Nmq-1p-MGL"/>
                                             <constraint firstItem="Pem-pF-6hB" firstAttribute="leading" secondItem="nD5-vE-Lv2" secondAttribute="leading" id="Vys-rS-CQq"/>
                                             <constraint firstItem="Cvb-Rs-t7A" firstAttribute="top" secondItem="nD5-vE-Lv2" secondAttribute="bottom" constant="8" symbolic="YES" id="Z17-ao-P8M"/>
@@ -973,13 +998,13 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" image="profile_settings_icon"/>
                                 <connections>
-                                    <action selector="didTapSettingButton:" destination="RaW-Wm-Soe" eventType="touchUpInside" id="Ufq-sr-4g1"/>
                                     <segue destination="HTU-AL-sfM" kind="show" id="Sb0-Zw-326"/>
                                 </connections>
                             </button>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="composeMailButton" destination="KXv-nT-dYO" id="Cfa-6a-EOQ"/>
                         <outlet property="followersButton" destination="oyy-e4-OwM" id="gvr-9h-84c"/>
                         <outlet property="followingButton" destination="Pem-pF-6hB" id="b4O-WW-5sa"/>
                         <outlet property="listingsCollectionView" destination="ump-lS-Fur" id="nIU-Xi-fEs"/>
@@ -1574,8 +1599,8 @@ Cg
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="nHl-qN-Fv6"/>
-        <segue reference="1cV-ZD-tXO"/>
+        <segue reference="jy6-i8-Qry"/>
+        <segue reference="VAk-SO-nHF"/>
         <segue reference="yJF-wa-pAP"/>
     </inferredMetricsTieBreakers>
     <resources>

@@ -11,6 +11,7 @@
 @implementation User
 @dynamic username;
 @dynamic email;
+@dynamic schoolEmail;
 @dynamic university;
 @dynamic biography;
 @dynamic isReported;

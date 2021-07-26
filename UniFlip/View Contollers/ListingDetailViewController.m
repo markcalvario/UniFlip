@@ -126,14 +126,12 @@ CGFloat lastScale;
 }
 
 -(void) openComposeMailViewController{
-    // get a new new MailComposeViewController object
     MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
-    // his class should be the delegate of the mc
     mc.mailComposeDelegate = self;
-    // set some recipients ... but you do not need to do this :)
     [mc setToRecipients:[NSArray arrayWithObjects: self.listing.authorEmail , nil]];
-    // displaying our modal view controller on the screen with standard transition
-    [self presentViewController:mc animated:true completion:nil];
+    if (mc){
+        [self presentViewController:mc animated:true completion:nil];
+    }
     // be a good memory manager and release mc, as you are responsible for it because your alloc/init
 }
 #pragma mark - Action Handlers

@@ -19,7 +19,6 @@
 @interface SellViewController ()<UINavigationControllerDelegate, UIImagePickerControllerDelegate, SelectOptionViewControllerDelege, PlaceAutocompleteDelege, UICollectionViewDelegate, UICollectionViewDataSource>
 @property (strong, nonatomic) UIAlertController *alert;
 @property (strong, nonatomic) UIImage *imagePlaceHolder;
-//@property (weak, nonatomic) IBOutlet UIButton *imageOfProductButton;
 @property (weak, nonatomic) IBOutlet UITextField *listingTitleField;
 @property (weak, nonatomic) IBOutlet UITextView *listingDescriptionView;
 @property (weak, nonatomic) IBOutlet UIButton *locationButton;
@@ -178,13 +177,11 @@
         else{
             NSLog(@"%@", errorMessage);
             MDCSnackbarMessage *message = [[MDCSnackbarMessage alloc] init];
-            //MDCSnackbarMessageView *messageView = [[MDCSnackbarMessageView alloc] init];
             [message setText:errorMessage];
             message.duration = 1;
             [MDCSnackbarManager.defaultManager showMessage:message];
         }
     }];
-    
 }
 
 -(void) areFieldsValid:(void(^)(BOOL, NSString *)) completion{
@@ -213,12 +210,10 @@
         completion(TRUE, nil);
 
     }
-    
 }
 
 
 -(void) resetInputFields{
-    //[self.imageOfProductButton setImage:self.imagePlaceHolder forState:UIControlStateNormal];
     self.imagePlaceHolder = [UIImage imageNamed:@"photo_add_icon"];
     self.listingTitleField.text = @"";
     self.listingTypeField.text = @"";
@@ -234,15 +229,13 @@
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     PhotoCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"PhotoCell" forIndexPath:indexPath];
     NSInteger lengthOfPhotosArray = self.photos.count;
-    if (lengthOfPhotosArray == 0 || (!cell.listingPhoto.image) || (indexPath.row >=g lengthOfPhotosArray)){
+    if (lengthOfPhotosArray == 0 || (!cell.listingPhoto.image) || (indexPath.row >= lengthOfPhotosArray)){
         [cell.listingPhoto setImage:[UIImage imageNamed:@"photo_add_icon"]];
     }
     else{
-        //NSInteger index = indexPath.row - 2;
         UIImage *photoSelected = [self.photos objectAtIndex:indexPath.row];
         [cell.listingPhoto setImage:photoSelected];
     }
-    //[cell.listingPhoto setImage:[UIImage imageNamed:@"photo_add_icon"]];
     return cell;
 }
 
@@ -255,10 +248,7 @@
 }
 
 #pragma mark - Navigation
-// In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
     if ( [[segue identifier] isEqualToString: @"CategoryToSelectOption"]){
         NSArray *arrayOfCategories = @[@"Appliances", @"Apps & Games", @"Arts, Crafts, & Sewing",
             @"Automotive Parts & Accessories", @"Baby", @"Beauty & Personal Care", @"Books", @"CDs & Vinyl",
