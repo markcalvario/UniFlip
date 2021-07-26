@@ -12,6 +12,7 @@
 #import "Listing.h"
 #import "MaterialSnackbar.h"
 #import "PhotoCell.h"
+#import "MaterialActionSheet.h"
 
 @import UITextView_Placeholder;
 
@@ -82,41 +83,42 @@
 
 /// Photo Selection Alert
 - (void)showPhotoAlert {
-    // Add code to be run periodically
-     UIImagePickerController *imagePickerVC = [UIImagePickerController new];
-     imagePickerVC.delegate = self;
-     imagePickerVC.allowsEditing = YES;
-     self.alert = [UIAlertController alertControllerWithTitle:@"Select a photo" message:@""
-                                preferredStyle:UIAlertControllerStyleActionSheet];
-
-     
-     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-         UIAlertAction *didSelectCamera = [UIAlertAction actionWithTitle:@"Camera"
-                                                       style:UIAlertActionStyleDefault
-                                           
-                                     handler:^(UIAlertAction * _Nonnull action) {
-                                            // handle cancel response here. Doing nothing will dismiss the view.
-                                         imagePickerVC.sourceType = UIImagePickerControllerSourceTypeCamera;
-             [self presentViewController:imagePickerVC animated:YES completion:nil];
-                                         
-                             }];
-         [self.alert addAction:didSelectCamera];
-     }
-     
-     
-     UIAlertAction *didSelectCameraRoll = [UIAlertAction actionWithTitle:@"Camera Roll"
-                                                   style:UIAlertActionStyleDefault
-                                 handler:^(UIAlertAction * _Nonnull action) {
-                                        // handle cancel response here. Doing nothing will dismiss the view.
-                                     imagePickerVC.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-                                     [self presentViewController:imagePickerVC animated:YES completion:nil];
-         
-                                 }];
-     [self.alert addAction:didSelectCameraRoll];
-  
-     [self presentViewController:self.alert animated:YES completion:^{
-         // optional code for what happens after the alert controller has finished presenting
-     }];
+    UIImagePickerController *imagePickerVC = [UIImagePickerController new];
+    imagePickerVC.delegate = self;
+    imagePickerVC.allowsEditing = YES;
+    MDCActionSheetController *actionSheet =
+        [MDCActionSheetController actionSheetControllerWithTitle:@""];
+    MDCActionSheetAction *deleteAction = [MDCActionSheetAction actionWithTitle:@"Delete"
+                                        image:[UIImage systemImageNamed:@"trash"]
+                                      handler:^(MDCActionSheetAction *action){
+        [self.photos removeObjectAtIndex:self.indexOfPhoto];
+        [self.photosCollectionView reloadData];
+        self.indexOfPhoto -= 1;
+        
+    }];
+    MDCActionSheetAction *selectCameraAction = [MDCActionSheetAction actionWithTitle:@"Camera"
+                                        image:[UIImage systemImageNamed:@"camera"]
+                                        handler:^(MDCActionSheetAction *action){
+        [self dismissViewControllerAnimated:TRUE completion:^{
+            imagePickerVC.sourceType = UIImagePickerControllerSourceTypeCamera;
+            [self presentViewController:imagePickerVC animated:YES completion:nil];
+        }];
+        
+    }];
+    MDCActionSheetAction *selectPhotoGalleryAction =
+        [MDCActionSheetAction actionWithTitle:@"Phone Gallery"
+                                        image:[UIImage systemImageNamed:@"square.grid.3x3"]
+                                      handler:^(MDCActionSheetAction *action){
+            imagePickerVC.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+            [self presentViewController:imagePickerVC animated:YES completion:nil];
+        }];
+    
+    [actionSheet addAction:selectCameraAction];
+    [actionSheet addAction:selectPhotoGalleryAction];
+    if (self.indexOfPhoto < self.photos.count){
+        [actionSheet addAction:deleteAction];
+    }
+    [self presentViewController:actionSheet animated:YES completion:nil];
 }
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
     // Get the image captured by the UIImagePickerController
@@ -146,9 +148,6 @@
 }
 
 #pragma mark - Actions performed on touch
-- (IBAction)didTapSelectPhotos:(id)sender {
-    [self showPhotoAlert];
-}
 - (IBAction)didTapExitKeyboard:(id)sender {
     [self.view endEditing:TRUE];
 }
@@ -235,11 +234,11 @@
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     PhotoCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"PhotoCell" forIndexPath:indexPath];
     NSInteger lengthOfPhotosArray = self.photos.count;
-    if (lengthOfPhotosArray == 0 || (!cell.listingPhoto.image)){
+    if (lengthOfPhotosArray == 0 || (!cell.listingPhoto.image) || (indexPath.row >=g lengthOfPhotosArray)){
         [cell.listingPhoto setImage:[UIImage imageNamed:@"photo_add_icon"]];
     }
     else{
-        NSInteger index = indexPath.row - 1;
+        //NSInteger index = indexPath.row - 2;
         UIImage *photoSelected = [self.photos objectAtIndex:indexPath.row];
         [cell.listingPhoto setImage:photoSelected];
     }

@@ -378,6 +378,9 @@ CGFloat lastScale;
     
     
     UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:self.view.frame];
+    scrollView.contentSize = imgView.frame.size;
+    
+    NSLog(@"%ld and %ld", (long) self.view.frame.size.width, (long) self.view.frame.size.height);
     scrollView.backgroundColor = [UIColor blackColor];
     scrollView.scrollEnabled = NO;
     scrollView.contentSize = CGSizeMake(imgView.frame.size.width , imgView.frame.size.height);
@@ -407,7 +410,8 @@ CGFloat lastScale;
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     if (scrollView.tag == 101){
         
-        if (scrollView.zoomScale > 1){
+        if (scrollView.zoomScale < 1){
+            NSLog(@"zooming out");
             /*UIImageView *imgView =[scrollView.subviews firstObject];
             UIImage *img = imgView.image;
             
@@ -425,10 +429,7 @@ CGFloat lastScale;
             [scrollView setContentInset: UIEdgeInsetsMake(top, left, top, left)];*/
             
         }
-        else{
-            self.imageToZoom.frame  = CGRectMake(self.imageToZoom.frame.origin.x, self.imageToZoom.frame.origin.y, scrollView.frame.size.heightg, scrollView.frame.size.width);
-            //[scrollView setContentInset: UIEdgeInsetsMake(0, 0, 0, 0)];
-        }
+        
     }
     else{
         self.photoIndicator.currentPage = scrollView.contentOffset.x/ scrollView.frame.size.width;
