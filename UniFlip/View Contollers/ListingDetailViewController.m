@@ -23,7 +23,6 @@
 
 
 @interface ListingDetailViewController ()<MFMailComposeViewControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
-//@property (weak, nonatomic) IBOutlet UIImageView *listingImage;
 @property (weak, nonatomic) IBOutlet UIButton *imageOfAuthorButton;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *categoryLabel;
@@ -45,8 +44,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    /*self.listingImageTapGesture.numberOfTapsRequired = 2;
-    self.listingImage.userInteractionEnabled = YES;*/
     self.currentUser = [User currentUser];
     self.listingImageTapGesture.numberOfTapsRequired = 2;
     self.photosCollectionView.delegate = self;
@@ -65,12 +62,6 @@
     self.categoryLabel.text = self.listing.listingCategory;
     self.descriptionLabel.text = self.listing.listingDescription;
     self.priceLabel.text = [@"$" stringByAppendingString:self.listing.listingPrice];
-    /*PFFileObject *listingImageObject = [self.listing.listingImages objectAtIndex:0];
-    [Listing PFFileToUIImage:listingImageObject completion:^(UIImage * image, NSError * error) {
-        if (image){
-            [self.listingImage setImage: [ListingDetailViewController imageWithImage:image scaledToWidth:414] ];
-        }
-    }];*/
     PFFileObject *userProfilePicture = self.listing.author.profilePicture;
     if (userProfilePicture){
         [Listing PFFileToUIImage:userProfilePicture completion:^(UIImage * image, NSError * error) {
@@ -84,7 +75,6 @@
     }
     self.imageOfAuthorButton.layer.cornerRadius = self.imageOfAuthorButton.frame.size.width / 2;
     self.imageOfAuthorButton.clipsToBounds = YES;
-
     [self updateSaveButtonUI:self.listing.isSaved withButton:self.saveButton];
 }
 
@@ -122,7 +112,6 @@
             NSLog(@"Mail sent failure: %@",error.description);
             break;
     }
-
     // Dismiss the mail compose view controller.
     [controller dismissViewControllerAnimated:true completion:nil];
 }
@@ -138,13 +127,10 @@
 -(void) openComposeMailViewController{
     // get a new new MailComposeViewController object
     MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
-
     // his class should be the delegate of the mc
     mc.mailComposeDelegate = self;
-
     // set some recipients ... but you do not need to do this :)
     [mc setToRecipients:[NSArray arrayWithObjects: self.listing.authorEmail , nil]];
-
     // displaying our modal view controller on the screen with standard transition
     [self presentViewController:mc animated:true completion:nil];
     // be a good memory manager and release mc, as you are responsible for it because your alloc/init
@@ -305,16 +291,7 @@
     PFFileObject *listingImageObject = [self.photos objectAtIndex:indexPath.row];
     [Listing PFFileToUIImage:listingImageObject completion:^(UIImage * image, NSError * error) {
         if (image){
-            
             [cell.detailPhoto setImage: [self scaleImageToSize:image withSize:CGSizeMake(cell.frame.size.width, cell.frame.size.height)]];
-            
-            /*if (image.size.width > image.size.height) {
-                cell.detailPhoto.contentMode = UIViewContentModeScaleAspectFit;
-                //since the width > height we may fit it and we'll have bands on top/bottom
-            } else {
-                cell.detailPhoto.contentMode = UIViewContentModeScaleAspectFill;
-              //width < height we fill it until width is taken up and clipped on top/bottom
-            }*/
         }
     }];
     cell.detailPhoto.userInteractionEnabled = YES;
@@ -328,8 +305,6 @@
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
     return CGSizeMake(collectionView.frame.size.width, collectionView.frame.size.height);
 }
-
-
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     self.photoIndicator.currentPage = scrollView.contentOffset.x/ scrollView.frame.size.width;
 }
@@ -392,8 +367,6 @@
 }
 
 -(void)addImageViewWithImage:(UIImage*)image {
-    
-
     UIImageView *imgView = [[UIImageView alloc] initWithFrame:self.view.frame];
     imgView.contentMode = UIViewContentModeScaleAspectFit;
     imgView.backgroundColor = [UIColor blackColor];

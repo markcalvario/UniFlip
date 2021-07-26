@@ -28,6 +28,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [self displayEditProfile];
+}
+- (void)viewWillAppear:(BOOL)animated{
+    [self displayEditProfile];
+}
+-(void) displayEditProfile{
     self.user = [User currentUser];
     PFFileObject *userProfilePicture = self.user.profilePicture;
     if (userProfilePicture){
@@ -47,7 +53,6 @@
     else{
         self.bioTextView.text = userBio;
     }
-    
     CALayer *imageLayer = self.profilePicButton.imageView.layer;
     [imageLayer setCornerRadius:5];
     [imageLayer setBorderWidth:2];
@@ -69,7 +74,6 @@
 }
 - (IBAction)didTapProfilePicButton:(id)sender {
     [self showPhotoAlert];
-    
 }
 - (void)showPhotoAlert {
     // Add code to be run periodically
@@ -102,29 +106,13 @@
                                  }];
      [self.photoSelectorAlert addAction:didSelectCameraRoll];
   
-     [self presentViewController:self.photoSelectorAlert animated:YES completion:^{
-         // optional code for what happens after the alert controller has finished presenting
-     }];
+     [self presentViewController:self.photoSelectorAlert animated:YES completion:nil];
 }
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
     // Get the image captured by the UIImagePickerController
     UIImage *originalImage = info[UIImagePickerControllerOriginalImage];
-    //UIImage *editedImage = info[UIImagePickerControllerEditedImage];
-    // Do something with the images (based on your use case)
     [self.profilePicButton setImage:originalImage forState:UIControlStateNormal];
     // Dismiss UIImagePickerController to go back to your original view controller
     [self dismissViewControllerAnimated:YES completion:nil];
 }
-
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
 @end

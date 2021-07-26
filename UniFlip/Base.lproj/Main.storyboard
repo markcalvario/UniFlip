@@ -774,10 +774,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dr4-ac-JeE">
-                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4b4-Tg-lbI">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="818"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="725"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="@markcalvario" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cvb-Rs-t7A">
                                                 <rect key="frame" x="8" y="106" width="398" height="18"/>
@@ -790,6 +790,9 @@
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This will be my bio" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YXr-ek-GJ3">
                                                 <rect key="frame" x="8" y="132" width="398" height="13.5"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="13.5" id="MxP-zD-5sM"/>
+                                                </constraints>
                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="11"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -803,10 +806,10 @@
                                                 <state key="normal" image="default_profile_pic"/>
                                             </button>
                                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ump-lS-Fur">
-                                                <rect key="frame" x="0.0" y="374" width="414" height="444"/>
+                                                <rect key="frame" x="0.0" y="295" width="414" height="420"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="444" id="wgN-Tr-yKE"/>
+                                                    <constraint firstAttribute="height" constant="420" id="wgN-Tr-yKE"/>
                                                 </constraints>
                                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="FFb-Mk-NwE">
                                                     <size key="itemSize" width="128" height="128"/>
@@ -878,19 +881,62 @@
                                                     </collectionViewCell>
                                                 </cells>
                                             </collectionView>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u0n-k7-P9f">
+                                                <rect key="frame" x="304" y="23" width="0.0" height="0.0"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="oyy-e4-OwM">
+                                                <rect key="frame" x="76" y="147.5" width="79" height="15"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="15" id="Q0J-vW-poI"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                <state key="normal" title="1000 Followers">
+                                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="Pem-pF-6hB">
+                                                <rect key="frame" x="8" y="147.5" width="60" height="15"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="15" id="8RQ-Fo-EDD"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                <state key="normal" title="0 Following">
+                                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oZQ-73-YSw">
+                                                <rect key="frame" x="304" y="38" width="102" height="30"/>
+                                                <color key="backgroundColor" systemColor="systemBlueColor"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="102" id="0B5-S5-ZdX"/>
+                                                </constraints>
+                                                <state key="normal" title="Follow">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
+                                            <constraint firstItem="oZQ-73-YSw" firstAttribute="centerY" secondItem="nD5-vE-Lv2" secondAttribute="centerY" id="2zG-oE-h71"/>
                                             <constraint firstItem="ump-lS-Fur" firstAttribute="leading" secondItem="4b4-Tg-lbI" secondAttribute="leading" id="7HJ-DN-9Om"/>
-                                            <constraint firstAttribute="bottom" secondItem="ump-lS-Fur" secondAttribute="bottom" id="7RB-jr-xCz"/>
+                                            <constraint firstAttribute="bottom" secondItem="ump-lS-Fur" secondAttribute="bottom" constant="10" id="7RB-jr-xCz"/>
                                             <constraint firstItem="YXr-ek-GJ3" firstAttribute="top" secondItem="Cvb-Rs-t7A" secondAttribute="bottom" constant="8" id="CPH-Dy-5BD"/>
                                             <constraint firstItem="YXr-ek-GJ3" firstAttribute="leading" secondItem="nD5-vE-Lv2" secondAttribute="leading" id="DRB-sM-7go"/>
                                             <constraint firstItem="nD5-vE-Lv2" firstAttribute="leading" secondItem="4b4-Tg-lbI" secondAttribute="leading" constant="8" id="DW4-eI-uFs"/>
+                                            <constraint firstAttribute="trailing" secondItem="oZQ-73-YSw" secondAttribute="trailing" constant="8" id="GZy-bj-8Yu"/>
                                             <constraint firstAttribute="trailing" secondItem="Cvb-Rs-t7A" secondAttribute="trailing" constant="8" id="Nmq-1p-MGL"/>
+                                            <constraint firstItem="Pem-pF-6hB" firstAttribute="leading" secondItem="nD5-vE-Lv2" secondAttribute="leading" id="Vys-rS-CQq"/>
                                             <constraint firstItem="Cvb-Rs-t7A" firstAttribute="top" secondItem="nD5-vE-Lv2" secondAttribute="bottom" constant="8" symbolic="YES" id="Z17-ao-P8M"/>
                                             <constraint firstAttribute="trailing" secondItem="ump-lS-Fur" secondAttribute="trailing" id="Zux-jl-gJH"/>
+                                            <constraint firstItem="oyy-e4-OwM" firstAttribute="centerY" secondItem="Pem-pF-6hB" secondAttribute="centerY" id="dBx-s7-1RP"/>
                                             <constraint firstItem="Cvb-Rs-t7A" firstAttribute="leading" secondItem="nD5-vE-Lv2" secondAttribute="leading" id="euL-Py-p3M"/>
+                                            <constraint firstItem="oyy-e4-OwM" firstAttribute="leading" secondItem="Pem-pF-6hB" secondAttribute="trailing" constant="8" symbolic="YES" id="jwF-uf-uQu"/>
                                             <constraint firstAttribute="trailing" secondItem="YXr-ek-GJ3" secondAttribute="trailing" constant="8" id="kk8-0x-yq9"/>
+                                            <constraint firstItem="oyy-e4-OwM" firstAttribute="top" secondItem="YXr-ek-GJ3" secondAttribute="bottom" constant="2" id="n4h-Sg-k4u"/>
                                             <constraint firstItem="nD5-vE-Lv2" firstAttribute="top" secondItem="4b4-Tg-lbI" secondAttribute="top" constant="8" id="siP-x5-K7e"/>
                                         </constraints>
                                     </view>
@@ -934,6 +980,8 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="followersButton" destination="oyy-e4-OwM" id="gvr-9h-84c"/>
+                        <outlet property="followingButton" destination="Pem-pF-6hB" id="b4O-WW-5sa"/>
                         <outlet property="listingsCollectionView" destination="ump-lS-Fur" id="nIU-Xi-fEs"/>
                         <outlet property="navigationBar" destination="Z1p-Qd-MGY" id="2Ur-vZ-sv7"/>
                         <outlet property="profilePicButton" destination="nD5-vE-Lv2" id="HzL-Gb-VgB"/>
@@ -957,13 +1005,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bio" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NaR-bx-XT1">
-                                <rect key="frame" x="20" y="245" width="27.5" height="20.5"/>
+                                <rect key="frame" x="20" y="289" width="27.5" height="20.5"/>
                                 <fontDescription key="fontDescription" name="Galvji-Bold" family="Galvji" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="zW4-Um-JSS">
-                                <rect key="frame" x="89" y="245" width="283" height="120"/>
+                                <rect key="frame" x="89" y="289" width="283" height="120"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="120" id="aBW-XS-5HK"/>
@@ -976,7 +1024,7 @@ Cg
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <button opaque="NO" alpha="0.5" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iRQ-CN-Kc2">
-                                <rect key="frame" x="132" y="73" width="150" height="150"/>
+                                <rect key="frame" x="132" y="117" width="150" height="150"/>
                                 <accessibility key="accessibilityConfiguration">
                                     <accessibilityTraits key="traits" button="YES" image="YES"/>
                                 </accessibility>
@@ -990,7 +1038,7 @@ Cg
                                 </connections>
                             </button>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="photo_add_icon" translatesAutoresizingMaskIntoConstraints="NO" id="Stm-vf-vaV">
-                                <rect key="frame" x="177" y="118" width="60" height="60"/>
+                                <rect key="frame" x="177" y="162" width="60" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="60" id="1sH-Qe-cLq"/>
                                     <constraint firstAttribute="height" constant="60" id="adp-Wb-UrU"/>
@@ -1309,10 +1357,10 @@ Cg
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cM6-57-0c1">
-                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rFm-RF-ljk">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="818"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="794"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hdC-lu-ffu">
                                                 <rect key="frame" x="8" y="305" width="72" height="72"/>
@@ -1347,7 +1395,7 @@ Cg
                                                     <action selector="didTapComposeMail:" destination="Ydr-sh-TIk" eventType="touchUpInside" id="hLT-03-BtR"/>
                                                 </connections>
                                             </button>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lNs-cD-jBU">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lNs-cD-jBU">
                                                 <rect key="frame" x="22" y="380" width="373" height="172"/>
                                                 <string key="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
                                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
@@ -1527,7 +1575,7 @@ Cg
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="jy6-i8-Qry"/>
-        <segue reference="1cV-ZD-tXO"/>
+        <segue reference="VAk-SO-nHF"/>
         <segue reference="yJF-wa-pAP"/>
     </inferredMetricsTieBreakers>
     <resources>
@@ -1546,6 +1594,9 @@ Cg
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBlueColor">
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGray3Color">
             <color red="0.7803921568627451" green="0.7803921568627451" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

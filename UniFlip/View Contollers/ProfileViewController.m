@@ -32,6 +32,9 @@
 @property (strong, nonatomic) MDCTabBarView *tabBarView;
 @property (readwrite, strong, nonatomic, nullable) UITabBarItem *selectedItem;
 
+@property (strong, nonatomic) IBOutlet UIButton *followingButton;
+@property (strong, nonatomic) IBOutlet UIButton *followersButton;
+
 @end
 
 @implementation ProfileViewController
@@ -303,7 +306,8 @@ BOOL showUserListings = TRUE;
         [[UITabBarItem alloc] initWithTitle:@"Saved" image:nil tag:0],
     ];
     self.tabBarView.preferredLayoutStyle = MDCTabBarViewLayoutStyleFixed; // or MDCTabBarViewLayoutStyleFixed
-    self.tabBarView.frame = CGRectMake(8, 157.5, 394, 15);
+    //self.tabBarView.frame = CGRectMake(8, 157.5, 394, 15);
+    self.tabBarView.frame = CGRectMake(8, self.followingButton.frame.origin.y+35, self.followingButton.superview.frame.size.width, 15);
     self.tabBarView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.profileView addSubview:self.tabBarView];
     //[self.tabBarView setBarTintColor:[UIColor blackColor]];
@@ -311,7 +315,7 @@ BOOL showUserListings = TRUE;
     //[self.tabBarView setSelectionIndicatorStrokeColor:[UIColor whiteColor]];
     self.tabBarView.tabBarDelegate = self;
     [self.tabBarView setSelectedItem:[self.tabBarView.items objectAtIndex:0]];
-
+    
     /* Leading space to superview */
     NSLayoutConstraint *trailing =[NSLayoutConstraint
                                     constraintWithItem: self.tabBarView
@@ -331,18 +335,29 @@ BOOL showUserListings = TRUE;
                                        constant:0];
     /* Top space to superview Y*/
     NSLayoutConstraint *top = [NSLayoutConstraint constraintWithItem:self.tabBarView attribute:NSLayoutAttributeTop
-                                                 relatedBy:NSLayoutRelationEqual toItem:self.userBioLabel attribute:
-                                                 NSLayoutAttributeBottom multiplier:1.0 constant:4];
+                                                 relatedBy:NSLayoutRelationEqual toItem:self.followingButton attribute:
+                                                 NSLayoutAttributeBottom multiplier:1.0 constant:2];
     /* Bottom space to superview Y*/
     NSLayoutConstraint *bottom = [NSLayoutConstraint constraintWithItem:self.tabBarView attribute:NSLayoutAttributeBottom
                                                  relatedBy:NSLayoutRelationEqual toItem:self.listingsCollectionView attribute:
-                                                 NSLayoutAttributeTop multiplier:1.0 constant:-4];
+                                                 NSLayoutAttributeTop multiplier:1.0 constant:-2];
+    
+    NSLayoutConstraint *height = [NSLayoutConstraint
+                                   constraintWithItem:self.tabBarView
+                                   attribute:NSLayoutAttributeHeight
+                                   relatedBy:NSLayoutRelationEqual
+                                   toItem:nil
+                                   attribute:NSLayoutAttributeNotAnAttribute
+                                   multiplier:0
+                                   constant:35];
     
     /* 4. Add the constraints to button's superview*/
     [self.profileView addConstraint:leading];
     [self.profileView addConstraint:trailing];
     [self.profileView addConstraint:top];
     [self.profileView addConstraint:bottom];
+    
+    [self.tabBarView addConstraint:height];
 }
 
 

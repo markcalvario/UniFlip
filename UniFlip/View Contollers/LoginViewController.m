@@ -20,7 +20,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     [self displayLoginScreen];
 }
 - (void)viewWillAppear:(BOOL)animated{
@@ -28,13 +27,10 @@
 }
 -(void) displayLoginScreen{
     self.passwordLabel.secureTextEntry = YES;
-
 }
 - (IBAction)didTapExitKeyboard:(id)sender {
     [self.view endEditing:TRUE];
 }
-
-
 - (IBAction)didTapLogin:(id)sender {
     NSString *username = self.usernameOrEmailLabel.text;
     NSString *password = self.passwordLabel.text;
@@ -44,32 +40,19 @@
             [self performSegueWithIdentifier:@"LoginToHomeSegue" sender:nil];
             
         } else {
-            [self showLoginError];
+            [self displayLoginError];
         }
     }];
-    
 }
-
--(void) showLoginError{
+-(void) displayLoginError{
     UIAlertController *loginErrorAlert = [UIAlertController alertControllerWithTitle:@"Login Unsuccessful"
                                                                                message:@"Your username and/or password do not match with our records."
                                                                         preferredStyle:(UIAlertControllerStyleAlert)];
-    // create an OK action
     UIAlertAction *tryAgainAction = [UIAlertAction actionWithTitle:@"Verify"
                                                        style:UIAlertActionStyleDefault
                                                      handler:nil];
-    // add the OK action to the alert controller
     [loginErrorAlert addAction:tryAgainAction];
     [self presentViewController:loginErrorAlert animated:YES completion:nil];
 }
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
