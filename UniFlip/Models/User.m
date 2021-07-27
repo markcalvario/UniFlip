@@ -84,6 +84,19 @@
         succeeded ? completion(TRUE) : completion(FALSE);
     }];
 }
++ (void) getAllUsersOfUniversity:(NSString *)university withCompletion:(void(^)(NSArray *))completion{
+    PFQuery *query = [User query];
+    [query whereKey:@"university" equalTo:university];
+    [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable users, NSError * _Nullable error) {
+        if (users){
+            completion(users);
+        }
+        else{
+            completion(nil);
+        }
+    }];
+}
+
 - (UIImage *)resizeImage:(UIImage *)image withSize:(CGSize)size {
     UIImageView *resizeImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
     

@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (void) postVisitedProfileToCounter:(User *)user withListing:(Listing *)listing withCompletion:(void(^)(BOOL finished))completion;
 + (void) postVisitedListingToCounter:(User *)user withListing:(Listing *)listing withCompletion:(void(^)(BOOL finished))completion;
 + (void) postVisitedCategoryToCounter:(User *)user withListing:(Listing *)listing withCompletion:(void(^)(BOOL finished))completion;
-
++ (void) getAllUsersOfUniversity:(NSString *)university withCompletion:(void(^)(NSArray *))completion;
 - (UIImage *)resizeImage:(UIImage *)image withSize:(CGSize)size;
 @end
 

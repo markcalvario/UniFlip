@@ -16,6 +16,7 @@
 #import <SystemConfiguration/SystemConfiguration.h>
 #import "Reachability.h"
 #import "CategoryViewController.h"
+#import "ProfileCell.h"
 
 @interface HomeViewController ()<UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchBarDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *listingCategoryTableView;
@@ -30,6 +31,8 @@
 @property (strong, nonatomic) NSMutableArray *allListings;
 @property (strong, nonatomic) UIRefreshControl *refreshControl;
 @property (strong, nonatomic) NSMutableArray *suggestedListings;
+@property (strong, nonatomic) NSArray *allUsersOfUniversity;
+@property (strong, nonatomic) NSMutableArray *filteredUsers;
 
 
 @property (strong, nonatomic) NSString *searchText;
@@ -50,6 +53,12 @@ BOOL isFiltered;
     [self.searchListingsBar setUserInteractionEnabled:NO];
     self.hasCalledViewDidLoad = TRUE;
     [self updateListingsByCategory];
+    [User getAllUsersOfUniversity:self.currentUser.university withCompletion:^(NSArray * users) {
+        if (users){
+            self.allUsersOfUniversity = [NSMutableArray array];
+            self.allUsersOfUniversity = users;
+        }
+    }];
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(updateListingsByCategory) forControlEvents:UIControlEventValueChanged];
     [self.listingCategoryTableView insertSubview:self.refreshControl atIndex:0];
@@ -60,6 +69,11 @@ BOOL isFiltered;
     isFiltered = NO;
     if (!self.hasCalledViewDidLoad && [self isConnectedToInternet]){
         [self updateListingsByCategory];
+        [User getAllUsersOfUniversity:self.currentUser.university withCompletion:^(NSArray * users) {
+            if (users){
+                self.allUsersOfUniversity = users;
+            }
+        }];
     }
     else if (![self isConnectedToInternet]){
         [self displayConnectionErrorAlert];
@@ -73,9 +87,7 @@ BOOL isFiltered;
 }
 -(void) displayConnectionErrorAlert{
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Unable to connect to the internet" message:@"Please check your internet connection and try again." preferredStyle:(UIAlertControllerStyleAlert)];
-    // create an OK action
     UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Try again" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {}];
-    // add the OK action to the alert controller
     [alert addAction:okAction];
     [self presentViewController:alert animated:YES completion:^{ }];
 }
@@ -160,14 +172,15 @@ BOOL isFiltered;
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
     self.filteredCategoryToArrayOfPosts = [NSMutableDictionary dictionary];
     self.filteredArrayOfCategories = [NSMutableArray array];
+    self.filteredUsers = [NSMutableArray array];
     if (searchText.length == 0){
         self.filteredCategoryToArrayOfPosts[@"Suggested Listings"] = self.suggestedListings;
         if (self.suggestedListings.count > 5){
             self.filteredCategoryToArrayOfPosts[@"Suggested Listings"] = [self.suggestedListings subarrayWithRange:NSMakeRange(0, 5)];
         }
-        self.filteredCategoryToArrayOfPosts[@"Users"] = [NSMutableArray array];
+        //self.filteredCategoryToArrayOfPosts[@"Users"] = [NSMutableArray array];
         [self.filteredArrayOfCategories addObject:@"Suggested Listings"];
-        [self.filteredArrayOfCategories addObject:@"Users"];
+        //[self.filteredArrayOfCategories addObject:@"Users"];
         isFiltered = YES;
     }
     else{
@@ -189,6 +202,13 @@ BOOL isFiltered;
                 }
             }
         }
+        for (User *user in self.allUsersOfUniversity){
+            NSRange usernameRange = [user.username rangeOfString:searchText options:NSCaseInsensitiveSearch];
+            if (usernameRange.location != NSNotFound){
+                NSLog(@"%@", user);
+                [self.filteredUsers addObject:user];
+            }
+        }
     }
     [self.listingCategoryTableView reloadData];
 
@@ -196,14 +216,15 @@ BOOL isFiltered;
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar{
     self.filteredCategoryToArrayOfPosts = [NSMutableDictionary dictionary];
     self.filteredArrayOfCategories = [NSMutableArray array];
+    self.filteredUsers = [NSMutableArray array];
     if (searchBar.text.length == 0){
         self.filteredCategoryToArrayOfPosts[@"Suggested Listings"] = self.suggestedListings;
         if (self.suggestedListings.count > 5){
             self.filteredCategoryToArrayOfPosts[@"Suggested Listings"] = [self.suggestedListings subarrayWithRange:NSMakeRange(0, 5)];
         }
-        self.filteredCategoryToArrayOfPosts[@"Users"] = [NSMutableArray array];
+        //self.filteredCategoryToArrayOfPosts[@"Users"] = [NSMutableArray array];
         [self.filteredArrayOfCategories addObject:@"Suggested Listings"];
-        [self.filteredArrayOfCategories addObject:@"Users"];
+        //[self.filteredArrayOfCategories addObject:@"Users"];
         isFiltered = YES;
         
     }
@@ -224,37 +245,69 @@ BOOL isFiltered;
 
 #pragma mark - Table View
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    CategoryCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CategoryCell" forIndexPath:indexPath];
-    NSString *category;
-    if (isFiltered){
-       category  = self.filteredArrayOfCategories[indexPath.row];
+    NSInteger lengthOfFilteredListings = [self.filteredArrayOfCategories count];
+    if (isFiltered && (indexPath.row >= lengthOfFilteredListings)){
+        NSInteger indexOfFilteredUsers = indexPath.row - lengthOfFilteredListings;
+        ProfileCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ProfileCell"];
+        User *user = [self.filteredUsers objectAtIndex:indexOfFilteredUsers];
+        cell.usernameLabel.text = user.username;
+        NSRange usernameRange = [user.username rangeOfString:self.searchText options:NSCaseInsensitiveSearch];
+        NSMutableAttributedString *substring = [[NSMutableAttributedString alloc] initWithString:user.username];
+        [substring addAttribute:NSForegroundColorAttributeName value:[UIColor blueColor] range:usernameRange];
+        cell.usernameLabel.attributedText = substring;
+        PFFileObject *profilePicFile = user.profilePicture;
+        [profilePicFile getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
+            if (!error) {
+                UIImage *image = [UIImage imageWithData:imageData];
+                image ? [cell.profilePic setImage:image] : [cell.profilePic setImage:[UIImage imageNamed:@"default_profile_pic"]];
+            }
+        }];
+        cell.profilePic.layer.cornerRadius = cell.profilePic.frame.size.width / 2;
+        cell.profilePic.clipsToBounds = YES;
+        return cell;
     }
     else{
-        category = self.arrayOfCategories[indexPath.row];
+        CategoryCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CategoryCell" forIndexPath:indexPath];
+        NSString *category;
+        if (isFiltered){
+            category  = [self.filteredArrayOfCategories objectAtIndex:indexPath.row];
+        }
+        else{
+            category = [self.arrayOfCategories objectAtIndex: indexPath.row];
+        }
+        cell.categoryLabel.text = category;
+        cell.listingCollectionView.tag = indexPath.row;
+        cell.listingCollectionView.scrollEnabled = NO;
+        cell.viewAllButton.tag = indexPath.row;
+        [cell.viewAllButton addTarget:self action:@selector(didTapViewAll:) forControlEvents:UIControlEventTouchUpInside];
+        return cell;
+
     }
-    cell.categoryLabel.text = category;
-    cell.listingCollectionView.tag = indexPath.row;
-    cell.listingCollectionView.scrollEnabled = NO;
-    cell.viewAllButton.tag = indexPath.row;
-    [cell.viewAllButton addTarget:self action:@selector(didTapViewAll:) forControlEvents:UIControlEventTouchUpInside];
-    return cell;
 }
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (isFiltered){
-        return [self.filteredCategoryToArrayOfPosts count];
+        if ([self.filteredUsers count] == 0){
+            return [self.filteredCategoryToArrayOfPosts count];
+        }
+        return [self.filteredCategoryToArrayOfPosts count] + [self.filteredUsers count];
     }
     return [self.categoryToArrayOfPosts count];
 }
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-    CategoryCell *tableViewCell = (CategoryCell *) cell;
-    tableViewCell.listingCollectionView.delegate = self;
-    tableViewCell.listingCollectionView.dataSource = self;
-    [tableViewCell.listingCollectionView reloadData];
+    if (!(indexPath.row >= [self.filteredArrayOfCategories count]) || (!isFiltered)){
+        CategoryCell *tableViewCell = (CategoryCell *) cell;
+        tableViewCell.listingCollectionView.delegate = self;
+        tableViewCell.listingCollectionView.dataSource = self;
+        [tableViewCell.listingCollectionView reloadData];
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSString *tableViewCategory;
     NSArray *currentCategoryArray;
+    if (isFiltered && indexPath.row >= [self.filteredArrayOfCategories count]){
+        return 66;
+    }
     if (isFiltered){
         tableViewCategory = self.filteredArrayOfCategories[indexPath.row];
         currentCategoryArray = self.filteredCategoryToArrayOfPosts[tableViewCategory];
@@ -504,8 +557,6 @@ BOOL isFiltered;
                         //starting_index
                         ending_index -= 1;
                     }
-                    
-
                 }
 
                 NSArray *mostViewedCategorySubarray = [sortedListings subarrayWithRange:NSMakeRange(0, numberOfListingsWithHighestCategory)];
@@ -545,11 +596,7 @@ BOOL isFiltered;
 }
 
 #pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
     if ([[segue identifier] isEqualToString:@"HomeToListingDetail"]){
         ListingDetailViewController *listingDetailViewController = [segue destinationViewController];
         listingDetailViewController.listing = sender;
