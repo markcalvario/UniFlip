@@ -29,14 +29,15 @@
 @property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
 @property (strong, nonatomic) IBOutlet UIButton *saveButton;
 @property (strong, nonatomic) IBOutlet UILabel *priceLabel;
-@property (strong, nonatomic) User *currentUser;
 @property (strong, nonatomic) IBOutlet UITapGestureRecognizer *listingImageTapGesture;
 @property (strong, nonatomic) IBOutlet UIButton *menuButton;
-
 @property (strong, nonatomic) IBOutlet UICollectionView *photosCollectionView;
-@property (strong, nonatomic) NSArray *photos;
 @property (strong, nonatomic) IBOutlet UIPageControl *photoIndicator;
 @property (strong, nonatomic) UIImageView *imageToZoom;
+@property (strong, nonatomic) User *currentUser;
+@property (strong, nonatomic) NSArray *photos;
+
+
 @end
 
 @implementation ListingDetailViewController
@@ -145,7 +146,6 @@ CGFloat lastScale;
             if (succeeded){
                 self.listing.isSaved = FALSE;
                 [self updateSaveButtonUI:self.listing.isSaved withButton: sender];
-
             }
         }];
     }
@@ -162,7 +162,7 @@ CGFloat lastScale;
 }
 - (IBAction)didTapViewProfileButton:(id)sender {
     if (![self.listing.author.objectId isEqual:self.currentUser.objectId]){
-        [self updateVisitedProfileToCounter];
+        [User postVisitedProfileToCounter:self.currentUser withListing:self.listing withCompletion:^(BOOL finished) {}];
     }
     [self performSegueWithIdentifier:@"ListingDetailToProfile" sender:self.listing.author];
 }
@@ -214,14 +214,12 @@ CGFloat lastScale;
                 }
                 else{
                     MDCSnackbarMessage *message = [[MDCSnackbarMessage alloc] init];
-                    //MDCSnackbarMessageView *messageView = [[MDCSnackbarMessageView alloc] init];
                     [message setText:@"You have already reported this listing"];
                     message.duration = 1;
                     [MDCSnackbarManager.defaultManager showMessage:message];
                 }
             }];
         }];
-        
     }];
     MDCActionSheetAction *emailAction =
         [MDCActionSheetAction actionWithTitle:@"Email"
@@ -237,28 +235,6 @@ CGFloat lastScale;
     [actionSheet addAction:emailAction];
     [self presentViewController:actionSheet animated:YES completion:nil];
 }
-
--(void) updateVisitedProfileToCounter{
-    NSMutableDictionary *visitedProfileToCounter = self.currentUser[@"visitedProfileToCounter"];
-    if (!visitedProfileToCounter){
-        visitedProfileToCounter = [NSMutableDictionary dictionary];
-    }
-    if ([visitedProfileToCounter objectForKey:self.listing.author.objectId]){
-        //increment
-        NSNumber *clicks = [visitedProfileToCounter valueForKey:self.listing.author.objectId];
-        int value = [clicks intValue];
-        clicks = [NSNumber numberWithInt:value + 1];
-        [visitedProfileToCounter setValue:clicks forKey:self.listing.author.objectId];
-    }
-    else{
-        [visitedProfileToCounter setValue:@(1) forKey:self.listing.author.objectId];
-    }
-    
-    self.currentUser[@"visitedProfileToCounter"] = visitedProfileToCounter;
-    [self.currentUser saveInBackground];
-}
-
-
 -(void) hasUserReportedListing:(void(^)(BOOL, NSError *))hasReported{
     PFRelation *relation = [self.listing relationForKey:@"reportedBy"];
     PFQuery *query = [relation query];
@@ -345,24 +321,9 @@ CGFloat lastScale;
       return scaledImage;
 }
 
-
-
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([[segue identifier] isEqualToString:@"ListingDetailToProfile"]){
-        ProfileViewController *profileViewController = [segue destinationViewController];
-        profileViewController.user = sender;
-    }
-    else{
-        ReportListingViewController *reportViewController = [segue destinationViewController];
-        reportViewController.listing = sender;
-    }
-}
-
 -(void)addImageViewWithImage:(UIImage*)image {
     UIImageView *imgView = [[UIImageView alloc] init];
+    
     imgView.frame = CGRectMake(0, self.view.frame.size.height/4, self.view.frame.size.width, self.view.frame.size.height/2);
     
     imgView.contentMode = UIViewContentModeScaleAspectFit;
@@ -377,8 +338,6 @@ CGFloat lastScale;
     
     UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:self.view.frame];
     scrollView.contentSize = imgView.frame.size;
-    
-    NSLog(@"%ld and %ld", (long) self.view.frame.size.width, (long) self.view.frame.size.height);
     scrollView.backgroundColor = [UIColor blackColor];
     scrollView.scrollEnabled = NO;
     scrollView.contentSize = CGSizeMake(imgView.frame.size.width , imgView.frame.size.height);
@@ -388,49 +347,55 @@ CGFloat lastScale;
     scrollView.tag = 101;
     [scrollView addGestureRecognizer:dismissTap];
     self.imageToZoom = imgView;
+    scrollView.alpha = 0;
+    imgView.alpha = 0;
     
-    
-    [scrollView addSubview:imgView];
     [self.view addSubview:scrollView];
+    [scrollView addSubview:imgView];
+    if (scrollView.alpha ==0){
+        [UIView animateWithDuration:0.5 delay:0.2 options:UIViewAnimationOptionCurveEaseOut animations:^{
+            scrollView.alpha = 1;
+            imgView.alpha = 1;
+        }completion:nil];
+    }
 }
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView{
     return self.imageToZoom;
 }
-
-
 -(void)removeImage {
     UIImageView *imgView = (UIImageView*)[self.view viewWithTag:100];
     UIScrollView *scrollView = (UIScrollView*)[self.view viewWithTag:101];
-    [imgView removeFromSuperview];
-    [scrollView removeFromSuperview];
+    
+    if (scrollView.alpha == 1){
+        [UIView animateWithDuration:0.75 delay:0.2 options:UIViewAnimationOptionCurveEaseOut animations:^{
+            imgView.alpha = 0;
+            scrollView.alpha = 0;
+            
+        }completion:^(BOOL completed){
+            [imgView removeFromSuperview];
+            [scrollView removeFromSuperview];
+        }];
+    }
+    
     
 }
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    if (scrollView.tag == 101){
-        
-        if (scrollView.zoomScale < 1){
-            NSLog(@"zooming out");
-            /*UIImageView *imgView =[scrollView.subviews firstObject];
-            UIImage *img = imgView.image;
-            
-            CGFloat ratioW = imgView.frame.size.width / img.size.width;
-            CGFloat ratioH = imgView.frame.size.height  / img.size.height;
-            
-            CGFloat ratio = ratioW < ratioH ? ratioW : ratioH;
-            CGFloat newWidth = img.size.width * ratio;
-            CGFloat newHeight = img.size.height * ratio;
-                        
-            CGFloat left = 0.5 * (newWidth * scrollView.zoomScale > imgView.frame.size.width ? newWidth - imgView.frame.size.width: scrollView.frame.size.width - scrollView.contentSize.width);
-            
-            CGFloat top = 0.5 * (newHeight*scrollView.zoomScale > imgView.frame.size.height ? newHeight - imgView.frame.size.height : scrollView.frame.size.height - scrollView.contentSize.height);
-            
-            [scrollView setContentInset: UIEdgeInsetsMake(top, left, top, left)];*/
-            
-        }
-        
+    if (scrollView.tag != 101){
+        self.photoIndicator.currentPage = scrollView.contentOffset.x/ scrollView.frame.size.width;
+    }
+}
+
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([[segue identifier] isEqualToString:@"ListingDetailToProfile"]){
+        ProfileViewController *profileViewController = [segue destinationViewController];
+        profileViewController.user = sender;
     }
     else{
-        self.photoIndicator.currentPage = scrollView.contentOffset.x/ scrollView.frame.size.width;
+        ReportListingViewController *reportViewController = [segue destinationViewController];
+        reportViewController.listing = sender;
     }
 }
 

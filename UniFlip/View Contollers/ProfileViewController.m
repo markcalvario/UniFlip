@@ -29,6 +29,7 @@
 @property (strong, nonatomic) IBOutlet UIButton *followingButton;
 @property (strong, nonatomic) IBOutlet UIButton *followersButton;
 @property (strong, nonatomic) IBOutlet UIButton *composeMailButton;
+@property (strong, nonatomic) IBOutlet UIButton *followButton;
 
 @property (strong, nonatomic) NSMutableArray *arrayOfListings;
 @property (strong, nonatomic) NSMutableArray *toolbarButtons;
@@ -102,6 +103,11 @@ BOOL showUserListings = TRUE;
     [imageLayer setBorderWidth:2];
     [imageLayer setBorderColor:[[UIColor alloc]initWithRed:0/255.0 green:0/255.0 blue:128/255.0 alpha:1].CGColor];
     [imageLayer setMasksToBounds:YES];
+    
+    CGFloat widthOfButton = self.followButton.layer.frame.size.height/ 2;
+    [[self.followButton layer] setCornerRadius: widthOfButton];
+    [self.followButton setClipsToBounds:TRUE];
+    [self.followButton setBackgroundColor:[[UIColor alloc]initWithRed:0/255.0 green:0/255.0 blue:128/255.0 alpha:1]];
     
 }
 
@@ -237,8 +243,6 @@ BOOL showUserListings = TRUE;
         [cell.profileListingImage setImage:image];
     }];
     
-   
-    
     NSString *price = [@"$" stringByAppendingString:listing.listingPrice];
     cell.profileListingPriceLabel.text = price;
     cell.profileListingTitleLabel.text = listing.listingTitle;
@@ -350,14 +354,11 @@ BOOL showUserListings = TRUE;
         [[UITabBarItem alloc] initWithTitle:@"Listings" image:nil tag:0],
         [[UITabBarItem alloc] initWithTitle:@"Saved" image:nil tag:0],
     ];
-    self.tabBarView.preferredLayoutStyle = MDCTabBarViewLayoutStyleFixed; // or MDCTabBarViewLayoutStyleFixed
+    self.tabBarView.preferredLayoutStyle = MDCTabBarViewLayoutStyleFixed;
     //self.tabBarView.frame = CGRectMake(8, 157.5, 394, 15);
     self.tabBarView.frame = CGRectMake(8, self.followingButton.frame.origin.y+35, self.followingButton.superview.frame.size.width, 15);
     self.tabBarView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.profileView addSubview:self.tabBarView];
-    //[self.tabBarView setBarTintColor:[UIColor blackColor]];
-    //[self.tabBarView setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    //[self.tabBarView setSelectionIndicatorStrokeColor:[UIColor whiteColor]];
     self.tabBarView.tabBarDelegate = self;
     [self.tabBarView setSelectedItem:[self.tabBarView.items objectAtIndex:0]];
     
