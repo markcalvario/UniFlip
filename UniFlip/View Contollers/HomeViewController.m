@@ -17,6 +17,7 @@
 #import "Reachability.h"
 #import "CategoryViewController.h"
 #import "ProfileCell.h"
+#import "ProfileViewController.h"
 
 @interface HomeViewController ()<UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchBarDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *listingCategoryTableView;
@@ -247,6 +248,7 @@ BOOL isFiltered;
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSInteger lengthOfFilteredListings = [self.filteredArrayOfCategories count];
     if (isFiltered && (indexPath.row >= lengthOfFilteredListings)){
+        tableView.allowsSelection = YES;
         NSInteger indexOfFilteredUsers = indexPath.row - lengthOfFilteredListings;
         ProfileCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ProfileCell"];
         User *user = [self.filteredUsers objectAtIndex:indexOfFilteredUsers];
@@ -267,6 +269,7 @@ BOOL isFiltered;
         return cell;
     }
     else{
+        tableView.allowsSelection = NO;
         CategoryCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CategoryCell" forIndexPath:indexPath];
         NSString *category;
         if (isFiltered){
@@ -276,6 +279,7 @@ BOOL isFiltered;
             category = [self.arrayOfCategories objectAtIndex: indexPath.row];
         }
         cell.categoryLabel.text = category;
+        cell.categoryLabel.accessibilityLabel = category;
         cell.listingCollectionView.tag = indexPath.row;
         cell.listingCollectionView.scrollEnabled = NO;
         cell.viewAllButton.tag = indexPath.row;
@@ -301,7 +305,14 @@ BOOL isFiltered;
         [tableViewCell.listingCollectionView reloadData];
     }
 }
-
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    NSInteger lengthOfFilteredListings = [self.filteredArrayOfCategories count];
+    if (isFiltered && (indexPath.row >= lengthOfFilteredListings)){
+        NSInteger indexOfFilteredUsers = indexPath.row - lengthOfFilteredListings;
+        User *user = [self.filteredUsers objectAtIndex:indexOfFilteredUsers];
+        [self performSegueWithIdentifier:@"HomeToProfile" sender:user];
+    }
+}
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSString *tableViewCategory;
     NSArray *currentCategoryArray;
@@ -607,7 +618,11 @@ BOOL isFiltered;
         Listing *listing = [sender objectAtIndex:0];
         listingDetailViewController.category = listing.listingCategory;
     }
-        
+    if ([[segue identifier] isEqualToString:@"HomeToProfile"]){
+        ProfileViewController *profileViewController = [segue destinationViewController];
+        profileViewController.user = sender;
+    }
+
 }
 
 

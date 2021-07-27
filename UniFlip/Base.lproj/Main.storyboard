@@ -197,7 +197,7 @@
                                                                         <rect key="frame" x="39" y="186" width="98" height="15"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="15" id="MrO-xS-diO"/>
-                                                                            <constraint firstAttribute="width" constant="98" id="odG-4s-YCo"/>
+                                                                            <constraint firstAttribute="width" priority="750" constant="98" id="odG-4s-YCo"/>
                                                                         </constraints>
                                                                         <fontDescription key="fontDescription" name="Galvji" family="Galvji" pointSize="12"/>
                                                                         <nil key="textColor"/>
@@ -366,6 +366,7 @@
                         <outlet property="searchListingsBar" destination="IIf-rw-qWN" id="VlD-l7-Hf0"/>
                         <segue destination="Ydr-sh-TIk" kind="show" identifier="HomeToListingDetail" id="nHl-qN-Fv6"/>
                         <segue destination="jiP-Xl-uJh" kind="show" identifier="HomeToViewByCategory" id="Hyo-td-gFF"/>
+                        <segue destination="RaW-Wm-Soe" kind="show" identifier="HomeToProfile" id="4Y7-XG-abQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="baD-wp-Qky" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1703,7 +1704,7 @@ Cg
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="nHl-qN-Fv6"/>
-        <segue reference="VAk-SO-nHF"/>
+        <segue reference="4Y7-XG-abQ"/>
         <segue reference="vaY-ad-883"/>
         <segue reference="yJF-wa-pAP"/>
     </inferredMetricsTieBreakers>
