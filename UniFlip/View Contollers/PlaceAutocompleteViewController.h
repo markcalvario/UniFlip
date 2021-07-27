@@ -12,13 +12,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol PlaceAutocompleteDelege <NSObject>
 @optional
-- (void)addPlaceSelectedToViewController:(NSString *)data;
+- (void)addPlaceSelectedToViewController:(NSString *)data withInputType:(NSString *)inputType;
 @end
 
 
 @interface PlaceAutocompleteViewController : UIViewController
 @property (nonatomic, weak) id <PlaceAutocompleteDelege> delegate;
-
+@property (nonatomic, strong) NSArray *data;
 @end
 
 NS_ASSUME_NONNULL_END

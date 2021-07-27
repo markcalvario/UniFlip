@@ -276,52 +276,8 @@ BOOL showUserListings = TRUE;
 }
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     Listing *listing = self.arrayOfListings[indexPath.row];
-    [self updateListingsToClicks: listing];
-    [self updateCategoriesVisitedToClick: listing];
-
-}
-
-
-///
-
--(void) updateListingsToClicks: (Listing *)listing{
-    NSMutableDictionary *listingsToClicks = self.currentUser[@"listingsToClicks"];
-    if (!listingsToClicks){
-        listingsToClicks = [NSMutableDictionary dictionary];
-    }
-    if ([listingsToClicks objectForKey:listing.objectId]){
-        //increment
-        NSNumber *clicks = [listingsToClicks valueForKey:listing.objectId];
-        int value = [clicks intValue];
-        clicks = [NSNumber numberWithInt:value + 1];
-        [listingsToClicks setValue:clicks forKey:listing.objectId];
-    }
-    else{
-        
-        [listingsToClicks setValue:@(1) forKey:listing.objectId];
-    }
-    
-    self.currentUser[@"listingsToClicks"] = listingsToClicks;
-    [self.currentUser saveInBackground];
-}
-
--(void) updateCategoriesVisitedToClick: (Listing *)listing{
-    NSMutableDictionary *categoriesVisitedToClick = self.currentUser[@"categoriesVisitedToClick"];
-    if (!categoriesVisitedToClick){
-        categoriesVisitedToClick = [NSMutableDictionary dictionary];
-    }
-    if ([categoriesVisitedToClick objectForKey:listing.listingCategory]){
-        //increment
-        NSNumber *clicks = [categoriesVisitedToClick valueForKey:listing.listingCategory];
-        int value = [clicks intValue];
-        clicks = [NSNumber numberWithInt:value + 1];
-        [categoriesVisitedToClick setValue:clicks forKey:listing.listingCategory];
-    }
-    else{
-        [categoriesVisitedToClick setValue:@(1) forKey:listing.listingCategory];
-    }
-    self.currentUser[@"categoriesVisitedToClick"] = categoriesVisitedToClick;
-    [self.currentUser saveInBackground];
+    [User postVisitedListingToCounter:self.currentUser withListing:listing withCompletion:^(BOOL finished) {}];
+    [User postVisitedCategoryToCounter:self.currentUser withListing:listing withCompletion:^(BOOL finished) {}];
 }
 
 #pragma mark - Navigation
@@ -332,8 +288,6 @@ BOOL showUserListings = TRUE;
         Listing *listing = self.arrayOfListings[indexPath.row];
         ListingDetailViewController *listingDetailViewController = [segue destinationViewController];
         listingDetailViewController.listing = listing;
-        //showUserListings = TRUE;
-        
     }
 }
 

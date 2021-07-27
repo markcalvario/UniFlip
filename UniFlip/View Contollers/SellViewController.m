@@ -104,6 +104,7 @@
         }];
         
     }];
+    //CategoryToSelectOption
     MDCActionSheetAction *selectPhotoGalleryAction =
         [MDCActionSheetAction actionWithTitle:@"Phone Gallery"
                                         image:[UIImage systemImageNamed:@"square.grid.3x3"]
@@ -139,11 +140,17 @@
     [self.categoryButton setTitle:option forState:UIControlStateNormal];
     [self.categoryButton setTitleColor:[UIColor colorWithRed:0 green:0.58984375 blue:0.8984375 alpha:1] forState:UIControlStateNormal];
 }
-- (void)addPlaceSelectedToViewController:(NSString*)location{
-    //do whatever you want with the data
-    NSLog(@"%@", location);
-    [self.locationButton setTitle: location forState:UIControlStateNormal];
-    [self.locationButton setTitleColor:[UIColor colorWithRed:0 green:0.58984375 blue:0.8984375 alpha:1] forState:UIControlStateNormal];
+- (void)addPlaceSelectedToViewController:(NSString*)location withInputType:(NSString *)inputType{
+    NSLog(@"%@ for %@", location, inputType);
+    if ([inputType isEqualToString:@"Location"]){
+        [self.locationButton setTitle: location forState:UIControlStateNormal];
+        [self.locationButton setTitleColor:[UIColor colorWithRed:0 green:0.58984375 blue:0.8984375 alpha:1] forState:UIControlStateNormal];
+    }
+    else{
+        [self.categoryButton setTitle:location forState:UIControlStateNormal];
+        [self.categoryButton setTitleColor:[UIColor colorWithRed:0 green:0.58984375 blue:0.8984375 alpha:1] forState:UIControlStateNormal];
+    }
+    
 }
 
 #pragma mark - Actions performed on touch
@@ -256,13 +263,17 @@
             @"Garden & Outdoor", @"Grocery & Gourmet Food", @"Handmade", @"Health, Household & Baby Care", @"Home & Kitchen", @"Industrial & Scientific",
            @"Luggage & Travel Gear", @"Movies & TV", @"Musical Instruments", @"Office Products", @"Pet Supplies", @"Sports & Outdoors",
             @"Tools & Home Improvement", @"Toys & Games", @"Video Games"];
-        SelectOptionViewController *selectOptionViewController = [segue destinationViewController];
+        /*SelectOptionViewController *selectOptionViewController = [segue destinationViewController];
         selectOptionViewController.data = arrayOfCategories;
-        selectOptionViewController.delegate = self;
+        selectOptionViewController.delegate = self;*/
+        PlaceAutocompleteViewController *placeAutocompleteViewController = [segue destinationViewController];
+        placeAutocompleteViewController.delegate = self;
+        placeAutocompleteViewController.data = arrayOfCategories;
     }
     else if ([[segue identifier] isEqualToString: @"LocationToSelectOption"]){
         PlaceAutocompleteViewController *placeAutocompleteViewController = [segue destinationViewController];
         placeAutocompleteViewController.delegate = self;
+        placeAutocompleteViewController.data = [NSArray array];
     }
 }
 

@@ -205,6 +205,10 @@
                                                                     </label>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1000" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h9j-0Q-DWM">
                                                                         <rect key="frame" x="5" y="186" width="26" height="12"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="12" id="5hx-nd-g8R"/>
+                                                                            <constraint firstAttribute="width" constant="26" id="Jja-EV-kp7"/>
+                                                                        </constraints>
                                                                         <fontDescription key="fontDescription" name="Galvji-Bold" family="Galvji" pointSize="10"/>
                                                                         <nil key="textColor"/>
                                                                         <nil key="highlightedColor"/>
@@ -223,6 +227,10 @@
                                                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="0tF-Bq-fQ3">
                                                                         <rect key="frame" x="5" y="4" width="160" height="166"/>
                                                                         <gestureRecognizers/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="width" constant="160" id="DxQ-Mg-NRn"/>
+                                                                            <constraint firstAttribute="height" constant="166" id="yoy-aa-gU7"/>
+                                                                        </constraints>
                                                                     </imageView>
                                                                 </subviews>
                                                                 <constraints>
@@ -518,7 +526,7 @@
                                                     <color key="titleColor" systemColor="systemGray4Color"/>
                                                 </state>
                                                 <connections>
-                                                    <segue destination="CVR-2k-8Mo" kind="show" identifier="CategoryToSelectOption" id="X15-Wa-hxq"/>
+                                                    <segue destination="Wr9-bP-ib7" kind="show" identifier="CategoryToSelectOption" id="vaY-ad-883"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pXH-5Y-rUe">
@@ -712,6 +720,26 @@
                                 <rect key="frame" x="0.0" y="138" width="414" height="675"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="OptionCell" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="OptionCell" rowHeight="59" id="c6H-tO-xcw" customClass="OptionCell">
+                                        <rect key="frame" x="0.0" y="24.5" width="414" height="59"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="c6H-tO-xcw" id="ibo-CU-RBH">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="59"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wsi-Ty-EIR">
+                                                    <rect key="frame" x="20" y="0.0" width="374" height="59"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" title="Button"/>
+                                                </button>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="option2Button" destination="Wsi-Ty-EIR" id="VEe-eu-uHy"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="5iS-ye-u2w"/>
@@ -725,7 +753,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ai5-50-uvj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1903" y="104"/>
+            <point key="canvasLocation" x="1902.8985507246377" y="103.79464285714285"/>
         </scene>
         <!--Select Option View Controller-->
         <scene sceneID="0xE-vQ-77k">
@@ -740,7 +768,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="OptionCell" rowHeight="59" id="Pqv-Aj-WnA" customClass="OptionCell">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="OptionCell2" rowHeight="59" id="Pqv-Aj-WnA" customClass="OptionCell">
                                         <rect key="frame" x="0.0" y="24.5" width="414" height="59"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Pqv-Aj-WnA" id="pd8-6F-XeQ">
@@ -1638,8 +1666,9 @@ Cg
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="jy6-i8-Qry"/>
+        <segue reference="nHl-qN-Fv6"/>
         <segue reference="VAk-SO-nHF"/>
+        <segue reference="vaY-ad-883"/>
         <segue reference="yJF-wa-pAP"/>
     </inferredMetricsTieBreakers>
     <resources>

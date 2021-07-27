@@ -6,10 +6,11 @@
 //
 
 #import "PlaceAutocompleteViewController.h"
+#import "OptionCell.h"
 @import GooglePlaces;
 @import UIKit;
 
-@interface PlaceAutocompleteViewController () <GMSAutocompleteTableDataSourceDelegate, UISearchBarDelegate>
+@interface PlaceAutocompleteViewController () <GMSAutocompleteTableDataSourceDelegate, UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *resultsSearchTableView;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchOptionsBar;
 
@@ -23,11 +24,17 @@
     [super viewDidLoad];
     
     self.searchOptionsBar.delegate = self;
-
-    tableDataSource = [[GMSAutocompleteTableDataSource alloc] init];
-    tableDataSource.delegate = self;
-    self.resultsSearchTableView.delegate = tableDataSource;
-    self.resultsSearchTableView.dataSource = tableDataSource;
+    if (self.data.count == 0){
+        tableDataSource = [[GMSAutocompleteTableDataSource alloc] init];
+        tableDataSource.delegate = self;
+        self.resultsSearchTableView.delegate = tableDataSource;
+        self.resultsSearchTableView.dataSource = tableDataSource;
+    }
+    else{
+        self.resultsSearchTableView.delegate = self;
+        self.resultsSearchTableView.dataSource = self;
+    }
+    
 }
 
 #pragma mark - GMSAutocompleteTableDataSourceDelegate
@@ -48,8 +55,8 @@
 - (void)tableDataSource:(GMSAutocompleteTableDataSource *)tableDataSource didAutocompleteWithPlace:(GMSPlace *)place {
     // Do something with the selected place.
     self.searchOptionsBar.text = place.formattedAddress;
-    if(_delegate && [_delegate respondsToSelector:@selector(addPlaceSelectedToViewController:)]){
-        [_delegate addPlaceSelectedToViewController: place.formattedAddress];
+    if(_delegate && [_delegate respondsToSelector:@selector(addPlaceSelectedToViewController: withInputType:)]){
+        [_delegate addPlaceSelectedToViewController: place.formattedAddress withInputType:@"Location"];
     }
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -68,5 +75,29 @@
     // Update the GMSAutocompleteTableDataSource with the search text.
     [tableDataSource sourceTextHasChanged:searchText];
 }
+
+- (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    OptionCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OptionCell" forIndexPath:indexPath];
+    NSString *option = self.data[indexPath.row];
+    //[self.delegate addOptionViewController:self didFinishEnteringItem:option];
+    [cell.option2Button setTag:indexPath.row];
+    [cell.option2Button addTarget:self action:@selector(didTapOption:) forControlEvents:UIControlEventTouchUpInside];
+    [cell.option2Button setTitle:option forState:UIControlStateNormal];
+    return cell;
+}
+
+- (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.data.count;
+}
+-(void) didTapOption: (UIButton *) sender{
+    NSString *option = self.data[sender.tag];
+    //[self performSegueWithIdentifier:@"OptionSelectedToSell" sender:option];
+    if(_delegate && [_delegate respondsToSelector:@selector(addPlaceSelectedToViewController: withInputType:)]){
+        [_delegate addPlaceSelectedToViewController: option withInputType:@"Category"];
+    }
+    [self.navigationController popViewControllerAnimated:YES];
+
+}
+
 
 @end
