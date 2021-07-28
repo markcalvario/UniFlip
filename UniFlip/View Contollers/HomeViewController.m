@@ -13,11 +13,13 @@
 #import "ListingCell.h"
 #import "User.h"
 #import "ListingDetailViewController.h"
-#import <SystemConfiguration/SystemConfiguration.h>
 #import "Reachability.h"
 #import "CategoryViewController.h"
 #import "ProfileCell.h"
 #import "ProfileViewController.h"
+
+#import <SystemConfiguration/SystemConfiguration.h>
+
 
 @interface HomeViewController ()<UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchBarDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *listingCategoryTableView;
@@ -26,7 +28,6 @@
 @property (strong, nonatomic) NSMutableDictionary *categoryToArrayOfPosts;
 @property (strong, nonatomic) NSMutableArray *arrayOfCategories;
 @property (strong, nonatomic) User *currentUser;
-@property (nonatomic) BOOL hasCalledViewDidLoad;
 @property (strong, nonatomic) NSMutableDictionary *filteredCategoryToArrayOfPosts;
 @property (strong, nonatomic) NSMutableArray *filteredArrayOfCategories;
 @property (strong, nonatomic) NSMutableArray *allListings;
@@ -34,53 +35,52 @@
 @property (strong, nonatomic) NSMutableArray *suggestedListings;
 @property (strong, nonatomic) NSArray *allUsersOfUniversity;
 @property (strong, nonatomic) NSMutableArray *filteredUsers;
-
-
 @property (strong, nonatomic) NSString *searchText;
+
+@property (strong, nonatomic) NSString *selectedFilter;
 @end
 
 @implementation HomeViewController
 BOOL isFiltered;
 
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.currentUser = [User currentUser];
-    isFiltered = NO;
-    self.listingCategoryTableView.delegate = self;
-    self.listingCategoryTableView.dataSource = self;
+    
     self.searchListingsBar.delegate = self;
     [self.searchListingsBar setUserInteractionEnabled:NO];
-    self.hasCalledViewDidLoad = TRUE;
-    [self updateListingsByCategory];
-    [User getAllUsersOfUniversity:self.currentUser.university withCompletion:^(NSArray * users) {
-        if (users){
-            self.allUsersOfUniversity = [NSMutableArray array];
-            self.allUsersOfUniversity = users;
-        }
-    }];
+    isFiltered = NO;
+    self.searchListingsBar.showsScopeBar = NO;
+
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(updateListingsByCategory) forControlEvents:UIControlEventValueChanged];
     [self.listingCategoryTableView insertSubview:self.refreshControl atIndex:0];
     
+    self.listingCategoryTableView.delegate = self;
+    self.listingCategoryTableView.dataSource = self;
+    
+    self.currentUser = [User currentUser];
+    
 }
 -(void) viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    isFiltered = NO;
-    if (!self.hasCalledViewDidLoad && [self isConnectedToInternet]){
+    [self displayHomeScreen];
+}
+
+-(void) displayHomeScreen{
+    if ([self isConnectedToInternet]){
         [self updateListingsByCategory];
         [User getAllUsersOfUniversity:self.currentUser.university withCompletion:^(NSArray * users) {
             if (users){
+                self.allUsersOfUniversity = [NSMutableArray array];
                 self.allUsersOfUniversity = users;
             }
         }];
     }
-    else if (![self isConnectedToInternet]){
+    else{
         [self displayConnectionErrorAlert];
     }
     
-    self.hasCalledViewDidLoad = FALSE;
 }
 - (BOOL) isConnectedToInternet{
     Reachability *reach = [Reachability reachabilityForInternetConnection];
@@ -167,91 +167,86 @@ BOOL isFiltered;
             }
         }];
     }
-    
 }
+
 #pragma mark - Search Bar
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
-    self.filteredCategoryToArrayOfPosts = [NSMutableDictionary dictionary];
-    self.filteredArrayOfCategories = [NSMutableArray array];
-    self.filteredUsers = [NSMutableArray array];
-    if (searchText.length == 0){
-        self.filteredCategoryToArrayOfPosts[@"Suggested Listings"] = self.suggestedListings;
-        if (self.suggestedListings.count > 5){
-            self.filteredCategoryToArrayOfPosts[@"Suggested Listings"] = [self.suggestedListings subarrayWithRange:NSMakeRange(0, 5)];
-        }
-        //self.filteredCategoryToArrayOfPosts[@"Users"] = [NSMutableArray array];
-        [self.filteredArrayOfCategories addObject:@"Suggested Listings"];
-        //[self.filteredArrayOfCategories addObject:@"Users"];
-        isFiltered = YES;
-    }
-    else{
-        isFiltered = YES;
-        self.searchText = searchText;
-        for (Listing *listing in self.allListings){
-            NSRange listingTitleRange = [listing.listingTitle rangeOfString:searchText options:NSCaseInsensitiveSearch];
-            if (listingTitleRange.location != NSNotFound){
-                if ( [self.filteredCategoryToArrayOfPosts objectForKey:listing.listingCategory]){
-                    NSMutableArray *arrayOfListingsValue = [self.categoryToArrayOfPosts objectForKey:listing.listingCategory];
-                    [self.filteredArrayOfCategories addObject: listing.listingCategory];
-                    [self.filteredCategoryToArrayOfPosts setObject:arrayOfListingsValue forKey:listing.listingCategory];
-                }
-                else{
-                    NSMutableArray *arrayOfListingsValue = [[NSMutableArray alloc] init];
-                    [arrayOfListingsValue addObject:listing];
-                    [self.filteredArrayOfCategories addObject: listing.listingCategory];
-                    [self.filteredCategoryToArrayOfPosts setObject:arrayOfListingsValue forKey:listing.listingCategory];
-                }
-            }
-        }
-        for (User *user in self.allUsersOfUniversity){
-            NSRange usernameRange = [user.username rangeOfString:searchText options:NSCaseInsensitiveSearch];
-            if (usernameRange.location != NSNotFound){
-                NSLog(@"%@", user);
-                [self.filteredUsers addObject:user];
-            }
-        }
-    }
-    [self.listingCategoryTableView reloadData];
-
+    [self updateSearchResults:searchText];
 }
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar{
-    self.filteredCategoryToArrayOfPosts = [NSMutableDictionary dictionary];
-    self.filteredArrayOfCategories = [NSMutableArray array];
-    self.filteredUsers = [NSMutableArray array];
-    if (searchBar.text.length == 0){
-        self.filteredCategoryToArrayOfPosts[@"Suggested Listings"] = self.suggestedListings;
-        if (self.suggestedListings.count > 5){
-            self.filteredCategoryToArrayOfPosts[@"Suggested Listings"] = [self.suggestedListings subarrayWithRange:NSMakeRange(0, 5)];
-        }
-        //self.filteredCategoryToArrayOfPosts[@"Users"] = [NSMutableArray array];
-        [self.filteredArrayOfCategories addObject:@"Suggested Listings"];
-        //[self.filteredArrayOfCategories addObject:@"Users"];
-        isFiltered = YES;
-        
-    }
-    [self.listingCategoryTableView reloadData];
-
+    [self displayScopeBar];
+    self.searchListingsBar.showsCancelButton = YES;
+    [self updateSearchResults:searchBar.text];
     return YES;
 }
-
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar{
     [self.view endEditing:TRUE];
 }
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar{
     isFiltered = NO;
+    self.searchListingsBar.showsScopeBar = NO;
+    self.searchListingsBar.showsCancelButton = NO;
     self.searchListingsBar.text = @"";
     [self.view endEditing:TRUE];
     [self.listingCategoryTableView reloadData];
 }
+- (void) displayScopeBar{
+    self.searchListingsBar.scopeButtonTitles = @[@"Listings", @"Users"];
+    self.searchListingsBar.showsScopeBar = YES;
+    self.selectedFilter = @"Listings";
+}
+- (void) updateSearchResults:(NSString *)searchText{
+    self.filteredCategoryToArrayOfPosts = [NSMutableDictionary dictionary];
+    self.filteredArrayOfCategories = [NSMutableArray array];
+    self.filteredUsers = [NSMutableArray array];
+    isFiltered = YES;
+    self.searchText = searchText;
+    NSString *searchBy = [self.searchListingsBar.scopeButtonTitles objectAtIndex:self.searchListingsBar.selectedScopeButtonIndex];
+    if ([searchBy isEqualToString:@"Listings"]){
+        if (searchText.length == 0){
+            self.filteredCategoryToArrayOfPosts[@"Suggested Listings"] = self.suggestedListings;
+            if (self.suggestedListings.count > 5){
+                self.filteredCategoryToArrayOfPosts[@"Suggested Listings"] = [self.suggestedListings subarrayWithRange:NSMakeRange(0, 5)];
+            }
+            [self.filteredArrayOfCategories addObject:@"Suggested Listings"];
+        }
+        else{
+            for (Listing *listing in self.allListings){
+                NSRange listingTitleRange = [listing.listingTitle rangeOfString:searchText options:NSCaseInsensitiveSearch];
+                if (listingTitleRange.location != NSNotFound){
+                    if ( [self.filteredCategoryToArrayOfPosts objectForKey:listing.listingCategory]){
+                        NSMutableArray *arrayOfListingsValue = [self.categoryToArrayOfPosts objectForKey:listing.listingCategory];
+                        [self.filteredArrayOfCategories addObject: listing.listingCategory];
+                        [self.filteredCategoryToArrayOfPosts setObject:arrayOfListingsValue forKey:listing.listingCategory];
+                    }
+                    else{
+                        NSMutableArray *arrayOfListingsValue = [[NSMutableArray alloc] init];
+                        [arrayOfListingsValue addObject:listing];
+                        [self.filteredArrayOfCategories addObject: listing.listingCategory];
+                        [self.filteredCategoryToArrayOfPosts setObject:arrayOfListingsValue forKey:listing.listingCategory];
+                    }
+                }
+            }
+        }
+    }
+    else{
+        for (User *user in self.allUsersOfUniversity){
+            NSRange usernameRange = [user.username rangeOfString:searchText options:NSCaseInsensitiveSearch];
+            if (usernameRange.location != NSNotFound){
+                [self.filteredUsers addObject:user];
+            }
+        }
+    }
+    [self.listingCategoryTableView reloadData];
+    
+}
 
 #pragma mark - Table View
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    NSInteger lengthOfFilteredListings = [self.filteredArrayOfCategories count];
-    if (isFiltered && (indexPath.row >= lengthOfFilteredListings)){
+    if (isFiltered && ([self.selectedFilter isEqualToString:@"Users"])){
         tableView.allowsSelection = YES;
-        NSInteger indexOfFilteredUsers = indexPath.row - lengthOfFilteredListings;
         ProfileCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ProfileCell"];
-        User *user = [self.filteredUsers objectAtIndex:indexOfFilteredUsers];
+        User *user = [self.filteredUsers objectAtIndex:indexPath.row];
         cell.usernameLabel.text = user.username;
         NSRange usernameRange = [user.username rangeOfString:self.searchText options:NSCaseInsensitiveSearch];
         NSMutableAttributedString *substring = [[NSMutableAttributedString alloc] initWithString:user.username];
@@ -290,15 +285,15 @@ BOOL isFiltered;
 }
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (isFiltered){
-        if ([self.filteredUsers count] == 0){
-            return [self.filteredCategoryToArrayOfPosts count];
+        if ([self.selectedFilter isEqualToString:@"Users"]){
+            return [self.filteredUsers count];
         }
-        return [self.filteredCategoryToArrayOfPosts count] + [self.filteredUsers count];
+        return [self.filteredArrayOfCategories count];
     }
     return [self.categoryToArrayOfPosts count];
 }
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (!(indexPath.row >= [self.filteredArrayOfCategories count]) || (!isFiltered)){
+    if ( ([self.selectedFilter isEqualToString:@"Listings"]) || (!isFiltered)){
         CategoryCell *tableViewCell = (CategoryCell *) cell;
         tableViewCell.listingCollectionView.delegate = self;
         tableViewCell.listingCollectionView.dataSource = self;
@@ -306,17 +301,15 @@ BOOL isFiltered;
     }
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSInteger lengthOfFilteredListings = [self.filteredArrayOfCategories count];
-    if (isFiltered && (indexPath.row >= lengthOfFilteredListings)){
-        NSInteger indexOfFilteredUsers = indexPath.row - lengthOfFilteredListings;
-        User *user = [self.filteredUsers objectAtIndex:indexOfFilteredUsers];
+    if ( ([self.selectedFilter isEqualToString:@"Users"]) && (isFiltered)){
+        User *user = [self.filteredUsers objectAtIndex:indexPath.row];
         [self performSegueWithIdentifier:@"HomeToProfile" sender:user];
     }
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSString *tableViewCategory;
     NSArray *currentCategoryArray;
-    if (isFiltered && indexPath.row >= [self.filteredArrayOfCategories count]){
+    if (isFiltered && ([self.selectedFilter isEqualToString:@"Users"])){
         return 66;
     }
     if (isFiltered){
@@ -330,6 +323,12 @@ BOOL isFiltered;
     CGFloat numOfListings = currentCategoryArray.count;
     CGFloat height = (245 * ceil(numOfListings/2)) + 50;
     return height;
+}
+- (void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope{
+    NSString *searchBy = [self.searchListingsBar.scopeButtonTitles objectAtIndex:self.searchListingsBar.selectedScopeButtonIndex];
+    self.selectedFilter = searchBy;
+    [self updateSearchResults:self.searchText];
+    
 }
 
 #pragma mark - Collection View
@@ -407,10 +406,9 @@ BOOL isFiltered;
     
 }
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
-    NSString *category = self.arrayOfCategories[collectionView.tag];
-    Listing *listing = self.categoryToArrayOfPosts[category][indexPath.row];
-    [User postVisitedListingToCounter:self.currentUser withListing:listing withCompletion:^(BOOL finished) {}];
-    [User postVisitedCategoryToCounter:self.currentUser withListing:listing withCompletion:^(BOOL finished) {}];
+    NSString *category;
+    Listing *listing;
+    
     if (isFiltered){
         category = self.filteredArrayOfCategories[collectionView.tag];
         listing = self.filteredCategoryToArrayOfPosts[category][indexPath.row];
@@ -419,6 +417,8 @@ BOOL isFiltered;
         category = self.arrayOfCategories[collectionView.tag];
         listing = self.categoryToArrayOfPosts[category][indexPath.row];
     }
+    [User postVisitedListingToCounter:self.currentUser withListing:listing withCompletion:^(BOOL finished) {}];
+    [User postVisitedCategoryToCounter:self.currentUser withListing:listing withCompletion:^(BOOL finished) {}];
     
     [self performSegueWithIdentifier:@"HomeToListingDetail" sender:listing];
 }

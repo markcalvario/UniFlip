@@ -158,9 +158,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <searchBar contentMode="redraw" placeholder="Search for listings" showsCancelButton="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IIf-rw-qWN">
+                            <searchBar contentMode="redraw" placeholder="Search for listings" translatesAutoresizingMaskIntoConstraints="NO" id="IIf-rw-qWN">
                                 <rect key="frame" x="0.0" y="88" width="414" height="51"/>
                                 <textInputTraits key="textInputTraits"/>
+                                <scopeButtonTitles>
+                                    <string>Title</string>
+                                    <string>Title</string>
+                                </scopeButtonTitles>
                             </searchBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="294" estimatedRowHeight="294" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="TUQ-ol-6UX">
                                 <rect key="frame" x="0.0" y="139" width="414" height="674"/>
@@ -337,12 +341,12 @@
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="TUQ-ol-6UX" firstAttribute="trailing" secondItem="dZs-BV-x54" secondAttribute="trailing" id="0c7-Pw-hyY"/>
+                            <constraint firstItem="TUQ-ol-6UX" firstAttribute="top" secondItem="IIf-rw-qWN" secondAttribute="bottom" id="3RE-xN-yEC"/>
                             <constraint firstItem="q5b-RP-dss" firstAttribute="leading" secondItem="dZs-BV-x54" secondAttribute="leading" constant="181" id="9Mq-1n-awm"/>
                             <constraint firstItem="IIf-rw-qWN" firstAttribute="top" secondItem="dZs-BV-x54" secondAttribute="top" id="Caz-CL-E2c"/>
                             <constraint firstItem="IIf-rw-qWN" firstAttribute="trailing" secondItem="dZs-BV-x54" secondAttribute="trailing" id="OP5-Cg-b6b"/>
                             <constraint firstItem="dZs-BV-x54" firstAttribute="trailing" secondItem="q5b-RP-dss" secondAttribute="trailing" constant="180" id="YYt-wK-dgf"/>
                             <constraint firstItem="dZs-BV-x54" firstAttribute="bottom" secondItem="q5b-RP-dss" secondAttribute="bottom" constant="337" id="hJZ-4i-jyH"/>
-                            <constraint firstItem="TUQ-ol-6UX" firstAttribute="top" secondItem="IIf-rw-qWN" secondAttribute="bottom" id="kB4-wQ-ms1"/>
                             <constraint firstItem="IIf-rw-qWN" firstAttribute="leading" secondItem="dZs-BV-x54" secondAttribute="leading" id="m5P-NN-SEx"/>
                             <constraint firstItem="TUQ-ol-6UX" firstAttribute="leading" secondItem="dZs-BV-x54" secondAttribute="leading" id="m84-hP-5MG"/>
                             <constraint firstItem="TUQ-ol-6UX" firstAttribute="bottom" secondItem="dZs-BV-x54" secondAttribute="bottom" id="vNB-mK-k5y"/>
