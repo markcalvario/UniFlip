@@ -32,7 +32,7 @@
 @property (strong, nonatomic) NSMutableArray *filteredArrayOfCategories;
 @property (strong, nonatomic) NSMutableArray *allListings;
 @property (strong, nonatomic) UIRefreshControl *refreshControl;
-@property (strong, nonatomic) NSMutableArray *suggestedListings;
+@property (strong, nonatomic) NSArray *suggestedListings;
 @property (strong, nonatomic) NSArray *allUsersOfUniversity;
 @property (strong, nonatomic) NSMutableArray *filteredUsers;
 @property (strong, nonatomic) NSString *searchText;
@@ -221,8 +221,6 @@ BOOL isFiltered;
             }
         }
     }
-    NSLog(@"%@", self.filteredCategoryToArrayOfPosts);
-    NSLog(@"%@", self.filteredArrayOfCategories);
     [self.listingCategoryTableView reloadData];
     
 }
@@ -497,13 +495,67 @@ BOOL isFiltered;
         [self displayConnectionErrorAlert];
     }
     else{
-        NSArray *sortedArray;
-        sortedArray = [self.allListings sortedArrayUsingComparator:^NSComparisonResult(Listing *a, Listing *b) {
-            return [b.saveCount compare:a.saveCount];
+        NSMutableArray *sortedListings = [NSMutableArray array];
+        for (Listing *listing in self.allListings){
+            if (![listing.author.objectId isEqualToString:self.currentUser.objectId]){
+                [sortedListings addObject:listing];
+            }
+        }
+        /// SORTING HERE
+        NSMutableDictionary *categoryToMultiplier = [NSMutableDictionary dictionaryWithDictionary:self.currentUser[@"visitedCategoryToCounter"]];
+        NSInteger totalListingsExcludingSelf = (NSInteger) self.allListings.count;
+        for (NSString *category in categoryToMultiplier.allKeys){
+            NSInteger count = [categoryToMultiplier[category] integerValue];
+            float multiplier = count / (float) totalListingsExcludingSelf;
+            [categoryToMultiplier setObject:[NSNumber numberWithFloat:multiplier] forKey:category];
+        }
+        
+        NSMutableDictionary *profileToMultiplier = [NSMutableDictionary dictionaryWithDictionary:self.currentUser[@"visitedProfileToCounter"]];
+        for (NSString *profileObject in profileToMultiplier.allKeys){
+            NSInteger count = [profileToMultiplier[profileObject] integerValue];
+            float multiplier = count / (float) totalListingsExcludingSelf;
+            [profileToMultiplier setObject:[NSNumber numberWithFloat:multiplier] forKey:profileObject];
+        }
+        NSMutableDictionary *listingToMultiplier = [NSMutableDictionary dictionaryWithDictionary:self.currentUser[@"visitedListingsToCounter"]];
+        for (NSString *listingObject in listingToMultiplier.allKeys){
+            NSInteger count = [listingToMultiplier[listingObject] integerValue];
+            float multiplier = count / (float) totalListingsExcludingSelf;
+            [listingToMultiplier setObject:[NSNumber numberWithFloat:multiplier] forKey:listingObject];
+        }
+        
+        NSMutableDictionary *listingToRanking = [NSMutableDictionary dictionary];
+        for (Listing *listing in sortedListings){
+            NSString *listingObjectId = listing.objectId;
+            NSString *authorObjectId = listing.author.objectId;
+            NSString *category = listing.listingCategory;
+            
+            float listingMultiplier = [listingToMultiplier[listingObjectId] floatValue];
+            float authorMultiplier = [profileToMultiplier[authorObjectId] floatValue];
+            float categoryMultiplier = [categoryToMultiplier[category] floatValue];
+            
+            float rankingValue = listingMultiplier + authorMultiplier + categoryMultiplier;
+            
+            
+            [listingToRanking setObject:[NSNumber numberWithFloat:rankingValue] forKey:listing.objectId];
+        }
+        NSArray *listingToRankingKeys = [listingToRanking allKeys];
+        NSArray *sortedKeys = [listingToRankingKeys sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
+            return [[listingToRanking objectForKey:b] compare:[listingToRanking objectForKey:a]];
         }];
-        self.suggestedListings = [NSMutableArray arrayWithArray:sortedArray];
+        
+        NSMutableDictionary *listingIdToListing = [NSMutableDictionary dictionary];
+        for (Listing *listing in sortedListings){
+            [listingIdToListing setObject:listing forKey:listing.objectId];
+        }
+        
+        sortedListings = [NSMutableArray array];
+        for (NSString *listingId in sortedKeys){
+            Listing *listing = [listingIdToListing valueForKey:listingId];
+            [sortedListings addObject:listing];
+        }
+        
+        self.suggestedListings = [NSArray arrayWithArray:sortedListings];
         [self.searchListingsBar setUserInteractionEnabled:YES];
-
         
     }
 }
