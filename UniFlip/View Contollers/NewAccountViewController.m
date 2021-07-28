@@ -27,6 +27,8 @@
 @property (strong, nonatomic) NSString *password;
 @property (strong, nonatomic) NSString *collegeName;
 
+@property (strong, nonatomic) NSMutableSet *set;
+
 @end
 
 @implementation NewAccountViewController
@@ -84,21 +86,28 @@
             //If API call successful, add the college dictionaries result into the array
            else {
                NSArray *dataArray = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-               self.arrayOfColleges = dataArray;
+               NSMutableArray *colleges = [NSMutableArray array];
+               for (NSDictionary *college in dataArray){
+                   if (![colleges containsObject:college]){
+                       [colleges addObject:college];
+                   }
+                }
+               self.arrayOfColleges = [NSArray arrayWithArray:colleges];
            }
        }];
     [task resume];
 }
 -(void) updateCollegesFromSubstring: (NSString *) universitySubstring{
-    self.arrayOfCollegesForTableView = [[NSMutableArray alloc] init];
+    self.arrayOfCollegesForTableView = [NSMutableArray array];
     for (NSDictionary *college in self.arrayOfColleges){
          NSString *collegeName = college[@"name"];
          collegeName = [collegeName lowercaseString];
-         if ([collegeName containsString:universitySubstring]){
+         if ([collegeName containsString:universitySubstring] && (![self.arrayOfCollegesForTableView containsObject:collegeName])){
              [self.arrayOfCollegesForTableView addObject: college];
          }
 
      }
+    
     [self.collegesTableView reloadData];
 }
 //*******************

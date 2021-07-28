@@ -33,7 +33,6 @@
     // Pass the selected object to the new view controller.
 }
 */
-
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     if (indexPath.row == 0){
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"FirstCell" forIndexPath:indexPath];
@@ -73,17 +72,7 @@
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     ListingCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ListingByCategory" forIndexPath:indexPath];
     Listing *listing = [self.listings objectAtIndex:indexPath.row];
-    cell.listingByCategoryPriceLabel.text = listing.listingPrice;
-    cell.listingByCategoryTitleLabel.text = listing.listingTitle;
-    PFFileObject *listingImageFile = [listing.photos objectAtIndex:0];
-    [cell.listingImage setImage:nil];
-    [listingImageFile getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
-        if (!error) {
-            UIImage *image = [UIImage imageWithData:imageData];
-            [cell.listingByCategoryImage setImage:image];
-           
-        }
-    }];
+    [cell withTitleLabel:cell.listingByCategoryTitleLabel withSaveButton:cell.listingByCategorySaveButton withPriceLabel:cell.listingByCategoryPriceLabel withListingImage:cell.listingByCategoryImage withListing:listing withCategory:@"" withIndexPath:indexPath withIsFiltered:NO withSearchText:@""];
     return cell;
 }
 

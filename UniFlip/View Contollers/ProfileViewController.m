@@ -200,7 +200,6 @@ BOOL showUserListings = TRUE;
         User *user = (User *)object;
         email = user.schoolEmail;
         [mc setToRecipients:[NSArray arrayWithObjects: email , nil]];
-        // displaying our modal view controller on the screen with standard transition
         if (mc){
             [self presentViewController:mc animated:true completion:nil];
         }
@@ -238,22 +237,7 @@ BOOL showUserListings = TRUE;
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     ListingCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ListingCell" forIndexPath:indexPath];
     Listing *listing = self.arrayOfListings[indexPath.row];
-    PFFileObject *listingImageFile = [listing.photos objectAtIndex:0];
-    [Listing PFFileToUIImage: listingImageFile completion:^(UIImage* image, NSError * error) {
-        [cell.profileListingImage setImage:image];
-    }];
-    
-    NSString *price = [@"$" stringByAppendingString:listing.listingPrice];
-    cell.profileListingPriceLabel.text = price;
-    cell.profileListingTitleLabel.text = listing.listingTitle;
-    cell.profileListingImage.image = nil;
-    if (listing.isSaved){
-        [cell.profileListingSaveButton setImage:[UIImage imageNamed:@"saved_icon"] forState:UIControlStateNormal];
-    }
-    else{
-        [cell.profileListingSaveButton setImage:[UIImage imageNamed:@"unsaved_icon"] forState:UIControlStateNormal];
-    }
-    cell.profileListingSaveButton.tag = indexPath.row;
+    [cell withTitleLabel:cell.profileListingTitleLabel withSaveButton:cell.profileListingSaveButton withPriceLabel:cell.profileListingPriceLabel withListingImage:cell.profileListingImage withListing:listing withCategory:@"" withIndexPath:indexPath withIsFiltered:NO withSearchText:@""];
     [self updateSaveButtonUI:listing.isSaved withButton: cell.profileListingSaveButton];
     [cell.profileListingSaveButton addTarget:self action:@selector(didTapSaveIcon:) forControlEvents: UIControlEventTouchUpInside];
     return cell;

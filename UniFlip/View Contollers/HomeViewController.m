@@ -231,20 +231,7 @@ BOOL isFiltered;
         tableView.allowsSelection = YES;
         ProfileCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ProfileCell"];
         User *user = [self.filteredUsers objectAtIndex:indexPath.row];
-        cell.usernameLabel.text = user.username;
-        NSRange usernameRange = [user.username rangeOfString:self.searchText options:NSCaseInsensitiveSearch];
-        NSMutableAttributedString *substring = [[NSMutableAttributedString alloc] initWithString:user.username];
-        [substring addAttribute:NSForegroundColorAttributeName value:[UIColor blueColor] range:usernameRange];
-        cell.usernameLabel.attributedText = substring;
-        PFFileObject *profilePicFile = user.profilePicture;
-        [profilePicFile getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
-            if (!error) {
-                UIImage *image = [UIImage imageWithData:imageData];
-                image ? [cell.profilePic setImage:image] : [cell.profilePic setImage:[UIImage imageNamed:@"default_profile_pic"]];
-            }
-        }];
-        cell.profilePic.layer.cornerRadius = cell.profilePic.frame.size.width / 2;
-        cell.profilePic.clipsToBounds = YES;
+        [cell populateProfileCellInWithUser:user withIndexPath:indexPath withSearchText:self.searchText];
         return cell;
     }
     else{
@@ -257,11 +244,7 @@ BOOL isFiltered;
         else{
             category = [self.arrayOfCategories objectAtIndex: indexPath.row];
         }
-        cell.categoryLabel.text = category;
-        cell.categoryLabel.accessibilityLabel = category;
-        cell.listingCollectionView.tag = indexPath.row;
-        cell.listingCollectionView.scrollEnabled = NO;
-        cell.viewAllButton.tag = indexPath.row;
+        [cell populateCategoryCellInHomeWithCategory:category withIndexPath:indexPath];
         [cell.viewAllButton addTarget:self action:@selector(didTapViewAll:) forControlEvents:UIControlEventTouchUpInside];
         return cell;
 
@@ -344,34 +327,7 @@ BOOL isFiltered;
         currentCategoryArray = self.categoryToArrayOfPosts[tableViewCategory];
     }
     Listing *listing = currentCategoryArray[indexPath.row];
-    listingCell.titleLabel.text = listing.listingTitle;
-    
-    if (isFiltered && self.searchText.length > 0){
-        NSRange listingTitleRange = [listing.listingTitle rangeOfString:self.searchText options:NSCaseInsensitiveSearch];
-        NSMutableAttributedString *substring = [[NSMutableAttributedString alloc] initWithString:listing.listingTitle];
-        [substring addAttribute:NSForegroundColorAttributeName value:[UIColor blueColor] range:listingTitleRange];
-        listingCell.titleLabel.attributedText = substring;
-    }
-    else{
-        listingCell.titleLabel.text = listing.listingTitle;
-    }
-    
-    NSString *price = listing.listingPrice;
-    listingCell.priceLabel.text = [@"$" stringByAppendingString: price];
-    listingCell.profileListingTitleLabel.text = listing.listingTitle;
-    
-    PFFileObject *listingImageFile = [listing.photos objectAtIndex:0];
-    [listingCell.listingImage setImage:nil];
-    [listingImageFile getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
-        if (!error) {
-            UIImage *image = [UIImage imageWithData:imageData];
-            [listingCell.listingImage setImage:image];
-           
-        }
-    }];
-    listingCell.saveButton.tag = indexPath.row;
-    [listingCell.saveButton setTitle: tableViewCategory forState:UIControlStateNormal];
-    listingCell.saveButton.titleLabel.font = [UIFont systemFontOfSize:0];
+    [listingCell withTitleLabel: listingCell.titleLabel withSaveButton:listingCell.saveButton withPriceLabel:listingCell.priceLabel withListingImage:listingCell.listingImage withListing:listing withCategory:tableViewCategory withIndexPath:indexPath withIsFiltered:isFiltered withSearchText:self.searchText];
     [self updateSaveButtonUI:listing.isSaved withButton: listingCell.saveButton];
     [listingCell.saveButton addTarget:self action:@selector(didTapSaveIcon:) forControlEvents: UIControlEventTouchUpInside];
     return listingCell;
@@ -429,7 +385,6 @@ BOOL isFiltered;
         else{
             listing = self.categoryToArrayOfPosts[[sender currentTitle]][sender.tag];
         }
-        
         if (listing.isSaved){
             NSLog(@"was saved but is now not saved");
             [Listing postUnsaveListing:listing withUser:self.currentUser completion:^(BOOL succeeded, NSError * _Nullable error) {
@@ -475,13 +430,10 @@ BOOL isFiltered;
     else{
         category = [self.filteredArrayOfCategories objectAtIndex:button.tag];
         listings = self.filteredCategoryToArrayOfPosts[category];
-
     }
     [self performSegueWithIdentifier:@"HomeToViewByCategory" sender:listings];
-
-    
 }
--(void) updateSaveButtonUI:(BOOL )isSaved withButton:(UIButton *)saveButton{
+-(void) updateSaveButtonUI:(BOOL)isSaved withButton:(UIButton *)saveButton{
     if (isSaved){
         [saveButton setImage:[UIImage imageNamed:@"saved_icon"] forState:UIControlStateNormal];
     }
@@ -534,8 +486,6 @@ BOOL isFiltered;
             float categoryMultiplier = [categoryToMultiplier[category] floatValue];
             
             float rankingValue = listingMultiplier + authorMultiplier + categoryMultiplier;
-            
-            
             [listingToRanking setObject:[NSNumber numberWithFloat:rankingValue] forKey:listing.objectId];
         }
         NSArray *listingToRankingKeys = [listingToRanking allKeys];

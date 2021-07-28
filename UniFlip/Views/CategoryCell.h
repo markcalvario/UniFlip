@@ -12,9 +12,9 @@ NS_ASSUME_NONNULL_BEGIN
 @interface CategoryCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UILabel *categoryLabel;
 @property (weak, nonatomic) IBOutlet UICollectionView *listingCollectionView;
-@property (strong, nonatomic) NSIndexPath *tableViewIndexPath;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *listingCollectionViewHeight;
 @property (strong, nonatomic) IBOutlet UIButton *viewAllButton;
+- (void) populateCategoryCellInHomeWithCategory:(NSString *)category withIndexPath:(NSIndexPath *)indexPath;
 
 
 

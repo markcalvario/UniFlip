@@ -6,6 +6,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Listing.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -14,8 +15,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UILabel *priceLabel;
 @property (strong, nonatomic) IBOutlet UIImageView *listingImage;
 @property (weak, nonatomic) IBOutlet UIButton *saveButton;
-
-
 
 // For the ProfileViewController
 @property (weak, nonatomic) IBOutlet UIImageView *profileListingImage;
@@ -29,6 +28,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet UILabel *listingByCategoryTitleLabel;
 @property (strong, nonatomic) IBOutlet UIButton *listingByCategorySaveButton;
 
+
+- (void) withTitleLabel:(UILabel *) titleLabel withSaveButton:(UIButton *) saveButton withPriceLabel: (UILabel *)priceLabel withListingImage: (UIImageView *)listingImage withListing:(Listing *)listing withCategory: (NSString *)category withIndexPath: (NSIndexPath *)indexPath withIsFiltered:(BOOL)isFiltered withSearchText:(NSString *)searchText;
 
 @end
 

@@ -6,12 +6,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "User.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ProfileCell : UITableViewCell
 @property (strong, nonatomic) IBOutlet UIImageView *profilePic;
 @property (strong, nonatomic) IBOutlet UILabel *usernameLabel;
+- (void) populateProfileCellInWithUser:(User *)user withIndexPath:(NSIndexPath *)indexPath withSearchText:(NSString *)searchText;
 
 @end
 
