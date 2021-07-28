@@ -503,22 +503,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "12919797-3C49-41F3-95DF-1179695C91D5"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "UniFlip/Models/Listing.m"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "57"
-            endingLineNumber = "57"
-            landmarkName = "+postUserListing:withTitle:withType:withDescription:withLocation:withCategory:withBrand:withCondition:withPrice:withCompletion:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "6F588E5F-B1AE-45DF-9385-F4322A74D443"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -551,38 +535,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "6292F5CF-8307-41C3-9952-0819B2E3DB42"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "UniFlip/Models/Listing.m"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "41"
-            endingLineNumber = "41"
-            landmarkName = "+postUserListing:withTitle:withType:withDescription:withLocation:withCategory:withBrand:withCondition:withPrice:withCompletion:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "FB1A9518-B7D8-469A-9514-0C3035CCB549"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "UniFlip/Models/Listing.m"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "58"
-            endingLineNumber = "58"
-            landmarkName = "+postUserListing:withTitle:withType:withDescription:withLocation:withCategory:withBrand:withCondition:withPrice:withCompletion:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "54D431B3-71C2-4388-A3E0-8678A2C99A26"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -590,9 +542,9 @@
             filePath = "UniFlip/View Contollers/HomeViewController.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "362"
-            endingLineNumber = "362"
-            landmarkName = "-collectionView:cellForItemAtIndexPath:"
+            startingLineNumber = "348"
+            endingLineNumber = "348"
+            landmarkName = "-updateListingsByCategory"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -663,54 +615,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "1B08C3B9-BDCF-4032-87F1-F07ACDAEEE60"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "UniFlip/View Contollers/HomeViewController.m"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "304"
-            endingLineNumber = "304"
-            landmarkName = "-tableView:didSelectRowAtIndexPath:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "97297F61-8060-4BC6-9AC9-FBBBED083520"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "UniFlip/View Contollers/HomeViewController.m"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "194"
-            endingLineNumber = "194"
-            landmarkName = "-displayScopeBar"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "A7CEA368-C5A4-4C30-8F0C-06B065FEF6AC"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "UniFlip/View Contollers/HomeViewController.m"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "196"
-            endingLineNumber = "196"
-            landmarkName = "-displayScopeBar"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "4E230F15-5389-43E9-A743-5CC6931811E2"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
@@ -718,122 +622,170 @@
             filePath = "UniFlip/View Contollers/HomeViewController.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "249"
-            endingLineNumber = "249"
-            landmarkName = "-tableView:cellForRowAtIndexPath:"
+            startingLineNumber = "235"
+            endingLineNumber = "235"
+            landmarkName = "-updateListingsByCategory"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "9D9A36E5-E02A-490C-A750-37BB25A5B7C3"
+            uuid = "18D3E58E-AA32-41DE-AC25-EC4BE40DD829"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "UniFlip/View Contollers/HomeViewController.m"
+            filePath = "UniFlip/Models/Listing.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "305"
-            endingLineNumber = "305"
-            landmarkName = "-tableView:didSelectRowAtIndexPath:"
+            startingLineNumber = "68"
+            endingLineNumber = "68"
+            landmarkName = "+postSaveListing:withUser:completion:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "1F9BE9B4-3F86-4451-B25E-553DA70C168B"
+            uuid = "4063FC4F-983A-4453-942F-FAFD5B251FFD"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "UniFlip/View Contollers/HomeViewController.m"
+            filePath = "UniFlip/Models/Listing.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "274"
-            endingLineNumber = "274"
-            landmarkName = "-tableView:cellForRowAtIndexPath:"
+            startingLineNumber = "71"
+            endingLineNumber = "71"
+            landmarkName = "+postSaveListing:withUser:completion:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "32423B56-9EB3-4FEC-B142-85B89AB421FC"
+            uuid = "EDC5F048-88A0-4C89-8EB6-138D5D7BCD71"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "UniFlip/View Contollers/HomeViewController.m"
+            filePath = "UniFlip/Models/Listing.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "271"
-            endingLineNumber = "271"
-            landmarkName = "-tableView:cellForRowAtIndexPath:"
+            startingLineNumber = "63"
+            endingLineNumber = "63"
+            landmarkName = "+postSaveListing:withUser:completion:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "FAB4A83D-B5E8-40C7-AC2E-07DB989724DD"
+            uuid = "C2D59C60-A2AD-413B-9D50-0AA81CB89E7B"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "UniFlip/View Contollers/HomeViewController.m"
+            filePath = "UniFlip/Models/Listing.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "413"
-            endingLineNumber = "413"
-            landmarkName = "-collectionView:didSelectItemAtIndexPath:"
+            startingLineNumber = "62"
+            endingLineNumber = "62"
+            landmarkName = "+postSaveListing:withUser:completion:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "87A5E742-C7BE-48D3-922F-7CC71E02C50C"
+            uuid = "F05EBF35-1DE0-4365-9134-6E5186512375"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "UniFlip/View Contollers/HomeViewController.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "414"
-            endingLineNumber = "414"
-            landmarkName = "-collectionView:didSelectItemAtIndexPath:"
+            startingLineNumber = "190"
+            endingLineNumber = "190"
+            landmarkName = "-updateListingsByCategory"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9DFCB08B-C5C3-42FC-80C4-84F505F24450"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "UniFlip/View Contollers/HomeViewController.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "199"
+            endingLineNumber = "199"
+            landmarkName = "-updateListingsByCategory"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "225A131D-365C-4FED-86BE-58B25BADE078"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "UniFlip/View Contollers/HomeViewController.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "204"
+            endingLineNumber = "204"
+            landmarkName = "-updateListingsByCategory"
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "87A5E742-C7BE-48D3-922F-7CC71E02C50C - 240f5d2c7c40a27d"
+                  uuid = "225A131D-365C-4FED-86BE-58B25BADE078 - 3357a88b201832a5"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "-[HomeViewController didTapSaveIcon:]"
+                  symbolName = "-[HomeViewController updateSearchResults:]"
                   moduleName = "UniFlip"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/mac2492/Desktop/UniFlip/UniFlip/View%20Contollers/HomeViewController.m"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "446"
-                  endingLineNumber = "446"
-                  offsetFromSymbolStart = "576">
+                  startingLineNumber = "204"
+                  endingLineNumber = "204"
+                  offsetFromSymbolStart = "1548">
                </Location>
                <Location
-                  uuid = "87A5E742-C7BE-48D3-922F-7CC71E02C50C - 462138b2e8eb99ac"
+                  uuid = "225A131D-365C-4FED-86BE-58B25BADE078 - 3357a88b201832a5"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "__37-[HomeViewController didTapSaveIcon:]_block_invoke"
+                  symbolName = "-[HomeViewController updateSearchResults:]"
                   moduleName = "UniFlip"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/mac2492/Desktop/UniFlip/UniFlip/View%20Contollers/HomeViewController.m"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "447"
-                  endingLineNumber = "447"
-                  offsetFromSymbolStart = "55">
+                  startingLineNumber = "204"
+                  endingLineNumber = "204"
+                  offsetFromSymbolStart = "1556">
                </Location>
             </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D7FB4FAE-769C-425C-9185-AC0709747F73"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "UniFlip/View Contollers/HomeViewController.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "210"
+            endingLineNumber = "210"
+            landmarkName = "-updateListingsByCategory"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

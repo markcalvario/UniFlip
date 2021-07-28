@@ -46,27 +46,21 @@ BOOL isFiltered;
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
     self.searchListingsBar.delegate = self;
     [self.searchListingsBar setUserInteractionEnabled:NO];
     isFiltered = NO;
     self.searchListingsBar.showsScopeBar = NO;
-
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(updateListingsByCategory) forControlEvents:UIControlEventValueChanged];
     [self.listingCategoryTableView insertSubview:self.refreshControl atIndex:0];
-    
     self.listingCategoryTableView.delegate = self;
     self.listingCategoryTableView.dataSource = self;
-    
     self.currentUser = [User currentUser];
-    
 }
 -(void) viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self displayHomeScreen];
 }
-
 -(void) displayHomeScreen{
     if ([self isConnectedToInternet]){
         [self updateListingsByCategory];
@@ -80,17 +74,6 @@ BOOL isFiltered;
     else{
         [self displayConnectionErrorAlert];
     }
-    
-}
-- (BOOL) isConnectedToInternet{
-    Reachability *reach = [Reachability reachabilityForInternetConnection];
-    return [reach isReachable];
-}
--(void) displayConnectionErrorAlert{
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Unable to connect to the internet" message:@"Please check your internet connection and try again." preferredStyle:(UIAlertControllerStyleAlert)];
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Try again" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {}];
-    [alert addAction:okAction];
-    [self presentViewController:alert animated:YES completion:^{ }];
 }
 -(void) updateListingsByCategory{
     if (![self isConnectedToInternet]){
@@ -114,57 +97,58 @@ BOOL isFiltered;
         [query findObjectsInBackgroundWithBlock:^(NSArray<Listing *> * _Nullable listings, NSError * _Nullable error) {
             if (listings) {
                 allListings = [NSMutableArray arrayWithArray:listings];
+                for (Listing *listing in allListings){
+                    if ([listing.author.university isEqualToString: self.currentUser.university]){
+                        __block BOOL isListingSaved = FALSE;
+                        //Adding listing to appropiate dictionary key
+                        NSString *category = listing.listingCategory;
+                        if ( [self.categoryToArrayOfPosts objectForKey:listing.listingCategory]){
+                            NSMutableArray *arrayOfListingsValue = [self.categoryToArrayOfPosts objectForKey:category];
+                            [arrayOfListingsValue addObject:listing];
+                            [self.categoryToArrayOfPosts setObject:arrayOfListingsValue forKey:category];
+                        }
+                        else{
+                            NSMutableArray *arrayOfListingsValue = [[NSMutableArray alloc] init];
+                            [arrayOfListingsValue addObject:listing];
+                            [self.arrayOfCategories addObject: category];
+                            [self.categoryToArrayOfPosts setObject:arrayOfListingsValue forKey:category];
+                        }
+                        [self.allListings addObject:listing];
+                        //checking for saved listings by user
+                        PFRelation *relation = [listing relationForKey:@"savedBy"];
+                        PFQuery *query = [relation query];
+                        __block NSArray *savedByUsers = [NSArray array];
+                        [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable arrayOfUsers, NSError * _Nullable error) {
+                            if (arrayOfUsers){
+                                savedByUsers = arrayOfUsers;
+                                for (User *user in savedByUsers){
+                                    if ([user.username isEqualToString: self.currentUser.username]){
+                                        listing.isSaved = TRUE;
+                                        isListingSaved = TRUE;
+                                    }
+                                }
+                                if (!isListingSaved){
+                                    listing.isSaved = FALSE;
+                                }
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    [self.loadingSpinner stopAnimating];
+                                    self.loadingSpinner.hidden = YES;
+                                    [self.view setAlpha:1];
+                                    [self.refreshControl endRefreshing];
+                                    [self.listingCategoryTableView reloadData];
+                                    [self updateSuggestedListings];
+                                });
+                            }else{
+                                NSLog(@"Could not load saved listings");
+                            }
+                        }];
+                    }
+                }
             }
             else{
                 NSLog(@"%@", error.localizedDescription);
             }
-            for (Listing *listing in allListings){
-                if ([listing.author.university isEqualToString: self.currentUser.university]){
-                    __block BOOL isListingSaved = FALSE;
-                    //Adding listing to appropiate dictionary key
-                    NSString *category = listing.listingCategory;
-                    if ( [self.categoryToArrayOfPosts objectForKey:listing.listingCategory]){
-                        NSMutableArray *arrayOfListingsValue = [self.categoryToArrayOfPosts objectForKey:category];
-                        [arrayOfListingsValue addObject:listing];
-                        [self.categoryToArrayOfPosts setObject:arrayOfListingsValue forKey:category];
-                    }
-                    else{
-                        NSMutableArray *arrayOfListingsValue = [[NSMutableArray alloc] init];
-                        [arrayOfListingsValue addObject:listing];
-                        [self.arrayOfCategories addObject: category];
-                        [self.categoryToArrayOfPosts setObject:arrayOfListingsValue forKey:category];
-                    }
-                    [self.allListings addObject:listing];
-                    //checking for saved listings by user
-                    PFRelation *relation = [listing relationForKey:@"savedBy"];
-                    PFQuery *query = [relation query];
-                    __block NSArray *savedByUsers = [NSArray array];
-                    [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable arrayOfUsers, NSError * _Nullable error) {
-                        if (arrayOfUsers){
-                            savedByUsers = arrayOfUsers;
-                        }else{
-                            NSLog(@"Could not load saved listings");
-                        }
-                        for (User *user in savedByUsers){
-                            if ([user.username isEqualToString: self.currentUser.username]){
-                                listing.isSaved = TRUE;
-                                isListingSaved = TRUE;
-                            }
-                        }
-                        if (!isListingSaved){
-                            listing.isSaved = FALSE;
-                        }
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            [self.loadingSpinner stopAnimating];
-                            self.loadingSpinner.hidden = YES;
-                            [self.view setAlpha:1];
-                            [self.refreshControl endRefreshing];
-                            [self.listingCategoryTableView reloadData];
-                            [self updateSuggestedListings];
-                        });
-                    }];
-                }
-            }
+            
         }];
     }
 }
@@ -215,8 +199,8 @@ BOOL isFiltered;
                 NSRange listingTitleRange = [listing.listingTitle rangeOfString:searchText options:NSCaseInsensitiveSearch];
                 if (listingTitleRange.location != NSNotFound){
                     if ( [self.filteredCategoryToArrayOfPosts objectForKey:listing.listingCategory]){
-                        NSMutableArray *arrayOfListingsValue = [self.categoryToArrayOfPosts objectForKey:listing.listingCategory];
-                        [self.filteredArrayOfCategories addObject: listing.listingCategory];
+                        NSMutableArray *arrayOfListingsValue = [self.filteredCategoryToArrayOfPosts objectForKey:listing.listingCategory];
+                        [arrayOfListingsValue addObject:listing];
                         [self.filteredCategoryToArrayOfPosts setObject:arrayOfListingsValue forKey:listing.listingCategory];
                     }
                     else{
@@ -237,6 +221,8 @@ BOOL isFiltered;
             }
         }
     }
+    NSLog(@"%@", self.filteredCategoryToArrayOfPosts);
+    NSLog(@"%@", self.filteredArrayOfCategories);
     [self.listingCategoryTableView reloadData];
     
 }
@@ -386,7 +372,7 @@ BOOL isFiltered;
         }
     }];
     listingCell.saveButton.tag = indexPath.row;
-    [listingCell.saveButton setTitle: listing.listingCategory forState:UIControlStateNormal];
+    [listingCell.saveButton setTitle: tableViewCategory forState:UIControlStateNormal];
     listingCell.saveButton.titleLabel.font = [UIFont systemFontOfSize:0];
     [self updateSaveButtonUI:listing.isSaved withButton: listingCell.saveButton];
     [listingCell.saveButton addTarget:self action:@selector(didTapSaveIcon:) forControlEvents: UIControlEventTouchUpInside];
@@ -397,8 +383,6 @@ BOOL isFiltered;
     UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *) collectionViewLayout;
     layout.minimumLineSpacing = 1;
     layout.minimumInteritemSpacing = 3;
-
-    
     CGFloat numberOfItemsPerRow = 2;
     CGFloat itemWidth = (collectionView.frame.size.width - layout.minimumInteritemSpacing *(numberOfItemsPerRow))/numberOfItemsPerRow;
     CGFloat itemHeight = itemWidth *1.25;
@@ -440,7 +424,14 @@ BOOL isFiltered;
         [self.loadingSpinner startAnimating];
         self.loadingSpinner.hidden = NO;
         [self.view setAlpha:0.75];
-        Listing *listing = self.categoryToArrayOfPosts[[sender currentTitle]][sender.tag];
+        Listing *listing;
+        if (isFiltered){
+            listing = self.filteredCategoryToArrayOfPosts[[sender currentTitle]][sender.tag];
+        }
+        else{
+            listing = self.categoryToArrayOfPosts[[sender currentTitle]][sender.tag];
+        }
+        
         if (listing.isSaved){
             NSLog(@"was saved but is now not saved");
             [Listing postUnsaveListing:listing withUser:self.currentUser completion:^(BOOL succeeded, NSError * _Nullable error) {
@@ -451,6 +442,9 @@ BOOL isFiltered;
                     [self.loadingSpinner stopAnimating];
                     self.loadingSpinner.hidden = YES;
                     [self.view setAlpha:1];
+                }
+                else{
+                    NSLog(@"unsuccessful 1");
                 }
             }];
         }
@@ -464,6 +458,9 @@ BOOL isFiltered;
                     [self.loadingSpinner stopAnimating];
                     self.loadingSpinner.hidden = YES;
                     [self.view setAlpha:1];
+                }
+                else{
+                    NSLog(@"unsuccessful 2");
                 }
             }];
         }
@@ -500,110 +497,26 @@ BOOL isFiltered;
         [self displayConnectionErrorAlert];
     }
     else{
-        dispatch_group_t dispatchGroup = dispatch_group_create();
-
-        NSDictionary *categoriesVisitedToCount = self.currentUser[@"categoriesVisitedToClick"];
-        //NSLog(@"%@", categoriesVisitedToCount);
-        NSNumber *highestCount = 0;
-        NSString *mostViewedCategory = @"";
-        for (NSString *category in categoriesVisitedToCount){
-            NSNumber *count = categoriesVisitedToCount[category];
-            if ([count doubleValue] > [highestCount doubleValue]){
-                highestCount = count;
-                mostViewedCategory = category;
-            }
-        }
-        NSDictionary *usersVisitedToCounter = self.currentUser[@"visitedProfileToCounter"];
-        //NSLog(@"%@", usersVisitedToCounter);
-        highestCount = 0;
-        NSString *mostViewedUser = @"";
-        for (NSString *user in usersVisitedToCounter){
-            NSNumber *count = usersVisitedToCounter[user];
-            if ([count doubleValue] > [highestCount doubleValue]){
-                highestCount = count;
-                mostViewedUser = user;
-            }
-        }
-        PFQuery *query = [Listing query];
-        [query includeKey:@"savedBy"];
-        [query orderByDescending:@"saveCount"];
-        [query includeKey:@"author"];
-        //__block NSMutableArray *mutableArrayOfAllListings = [NSMutableArray array];
-        __block NSMutableArray *sortedListings = [NSMutableArray array];
-        dispatch_group_enter(dispatchGroup);
-        [query findObjectsInBackgroundWithBlock:^(NSArray<Listing *> * _Nullable allListings, NSError * _Nullable error) {
-            if (allListings) {
-                //mutableArrayOfAllListings = [NSMutableArray arrayWithArray:allListings];
-                sortedListings = [NSMutableArray array];
-                NSInteger numberOfListingsWithHighestCategory = 0;
-                for (Listing *listing in allListings){
-                    if (![listing.author.objectId isEqualToString:self.currentUser.objectId]){
-                        [sortedListings addObject:listing];
-                        if ([listing.listingCategory isEqualToString:mostViewedCategory]){
-                            numberOfListingsWithHighestCategory++;
-                        }
-                    }
-                    
-                }
-                
-                NSInteger length_of_array = (NSInteger) sortedListings.count;
-                NSInteger starting_index = 0;
-                NSInteger ending_index = (length_of_array - 1);
-
-                while (ending_index > starting_index){
-                    
-                    Listing *starting_listing = [sortedListings objectAtIndex:starting_index];
-                    Listing *ending_listing = [sortedListings objectAtIndex:ending_index];
-                    //NSLog(@"%@", starting_listing[@"savedBy"]);
-                    if ([starting_listing.listingCategory isEqualToString:mostViewedCategory]){
-                        starting_index += 1;
-                    }
-                    else if (![starting_listing.listingCategory isEqualToString:mostViewedCategory] && [ending_listing.listingCategory isEqualToString:mostViewedCategory]){
-                        [sortedListings exchangeObjectAtIndex:starting_index withObjectAtIndex:ending_index];
-                        starting_index += 1;
-                        ending_index -= 1;
-                        
-                    }
-                    else{
-                        //starting_index
-                        ending_index -= 1;
-                    }
-                }
-
-                NSArray *mostViewedCategorySubarray = [sortedListings subarrayWithRange:NSMakeRange(0, numberOfListingsWithHighestCategory)];
-                length_of_array = (NSInteger) mostViewedCategorySubarray.count;
-                starting_index = 0;
-                ending_index = (length_of_array - 1);
-                while (ending_index > starting_index){
-                    
-                    Listing *starting_listing = [sortedListings objectAtIndex:starting_index];
-                    Listing *ending_listing = [sortedListings objectAtIndex:ending_index];
-                    //NSLog(@"%@", starting_listing[@"savedBy"]);
-                    if ([starting_listing.author.objectId isEqualToString:mostViewedUser]){
-                        starting_index += 1;
-                    }
-                    else if (![starting_listing.author.objectId isEqualToString:mostViewedUser] && [ending_listing.author.objectId isEqualToString:mostViewedUser]){
-                        [sortedListings exchangeObjectAtIndex:starting_index withObjectAtIndex:ending_index];
-                        starting_index += 1;
-                        ending_index -= 1;
-                    }
-                    else{
-                        //starting_index
-                        ending_index -= 1;
-                    }
-                }
-            }
-            else{
-                NSLog(@"%@", error.localizedDescription);
-            }
-            dispatch_group_leave(dispatchGroup);
+        NSArray *sortedArray;
+        sortedArray = [self.allListings sortedArrayUsingComparator:^NSComparisonResult(Listing *a, Listing *b) {
+            return [b.saveCount compare:a.saveCount];
         }];
-        dispatch_group_notify(dispatchGroup, dispatch_get_main_queue(), ^(void){
-            self.suggestedListings  = sortedListings;
-            [self.searchListingsBar setUserInteractionEnabled:YES];
-        });
+        self.suggestedListings = [NSMutableArray arrayWithArray:sortedArray];
+        [self.searchListingsBar setUserInteractionEnabled:YES];
+
         
     }
+}
+
+- (BOOL) isConnectedToInternet{
+    Reachability *reach = [Reachability reachabilityForInternetConnection];
+    return [reach isReachable];
+}
+-(void) displayConnectionErrorAlert{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Unable to connect to the internet" message:@"Please check your internet connection and try again." preferredStyle:(UIAlertControllerStyleAlert)];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Try again" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {}];
+    [alert addAction:okAction];
+    [self presentViewController:alert animated:YES completion:^{ }];
 }
 
 #pragma mark - Navigation
