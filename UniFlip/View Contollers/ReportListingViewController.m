@@ -23,6 +23,7 @@
     // Do any additional setup after loading the view.
     self.currentUser = [User currentUser];
     self.reportTextView.placeholder = @"Reason for reporting";
+    [self addAccessibility];
     
 }
 - (IBAction)didTapReport:(id)sender {
@@ -36,6 +37,13 @@
                 NSLog(@"Could not report");
             }
     }];
+}
+-(void) addAccessibility{
+    self.reportTextView.isAccessibilityElement = YES;
+    self.reportButton.isAccessibilityElement = YES;
+    
+    self.reportTextView.accessibilityValue = [@"Type in a reason for reporting" stringByAppendingString:self.listing.listingTitle];
+    self.reportButton.accessibilityValue = @"Tap this button to submit your report for this listing";
 }
 
 /*

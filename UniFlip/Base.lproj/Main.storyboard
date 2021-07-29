@@ -136,6 +136,8 @@
                     </view>
                     <navigationItem key="navigationItem" id="wwY-Jt-ihd"/>
                     <connections>
+                        <outlet property="createNewAccountButton" destination="56C-re-pzA" id="Mat-wq-M0I"/>
+                        <outlet property="loginButton" destination="5iq-51-E8s" id="NgY-f1-m2J"/>
                         <outlet property="passwordLabel" destination="050-kp-xA3" id="mj8-Y7-FdC"/>
                         <outlet property="usernameOrEmailLabel" destination="NG1-6d-RZG" id="wXf-kC-iaF"/>
                         <segue destination="5VU-bK-wVp" kind="presentation" identifier="LoginToHomeSegue" id="pcO-x9-Iof"/>
@@ -158,7 +160,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <searchBar contentMode="redraw" placeholder="Search for listings" translatesAutoresizingMaskIntoConstraints="NO" id="IIf-rw-qWN">
+                            <searchBar contentMode="redraw" placeholder="Search for listings or users" translatesAutoresizingMaskIntoConstraints="NO" id="IIf-rw-qWN">
                                 <rect key="frame" x="0.0" y="88" width="414" height="51"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <scopeButtonTitles>
@@ -794,56 +796,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ai5-50-uvj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1902.8985507246377" y="103.79464285714285"/>
-        </scene>
-        <!--Select Option View Controller-->
-        <scene sceneID="0xE-vQ-77k">
-            <objects>
-                <viewController storyboardIdentifier="SelectOptionViewController" modalPresentationStyle="fullScreen" id="CVR-2k-8Mo" customClass="SelectOptionViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="wlZ-CZ-Dz0">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="2lX-7a-Xkl">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="813"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="OptionCell2" rowHeight="59" id="Pqv-Aj-WnA" customClass="OptionCell">
-                                        <rect key="frame" x="0.0" y="24.5" width="414" height="59"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Pqv-Aj-WnA" id="pd8-6F-XeQ">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="59"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EkP-M5-Nsr">
-                                                    <rect key="frame" x="20" y="11" width="374" height="34"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <state key="normal" title="Button"/>
-                                                    <connections>
-                                                        <action selector="didTapOption:" destination="Pqv-Aj-WnA" eventType="touchUpInside" id="uAH-OG-Wco"/>
-                                                    </connections>
-                                                </button>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                        <connections>
-                                            <outlet property="optionButton" destination="EkP-M5-Nsr" id="q2s-vU-54h"/>
-                                        </connections>
-                                    </tableViewCell>
-                                </prototypes>
-                            </tableView>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="XH4-XM-D59"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="Rbb-bZ-mkO"/>
-                    <connections>
-                        <outlet property="optionsTableView" destination="2lX-7a-Xkl" id="733-B8-yhl"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="32A-Yd-alT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2670" y="907"/>
+            <point key="canvasLocation" x="1886" y="115"/>
         </scene>
         <!--Profile View Controller-->
         <scene sceneID="RnB-kT-ldm">
@@ -1183,6 +1136,7 @@ Cg
                         <outlet property="addPhotoIcon" destination="Stm-vf-vaV" id="hz4-GC-3oQ"/>
                         <outlet property="bioTextView" destination="zW4-Um-JSS" id="gag-8H-cf7"/>
                         <outlet property="profilePicButton" destination="iRQ-CN-Kc2" id="rw4-Gp-C65"/>
+                        <outlet property="saveChangesButton" destination="mxI-bu-86h" id="3hr-Wg-Q3S"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dgd-Yi-qaG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1343,7 +1297,9 @@ Cg
                         <outlet property="collegeTextField" destination="kSl-Rg-mJV" id="2el-5C-Mdo"/>
                         <outlet property="collegesTableView" destination="MU9-CA-fpk" id="LyO-gN-hwM"/>
                         <outlet property="passwordField" destination="1o6-eE-KJ8" id="K4l-Vc-Jmr"/>
+                        <outlet property="registerButton" destination="BlG-3a-H9L" id="SgC-gg-3Qu"/>
                         <outlet property="schoolEmailField" destination="dY6-uf-eF5" id="lc2-gC-njf"/>
+                        <outlet property="toLoginScreenButton" destination="7kU-mm-6Yc" id="1Eg-Xm-2Dg"/>
                         <outlet property="usernameField" destination="8gD-8M-n7f" id="lE9-Ko-2qJ"/>
                         <segue destination="BYZ-38-t0r" kind="show" identifier="SuccessfulRegisterToLogin" id="hxG-tt-Luk"/>
                     </connections>
@@ -1659,6 +1615,7 @@ Cg
                     </navigationItem>
                     <connections>
                         <outlet property="categoryLabel" destination="o7R-pQ-1vG" id="arT-ue-PkE"/>
+                        <outlet property="composeMailButton" destination="ssl-a0-r5E" id="syj-3o-HzS"/>
                         <outlet property="descriptionLabel" destination="lNs-cD-jBU" id="GIT-un-CfY"/>
                         <outlet property="imageOfAuthorButton" destination="hdC-lu-ffu" id="0nA-J2-Lcp"/>
                         <outlet property="listingImageTapGesture" destination="0eg-qE-n2C" id="HhW-G7-NDH"/>
@@ -1706,7 +1663,7 @@ Cg
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="nHl-qN-Fv6"/>
-        <segue reference="4Y7-XG-abQ"/>
+        <segue reference="1cV-ZD-tXO"/>
         <segue reference="vaY-ad-883"/>
         <segue reference="yJF-wa-pAP"/>
     </inferredMetricsTieBreakers>

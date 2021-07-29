@@ -11,6 +11,8 @@
 #import "User.h"
 #import "Listing.h"
 #import <QuartzCore/QuartzCore.h>
+#import "MaterialActionSheet.h"
+
 
 @import UITextView_Placeholder;
 
@@ -20,6 +22,7 @@
 @property (strong, nonatomic) IBOutlet UITextView *bioTextView;
 @property (strong, nonatomic) UIAlertController *photoSelectorAlert;
 @property (strong, nonatomic) IBOutlet UIImageView *addPhotoIcon;
+@property (strong, nonatomic) IBOutlet UIButton *saveChangesButton;
 
 @end
 
@@ -29,6 +32,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self displayEditProfile];
+    [self addAccessiblity];
 }
 - (void)viewWillAppear:(BOOL)animated{
     [self displayEditProfile];
@@ -80,33 +84,30 @@
      UIImagePickerController *imagePickerVC = [UIImagePickerController new];
      imagePickerVC.delegate = self;
      imagePickerVC.allowsEditing = YES;
-     self.photoSelectorAlert = [UIAlertController alertControllerWithTitle:@"Select a photo" message:@""
-                                preferredStyle:UIAlertControllerStyleActionSheet];
+    MDCActionSheetController *actionSheet =
+        [MDCActionSheetController actionSheetControllerWithTitle:@""];
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        MDCActionSheetAction *selectCameraAction = [MDCActionSheetAction actionWithTitle:@"Camera"
+                                            image:[UIImage systemImageNamed:@"camera"]
+                                            handler:^(MDCActionSheetAction *action){
+            [self dismissViewControllerAnimated:TRUE completion:^{
+                imagePickerVC.sourceType = UIImagePickerControllerSourceTypeCamera;
+                [self presentViewController:imagePickerVC animated:YES completion:nil];
+            }];
+        }];
+        [actionSheet addAction:selectCameraAction];
+    }
+    MDCActionSheetAction *selectPhotoGalleryAction =
+        [MDCActionSheetAction actionWithTitle:@"Phone Gallery"
+                                        image:[UIImage systemImageNamed:@"square.grid.3x3"]
+                                      handler:^(MDCActionSheetAction *action){
+            imagePickerVC.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+            [self presentViewController:imagePickerVC animated:YES completion:nil];
+        }];
 
-     
-     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-         UIAlertAction *didSelectCamera = [UIAlertAction actionWithTitle:@"Camera"
-                                                       style:UIAlertActionStyleDefault
-                                           
-                                     handler:^(UIAlertAction * _Nonnull action) {
-                                            // handle cancel response here. Doing nothing will dismiss the view.
-                                         imagePickerVC.sourceType = UIImagePickerControllerSourceTypeCamera;
-             [self presentViewController:imagePickerVC animated:YES completion:nil];
-                                         
-                             }];
-         [self.photoSelectorAlert addAction:didSelectCamera];
-     }
-     UIAlertAction *didSelectCameraRoll = [UIAlertAction actionWithTitle:@"Camera Roll"
-                                                   style:UIAlertActionStyleDefault
-                                 handler:^(UIAlertAction * _Nonnull action) {
-                                        // handle cancel response here. Doing nothing will dismiss the view.
-                                     imagePickerVC.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-                                     [self presentViewController:imagePickerVC animated:YES completion:nil];
-         
-                                 }];
-     [self.photoSelectorAlert addAction:didSelectCameraRoll];
-  
-     [self presentViewController:self.photoSelectorAlert animated:YES completion:nil];
+    [actionSheet addAction:selectPhotoGalleryAction];
+    [self presentViewController:actionSheet animated:YES completion:nil];
+    
 }
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
     // Get the image captured by the UIImagePickerController
@@ -115,4 +116,17 @@
     // Dismiss UIImagePickerController to go back to your original view controller
     [self dismissViewControllerAnimated:YES completion:nil];
 }
+
+-(void) addAccessiblity{
+    self.profilePicButton.isAccessibilityElement = YES;
+    self.addPhotoIcon.isAccessibilityElement = YES;
+    self.bioTextView.isAccessibilityElement = YES;
+    self.saveChangesButton.isAccessibilityElement = YES;
+    
+    self.profilePicButton.accessibilityValue = @"Tap to change your profile picture";
+    self.bioTextView.accessibilityValue = @"Enter your editied profile bio";
+    self.saveChangesButton.accessibilityValue = @"Tap to save any changes to your profile";
+    self.addPhotoIcon.accessibilityValue = @"Icon indicating to add a photo";
+}
+
 @end

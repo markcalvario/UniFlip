@@ -17,6 +17,8 @@
 @property (weak, nonatomic) IBOutlet UITextField *passwordField;
 @property (weak, nonatomic) IBOutlet UITextField *collegeTextField;
 @property (weak, nonatomic) IBOutlet UITableView *collegesTableView;
+@property (strong, nonatomic) IBOutlet UIButton *registerButton;
+@property (strong, nonatomic) IBOutlet UIButton *toLoginScreenButton;
 
 @property (strong, nonatomic) NSArray *arrayOfColleges;
 @property (strong, nonatomic) NSMutableArray *arrayOfCollegesForTableView;
@@ -42,6 +44,7 @@
     self.passwordField.secureTextEntry = YES;
     self.collegesTableView.hidden = YES;
     [self updateListOfAllUSColleges];
+    [self addAccessibility];
 }
 
 -(void) showSuccessAlert{
@@ -150,6 +153,7 @@
     newUser.password = self.password;
     newUser[@"biography"] = @"";
     newUser[@"university"] = collegeName;
+    newUser[@"schoolEmail"] = self.schoolEmail;
     // call sign up function on the object
     [newUser signUpInBackgroundWithBlock:^(BOOL succeeded, NSError * error) {
         if (error != nil) {
@@ -244,6 +248,8 @@
     [cell.collegeNameButton setTitle:collegeName forState: UIControlStateNormal];
     [cell.collegeNameButton setTag: indexPath.row];
     [cell.collegeNameButton addTarget:self action:@selector(didTapCollegeOption:) forControlEvents:UIControlEventTouchUpInside];
+    cell.isAccessibilityElement = YES;
+    cell.accessibilityValue = [@"School: " stringByAppendingString:collegeName];
     return cell;
 }
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -264,7 +270,21 @@
 
 
 
-
+-(void) addAccessibility{
+    self.collegeTextField.isAccessibilityElement = YES;
+    self.schoolEmailField.isAccessibilityElement = YES;
+    self.usernameField.isAccessibilityElement = YES;
+    self.passwordField.isAccessibilityElement = YES;
+    self.registerButton.isAccessibilityElement = YES;
+    self.toLoginScreenButton.isAccessibilityElement = YES;
+    
+    self.collegeTextField.accessibilityValue = @"Type in the name of the school you currently attend";
+    self.schoolEmailField.accessibilityValue = @"Type in the your school email";
+    self.usernameField.accessibilityValue = @"Type in a username you want to associate your account with";
+    self.passwordField.accessibilityValue = @"Type in a password you want to associate your account with";
+    self.registerButton.accessibilityValue = @"Tap button once to register your account";
+    self.toLoginScreenButton.accessibilityValue = @"Tap this button once to go back to the login screen if you already have an account";
+}
 
 
 

@@ -11,6 +11,8 @@
 @interface LoginViewController ()
 @property (weak, nonatomic) IBOutlet UITextField *usernameOrEmailLabel;
 @property (weak, nonatomic) IBOutlet UITextField *passwordLabel;
+@property (strong, nonatomic) IBOutlet UIButton *createNewAccountButton;
+@property (strong, nonatomic) IBOutlet UIButton *loginButton;
 
 
 @end
@@ -21,6 +23,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self displayLoginScreen];
+    [self addAccessibility];
 }
 - (void)viewWillAppear:(BOOL)animated{
     [self displayLoginScreen];
@@ -53,6 +56,19 @@
                                                      handler:nil];
     [loginErrorAlert addAction:tryAgainAction];
     [self presentViewController:loginErrorAlert animated:YES completion:nil];
+}
+
+-(void) addAccessibility{
+    self.usernameOrEmailLabel.isAccessibilityElement = YES;
+    self.passwordLabel.isAccessibilityElement = YES;
+    self.createNewAccountButton.isAccessibilityElement = YES;
+    self.loginButton.isAccessibilityElement = YES;
+    
+    self.usernameOrEmailLabel.accessibilityValue = @"Type in your username to your account";
+    self.passwordLabel.accessibilityValue = @"Type in your password to your account";
+    self.createNewAccountButton.accessibilityValue = @"Tap button to go to the create new account screen";
+    self.loginButton.accessibilityValue = @"Tap login button once to login into your account";
+    
 }
 
 @end

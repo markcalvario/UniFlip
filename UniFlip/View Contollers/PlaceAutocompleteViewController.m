@@ -24,15 +24,18 @@
     [super viewDidLoad];
     
     self.searchOptionsBar.delegate = self;
+    self.resultsSearchTableView.isAccessibilityElement = YES;
     if (self.data.count == 0){
         tableDataSource = [[GMSAutocompleteTableDataSource alloc] init];
         tableDataSource.delegate = self;
         self.resultsSearchTableView.delegate = tableDataSource;
         self.resultsSearchTableView.dataSource = tableDataSource;
+        self.resultsSearchTableView.accessibilityValue = @"Places to choose from";
     }
     else{
         self.resultsSearchTableView.delegate = self;
         self.resultsSearchTableView.dataSource = self;
+        self.resultsSearchTableView.accessibilityValue = @"Categories to choose from";
     }
     
 }
@@ -79,7 +82,11 @@
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     OptionCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OptionCell" forIndexPath:indexPath];
     NSString *option = self.data[indexPath.row];
+    cell.isAccessibilityElement = YES;
+    cell.accessibilityValue = [option stringByAppendingString:@" category"];
     //[self.delegate addOptionViewController:self didFinishEnteringItem:option];
+    cell.option2Button.isAccessibilityElement = YES;
+    cell.option2Button.accessibilityValue = [option stringByAppendingString:@" category button"];
     [cell.option2Button setTag:indexPath.row];
     [cell.option2Button addTarget:self action:@selector(didTapOption:) forControlEvents:UIControlEventTouchUpInside];
     [cell.option2Button setTitle:option forState:UIControlStateNormal];

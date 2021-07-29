@@ -57,8 +57,8 @@
     self.photos = [NSMutableArray array];
     self.listingDescriptionView.placeholder = @"Description of your listing";
     [self.exitKeyboardGesture setCancelsTouchesInView:NO];
+    [self addAccessibility];
 
-    
 }
 - (void) setSellViewControllerStyling{
     [[self.listingDescriptionView layer] setBorderColor:[[UIColor systemGray5Color] CGColor]];
@@ -95,15 +95,18 @@
         self.indexOfPhoto -= 1;
         
     }];
-    MDCActionSheetAction *selectCameraAction = [MDCActionSheetAction actionWithTitle:@"Camera"
-                                        image:[UIImage systemImageNamed:@"camera"]
-                                        handler:^(MDCActionSheetAction *action){
-        [self dismissViewControllerAnimated:TRUE completion:^{
-            imagePickerVC.sourceType = UIImagePickerControllerSourceTypeCamera;
-            [self presentViewController:imagePickerVC animated:YES completion:nil];
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        MDCActionSheetAction *selectCameraAction = [MDCActionSheetAction actionWithTitle:@"Camera"
+                                            image:[UIImage systemImageNamed:@"camera"]
+                                            handler:^(MDCActionSheetAction *action){
+            [self dismissViewControllerAnimated:TRUE completion:^{
+                imagePickerVC.sourceType = UIImagePickerControllerSourceTypeCamera;
+                [self presentViewController:imagePickerVC animated:YES completion:nil];
+            }];
         }];
-        
-    }];
+        [actionSheet addAction:selectCameraAction];
+    }
+   
     //CategoryToSelectOption
     MDCActionSheetAction *selectPhotoGalleryAction =
         [MDCActionSheetAction actionWithTitle:@"Phone Gallery"
@@ -113,7 +116,6 @@
             [self presentViewController:imagePickerVC animated:YES completion:nil];
         }];
     
-    [actionSheet addAction:selectCameraAction];
     [actionSheet addAction:selectPhotoGalleryAction];
     if (self.indexOfPhoto < self.photos.count){
         [actionSheet addAction:deleteAction];
@@ -232,16 +234,46 @@
     self.priceField.text = @"";
 }
 
+
+-(void) addAccessibility{
+    self.listingTitleField.isAccessibilityElement = YES;
+    self.listingTypeField.isAccessibilityElement = YES;
+    self.listingDescriptionView.isAccessibilityElement = YES;
+    self.locationButton.isAccessibilityElement = YES;
+    self.categoryButton.isAccessibilityElement = YES;
+    self.brandField.isAccessibilityElement = YES;
+    self.conditionField.isAccessibilityElement = YES;
+    self.priceField.isAccessibilityElement = YES;
+    self.postListingButton.isAccessibilityElement = YES;
+    self.photosCollectionView.isAccessibilityElement = YES;
+    
+    self.listingTitleField.accessibilityValue = @"Enter the name of your listing you want to post";
+    self.listingTypeField.accessibilityValue = @"Enter whether your listing is a product or service";
+    self.listingDescriptionView.accessibilityValue = @"Enter a description of your listing";
+    self.locationButton.accessibilityValue = @"Tap to enter a location of where your listing is at";
+    self.categoryButton.accessibilityValue = @"Tap to enter the category your listing falls under";
+    self.brandField.accessibilityValue = @"Enter a brand of your listing, if applicable";
+    self.conditionField.accessibilityValue = @"Enter the condition of your listing, if applicable";
+    self.priceField.accessibilityValue = @"Enter the price amount of your listing in United States dollar currency";
+    self.postListingButton.accessibilityValue = @"Tap to submit your listing";
+    self.photosCollectionView.accessibilityValue = @"Select photos of your listing, minimum of 1 photo";
+    
+}
+
 #pragma mark - Collection View
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     PhotoCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"PhotoCell" forIndexPath:indexPath];
     NSInteger lengthOfPhotosArray = self.photos.count;
+    cell.listingPhoto.isAccessibilityElement = YES;
     if (lengthOfPhotosArray == 0 || (!cell.listingPhoto.image) || (indexPath.row >= lengthOfPhotosArray)){
         [cell.listingPhoto setImage:[UIImage imageNamed:@"photo_add_icon"]];
+        cell.listingPhoto.accessibilityValue = @"Upload a new photo button";
     }
     else{
         UIImage *photoSelected = [self.photos objectAtIndex:indexPath.row];
         [cell.listingPhoto setImage:photoSelected];
+        cell.listingPhoto.accessibilityValue = @"Delete or replace your uploaded photo";
+
     }
     return cell;
 }
@@ -263,9 +295,6 @@
             @"Garden & Outdoor", @"Grocery & Gourmet Food", @"Handmade", @"Health, Household & Baby Care", @"Home & Kitchen", @"Industrial & Scientific",
            @"Luggage & Travel Gear", @"Movies & TV", @"Musical Instruments", @"Office Products", @"Pet Supplies", @"Sports & Outdoors",
             @"Tools & Home Improvement", @"Toys & Games", @"Video Games"];
-        /*SelectOptionViewController *selectOptionViewController = [segue destinationViewController];
-        selectOptionViewController.data = arrayOfCategories;
-        selectOptionViewController.delegate = self;*/
         PlaceAutocompleteViewController *placeAutocompleteViewController = [segue destinationViewController];
         placeAutocompleteViewController.delegate = self;
         placeAutocompleteViewController.data = arrayOfCategories;

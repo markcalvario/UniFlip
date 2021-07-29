@@ -50,6 +50,7 @@ BOOL showUserListings = TRUE;
     self.currentUser = [User currentUser];
     [self displayTabBar];
     [self setProfileScreen];
+    [self addAccessibility];
     
 }
 - (void)viewWillAppear:(BOOL)animated{
@@ -263,18 +264,6 @@ BOOL showUserListings = TRUE;
     [User postVisitedListingToCounter:self.currentUser withListing:listing withCompletion:^(BOOL finished) {}];
     [User postVisitedCategoryToCounter:self.currentUser withListing:listing withCompletion:^(BOOL finished) {}];
 }
-
-#pragma mark - Navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([[segue identifier] isEqualToString:@"ProfileToListingDetail"]){
-        ListingCell *tappedCell = sender;
-        NSIndexPath *indexPath = [self.listingsCollectionView indexPathForCell:tappedCell];
-        Listing *listing = self.arrayOfListings[indexPath.row];
-        ListingDetailViewController *listingDetailViewController = [segue destinationViewController];
-        listingDetailViewController.listing = listing;
-    }
-}
-
 - (void)tabBarView:(MDCTabBarView *)tabBarView didSelectItem:(UITabBarItem *)item{
     if ([item.title isEqualToString:@"Listings"]){
         showUserListings = TRUE;
@@ -344,7 +333,46 @@ BOOL showUserListings = TRUE;
     [self.tabBarView addConstraint:height];
 }
 
+-(void) addAccessibility{
+    self.profilePicButton.isAccessibilityElement = YES;
+    self.usernameLabel.isAccessibilityElement = YES;
+    self.userBioLabel.isAccessibilityElement = YES;
+    self.settingsButton.isAccessibilityElement = YES;
+    self.composeMailButton.isAccessibilityElement = YES;
+    self.followButton.isAccessibilityElement = YES;
+    self.followingButton.isAccessibilityElement = YES;
+    self.followersButton.isAccessibilityElement = YES;
+    self.tabBarView.isAccessibilityElement = YES;
+    self.tabBarView.accessibilityValue = @"Choose to view either a user's posted listings or their saved listings";
+    for (UITabBarItem *item in self.tabBarView.items){
+        item.isAccessibilityElement = YES;
+        if ([item.title isEqualToString:@"Listings"]){
+            item.accessibilityValue = [[@"Tap to view " stringByAppendingString:self.user.username] stringByAppendingString:@"'s posted listings"];
+        }
+        else{
+            item.accessibilityValue = [[@"Tap to view " stringByAppendingString:self.user.username] stringByAppendingString:@"'s saved listings"];
+        }
+    }
+    
+    self.profilePicButton.accessibilityValue = [self.user.username stringByAppendingString:@"'s profile picture"];
+    self.usernameLabel.accessibilityValue = [@"User's username is " stringByAppendingString:self.user.username];
+    self.userBioLabel.accessibilityValue = [[self.user.username stringByAppendingString:@"'s bio is "] stringByAppendingString:self.user.biography];
+    self.settingsButton.accessibilityValue = @"Tap to change your profile settings";
+    self.composeMailButton.accessibilityValue = [@"Tap to send an e-mail to " stringByAppendingString:self.user.username];
+    self.followButton.accessibilityValue = [@"Tap to follow " stringByAppendingString:self.user.username];
+    self.followingButton.accessibilityValue = [[[self.user.username stringByAppendingString:@" is following "] stringByAppendingString:self.followingButton.titleLabel.text] stringByAppendingString:@" other users"];
+    self.followersButton.accessibilityValue = [[[self.user.username stringByAppendingString:@" has "] stringByAppendingString:self.followersButton.titleLabel.text] stringByAppendingString:@" followers"];
+}
 
-
+#pragma mark - Navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([[segue identifier] isEqualToString:@"ProfileToListingDetail"]){
+        ListingCell *tappedCell = sender;
+        NSIndexPath *indexPath = [self.listingsCollectionView indexPathForCell:tappedCell];
+        Listing *listing = self.arrayOfListings[indexPath.row];
+        ListingDetailViewController *listingDetailViewController = [segue destinationViewController];
+        listingDetailViewController.listing = listing;
+    }
+}
 
 @end

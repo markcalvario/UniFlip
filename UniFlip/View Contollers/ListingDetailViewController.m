@@ -33,6 +33,7 @@
 @property (strong, nonatomic) IBOutlet UIButton *menuButton;
 @property (strong, nonatomic) IBOutlet UICollectionView *photosCollectionView;
 @property (strong, nonatomic) IBOutlet UIPageControl *photoIndicator;
+@property (strong, nonatomic) IBOutlet UIButton *composeMailButton;
 @property (strong, nonatomic) UIImageView *imageToZoom;
 @property (strong, nonatomic) User *currentUser;
 @property (strong, nonatomic) NSArray *photos;
@@ -53,6 +54,7 @@ CGFloat lastScale;
     self.photos = self.listing.photos;
     self.photoIndicator.numberOfPages = self.photos.count;
     [self loadListingScreenDetais];
+    [self addAccessibility];
 }
 -(void) viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -120,9 +122,11 @@ CGFloat lastScale;
 -(void) updateSaveButtonUI:(BOOL )isSaved withButton:(UIButton *)saveButton{
     if (isSaved){
         [saveButton setImage:[UIImage imageNamed:@"saved_icon"] forState:UIControlStateNormal];
+        self.saveButton.accessibilityValue = [[@"You have " stringByAppendingString:self.listing.listingTitle] stringByAppendingString:@" as saved. Tap to unsave this listing"];
     }
     else{
         [saveButton setImage:[UIImage imageNamed:@"unsaved_icon"] forState:UIControlStateNormal];
+        self.saveButton.accessibilityValue = [[@"You do not have " stringByAppendingString:self.listing.listingTitle] stringByAppendingString:@" as saved. Tap to save this listing"];
     }
 }
 
@@ -231,6 +235,13 @@ CGFloat lastScale;
         [deleteAction setTitleColor:[UIColor redColor]];
         [actionSheet addAction:deleteAction];
     }
+    deleteAction.isAccessibilityElement = YES;
+    reportAction.isAccessibilityElement = YES;
+    emailAction.isAccessibilityElement = YES;
+    deleteAction.accessibilityValue = [@"Tap to delete " stringByAppendingString:self.listing.listingTitle];
+    reportAction.accessibilityValue = [@"Tap to report " stringByAppendingString:self.listing.listingTitle];
+    emailAction.accessibilityValue = [@"Tap to send an e-mail to " stringByAppendingString:self.listing.author.username];
+    
     [actionSheet addAction:reportAction];
     [actionSheet addAction:emailAction];
     [self presentViewController:actionSheet animated:YES completion:nil];
@@ -269,6 +280,8 @@ CGFloat lastScale;
         }
     }];
     cell.detailPhoto.userInteractionEnabled = YES;
+    cell.isAccessibilityElement = YES;
+    cell.accessibilityValue = @"Tap this image to view the full size";
     return cell;
 }
 
@@ -383,6 +396,28 @@ CGFloat lastScale;
     if (scrollView.tag != 101){
         self.photoIndicator.currentPage = scrollView.contentOffset.x/ scrollView.frame.size.width;
     }
+}
+
+- (void) addAccessibility{
+    self.photosCollectionView.isAccessibilityElement = YES;
+    self.imageOfAuthorButton.isAccessibilityElement = YES;
+    self.titleLabel.isAccessibilityElement = YES;
+    self.priceLabel.isAccessibilityElement = YES;
+    self.categoryLabel.isAccessibilityElement = YES;
+    self.descriptionLabel.isAccessibilityElement = YES;
+    self.menuButton.isAccessibilityElement = YES;
+    self.saveButton.isAccessibilityElement = YES;
+    self.composeMailButton.isAccessibilityElement = YES;
+    
+    self.photosCollectionView.accessibilityValue = @"Swipe left to view more photos of this image if applicable";
+    self.imageOfAuthorButton.accessibilityValue = [[@"Tap " stringByAppendingString: self.listing.author.username] stringByAppendingString:@"'s profile picture to see their profile"];
+    self.titleLabel.accessibilityValue = [@"You are viewing " stringByAppendingString:self.listing.listingTitle];
+    self.priceLabel.accessibilityValue = [[[[@"The price of " stringByAppendingString:self.listing.listingTitle] stringByAppendingString:@" is "] stringByAppendingString:self.listing.listingPrice] stringByAppendingString:@" United States dollars"];
+    self.categoryLabel.accessibilityValue = [[[self.listing.listingTitle stringByAppendingString:@" falls under the "] stringByAppendingString: self.listing.listingCategory] stringByAppendingString:@" category"];
+    self.descriptionLabel.accessibilityValue = [@"Description reads as " stringByAppendingString:self.listing.listingDescription];
+    self.menuButton.accessibilityValue = @"Tap to view more options such as reporting this listing, emailing the author, or deleting the listing if you are the author of this listing";
+    self.composeMailButton.accessibilityValue = [@"Tap to send an e-mail to " stringByAppendingString:self.listing.author.username];
+    
 }
 
 #pragma mark - Navigation

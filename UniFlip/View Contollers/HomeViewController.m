@@ -56,6 +56,9 @@ BOOL isFiltered;
     self.listingCategoryTableView.delegate = self;
     self.listingCategoryTableView.dataSource = self;
     self.currentUser = [User currentUser];
+    
+    self.tabBarItem.image.isAccessibilityElement = YES;
+    self.tabBarItem.image.accessibilityValue = @"Home Tab";
 }
 -(void) viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
