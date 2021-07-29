@@ -20,6 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) BOOL isReported;
 @property (nonatomic, strong) PFFileObject *profilePicture;
 
++ (void) postUser:(NSString *)username withEmail:(NSString *)schoolEmail withPassword:(NSString *)password withSchoolName:(NSString *)schoolName withCompletion: (PFBooleanResultBlock  _Nullable)completion;
 + (void) postSaveSettings:(User *)user withProfileImage:(UIImage *)image withBiography:(NSString *)biography;
 + (void) postVisitedProfileToCounter:(User *)user withListing:(Listing *)listing withCompletion:(void(^)(BOOL finished))completion;
 + (void) postVisitedListingToCounter:(User *)user withListing:(Listing *)listing withCompletion:(void(^)(BOOL finished))completion;

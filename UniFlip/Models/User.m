@@ -17,6 +17,17 @@
 @dynamic isReported;
 @dynamic profilePicture;
 
++ (void) postUser:(NSString *)username withEmail:(NSString *)schoolEmail withPassword:(NSString *)password withSchoolName:(NSString *)schoolName withCompletion:(PFBooleanResultBlock  _Nullable)completion{
+    User *newUser = [User user];
+    newUser.email = schoolEmail;
+    newUser.username = username;
+    newUser.password = password;
+    newUser.biography = @"";
+    newUser.university = schoolName;
+    newUser.schoolEmail = schoolEmail;
+    [newUser signUpInBackgroundWithBlock: completion];
+}
+
 + (void) postSaveSettings:(User *)user withProfileImage:(UIImage *)image withBiography:(NSString *)biography{
     user.biography = biography;
     user.profilePicture = [Listing getPFFileFromImage: [user resizeImage:image withSize: CGSizeMake(300, 300)]];

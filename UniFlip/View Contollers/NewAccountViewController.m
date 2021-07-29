@@ -9,7 +9,7 @@
 #import "LoginViewController.h"
 #import "CollegeCell.h"
 #import "Parse/Parse.h"
-//#import "../Assets.xcassets/defaultProfilePic.imageset/Image.png"
+#import "User.h"
 
 @interface NewAccountViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITextField *schoolEmailField;
@@ -82,11 +82,9 @@
     NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:10.0];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:nil delegateQueue:[NSOperationQueue mainQueue]];
     NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-            //If the API call returned an error, print out the error message
            if (error != nil) {
                NSLog(@"%@", error);
            }
-            //If API call successful, add the college dictionaries result into the array
            else {
                NSArray *dataArray = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
                NSMutableArray *colleges = [NSMutableArray array];
@@ -113,10 +111,8 @@
     
     [self.collegesTableView reloadData];
 }
-//*******************
 
-
-/// Email Verification/Validation
+#pragma mark - Account Info Validation
 -(BOOL) doesEmailDomainMatchUniversity: (NSString *)schoolEmail schoolName:(NSString *)collegeName{
     NSArray *usernameAndDomain = [schoolEmail componentsSeparatedByString:@"@"];
     NSString *schoolEmailDomain = [usernameAndDomain objectAtIndex:1];
@@ -132,10 +128,9 @@
             return TRUE;
         }
     }
-    return TRUE; //change back to FALSE
+    return FALSE; //change back to FALSE
 }
-- (BOOL)validateEmailWithString:(NSString*)checkString
-{
+- (BOOL)validateEmailWithString:(NSString*)checkString{
     BOOL stricterFilter = NO; // Discussion http://blog.logichigh.com/2010/09/02/validating-an-e-mail-address/
     NSString *stricterFilterString = @"[A-Z0-9a-z\\._%+-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,4}";
     NSString *laxString = @".+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2}[A-Za-z]*";
@@ -143,70 +138,13 @@
     NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
     return [emailTest evaluateWithObject:checkString];
 }
-//*****************
-
-///Create User
--(void) createUserAccount: (NSString *) collegeName{
-    PFUser *newUser = [PFUser user];
-    newUser.email = self.schoolEmail;
-    newUser.username = self.username;
-    newUser.password = self.password;
-    newUser[@"biography"] = @"";
-    newUser[@"university"] = collegeName;
-    newUser[@"schoolEmail"] = self.schoolEmail;
-    // call sign up function on the object
-    [newUser signUpInBackgroundWithBlock:^(BOOL succeeded, NSError * error) {
-        if (error != nil) {
-            NSLog(@"Error: %@", error.localizedDescription);
-        } else {
-            NSLog(@"User registered successfully");
-            
-            NSLog(@"%@", newUser);
-            [self addUserToMarketplace:newUser.username school:collegeName];
-            [self showSuccessAlert];
-            //[self performSegueWithIdentifier:@"SuccessfulRegisterToLogin" sender:@"successfully registered"];
-        }
-    }];
-}
-
--(void) addUserToMarketplace:(NSString *) username school: (NSString *)school{
-    PFUser *user = nil;
-    PFQuery *queryUser = [PFUser query];
-    [queryUser whereKey:@"username" equalTo:username]; // find the unique username
-    NSArray *users = [queryUser findObjects];
-    user = users[0];
-    PFQuery *query = [PFQuery queryWithClassName:@"Marketplace"];
-    [query whereKey:@"school" equalTo:school];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *markets, NSError *error) {
-        if (error) {
-          NSLog(@"Error: %@ %@", error, [error userInfo]);
-        }
-        /// No marketplace exists
-        if ([markets count] == 0){
-            PFObject *marketplace = [PFObject objectWithClassName:@"Marketplace"];
-            marketplace[@"school"] = school;
-            [marketplace addUniqueObject:user forKey:@"users"];
-            [marketplace saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-              if (succeeded) {
-                  NSLog(@"added user to marketplace");
-              } else {
-                  NSLog(@"error creating a marketplace");
-              }
-            }];
-        }
-        else{
-            PFObject *marketplace = markets[0];
-            [marketplace addUniqueObject:user forKey:@"users"];
-            [marketplace saveInBackground];
-        }
-        
-
-    }];
-}
 
 
 
-/// ACTIONS
+
+
+
+#pragma mark - Actions
 - (IBAction)didTapRegister:(id)sender {
     self.schoolEmail = [self.schoolEmailField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     self.username = [self.usernameField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
@@ -218,7 +156,12 @@
     }
 
     if ([self doesEmailDomainMatchUniversity:self.schoolEmail schoolName:self.collegeName]){
-        [self createUserAccount:self.collegeName];
+        [User postUser:self.username withEmail:self.schoolEmail withPassword:self.password withSchoolName:self.collegeName withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+            if (succeeded){
+                [self showSuccessAlert];
+                [self performSegueWithIdentifier:@"SuccessfulRegisterToLogin" sender:@"successfully registered"];
+            }
+        }];
     }
     else{
         NSLog(@"%@", @"No match");
@@ -239,7 +182,7 @@
 
 
 
-/// AutoComplete TableView
+#pragma mark - Tableview for College Options
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     CollegeCell *cell = [tableView dequeueReusableCellWithIdentifier:@"collegeCell" forIndexPath:indexPath];
     NSDictionary *college = self.arrayOfCollegesForTableView[indexPath.row];
@@ -255,9 +198,6 @@
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.arrayOfCollegesForTableView.count;
 }
-
-
-/// Method that replaces College Text Field Text with the college name selected by the user in the tableview
 -(void) didTapCollegeOption: (UIButton *)sender{
     NSDictionary *college = self.arrayOfCollegesForTableView[sender.tag];
     NSString *collegeName = college[@"name"];
@@ -266,10 +206,6 @@
     self.collegesTableView.hidden = YES;
     self.collegeSelected = college;
 }
-
-
-
-
 -(void) addAccessibility{
     self.collegeTextField.isAccessibilityElement = YES;
     self.schoolEmailField.isAccessibilityElement = YES;
