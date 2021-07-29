@@ -833,9 +833,9 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This will be my bio" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YXr-ek-GJ3">
-                                                <rect key="frame" x="8" y="126" width="398" height="13.5"/>
+                                                <rect key="frame" x="8" y="126" width="398" height="40"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="13.5" id="MxP-zD-5sM"/>
+                                                    <constraint firstAttribute="height" constant="40" id="MxP-zD-5sM"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="11"/>
                                                 <nil key="textColor"/>
@@ -849,11 +849,11 @@
                                                 </constraints>
                                                 <state key="normal" image="default_profile_pic"/>
                                             </button>
-                                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ump-lS-Fur">
+                                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ump-lS-Fur">
                                                 <rect key="frame" x="0.0" y="295" width="414" height="420"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="420" id="wgN-Tr-yKE"/>
+                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="420" id="1h8-ni-8c6"/>
                                                 </constraints>
                                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="FFb-Mk-NwE">
                                                     <size key="itemSize" width="128" height="128"/>
@@ -933,7 +933,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="oyy-e4-OwM">
-                                                <rect key="frame" x="76" y="141.5" width="79" height="15"/>
+                                                <rect key="frame" x="76" y="168" width="79" height="15"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="15" id="Q0J-vW-poI"/>
                                                 </constraints>
@@ -943,7 +943,7 @@
                                                 </state>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="Pem-pF-6hB">
-                                                <rect key="frame" x="8" y="141.5" width="60" height="15"/>
+                                                <rect key="frame" x="8" y="168" width="60" height="15"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="15" id="8RQ-Fo-EDD"/>
                                                 </constraints>
@@ -1673,7 +1673,7 @@ Cg
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="nHl-qN-Fv6"/>
+        <segue reference="jy6-i8-Qry"/>
         <segue reference="4Y7-XG-abQ"/>
         <segue reference="vaY-ad-883"/>
         <segue reference="yJF-wa-pAP"/>

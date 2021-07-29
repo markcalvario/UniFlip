@@ -319,12 +319,12 @@ BOOL showUserListings = TRUE;
                                        constant:0];
     /* Top space to superview Y*/
     NSLayoutConstraint *top = [NSLayoutConstraint constraintWithItem:self.tabBarView attribute:NSLayoutAttributeTop
-                                                 relatedBy:NSLayoutRelationEqual toItem:self.followingButton attribute:
+                                                 relatedBy:NSLayoutRelationLessThanOrEqual toItem:self.followingButton attribute:
                                                  NSLayoutAttributeBottom multiplier:1.0 constant:2];
     /* Bottom space to superview Y*/
     NSLayoutConstraint *bottom = [NSLayoutConstraint constraintWithItem:self.tabBarView attribute:NSLayoutAttributeBottom
                                                  relatedBy:NSLayoutRelationEqual toItem:self.listingsCollectionView attribute:
-                                                 NSLayoutAttributeTop multiplier:1.0 constant:-2];
+                                                 NSLayoutAttributeTop multiplier:1.0 constant:0];
     
     NSLayoutConstraint *height = [NSLayoutConstraint
                                    constraintWithItem:self.tabBarView
