@@ -34,9 +34,12 @@
 @property (strong, nonatomic) IBOutlet UICollectionView *photosCollectionView;
 @property (strong, nonatomic) IBOutlet UIPageControl *photoIndicator;
 @property (strong, nonatomic) IBOutlet UIButton *composeMailButton;
+@property (strong, nonatomic) IBOutlet UIScrollView *outerScrollView;
 @property (strong, nonatomic) UIImageView *imageToZoom;
 @property (strong, nonatomic) User *currentUser;
 @property (strong, nonatomic) NSArray *photos;
+
+@property (strong, nonatomic) IBOutlet UIView *innerView;
 
 
 @end
@@ -336,34 +339,32 @@ CGFloat lastScale;
 
 -(void)addImageViewWithImage:(UIImage*)image {
     UIImageView *imgView = [[UIImageView alloc] init];
-    
-    imgView.frame = CGRectMake(0, self.view.frame.size.height/4, self.view.frame.size.width, self.view.frame.size.height/2);
+    imgView.frame = CGRectMake(0, self.titleLabel.superview.frame.size.height/4, self.titleLabel.superview.frame.size.width, self.titleLabel.superview.frame.size.height/2);
     
     imgView.contentMode = UIViewContentModeScaleAspectFit;
     imgView.backgroundColor = [UIColor blackColor];
     imgView.userInteractionEnabled = YES;
     imgView.image = image;
+    imgView.contentMode = UIViewContentModeScaleAspectFill;
     imgView.tag = 100;
-    UITapGestureRecognizer *dismissTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(removeImage)];
-    dismissTap.numberOfTapsRequired = 1;
-    [imgView addGestureRecognizer:dismissTap];
     
     
     UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:self.view.frame];
     scrollView.contentSize = imgView.frame.size;
     scrollView.backgroundColor = [UIColor blackColor];
-    scrollView.scrollEnabled = NO;
     scrollView.contentSize = CGSizeMake(imgView.frame.size.width , imgView.frame.size.height);
-    scrollView.minimumZoomScale=0.5;
-    scrollView.maximumZoomScale=1;
+    scrollView.minimumZoomScale=1;
+    scrollView.maximumZoomScale=10;
     scrollView.delegate=self;
+    UITapGestureRecognizer *dismissTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(removeImage)];
+    dismissTap.numberOfTapsRequired = 1;
     scrollView.tag = 101;
     [scrollView addGestureRecognizer:dismissTap];
     self.imageToZoom = imgView;
     scrollView.alpha = 0;
     imgView.alpha = 0;
     
-    [self.view addSubview:scrollView];
+    [self.innerView addSubview:scrollView];
     [scrollView addSubview:imgView];
     if (scrollView.alpha ==0){
         [UIView animateWithDuration:0.5 delay:0.2 options:UIViewAnimationOptionCurveEaseOut animations:^{
@@ -371,7 +372,11 @@ CGFloat lastScale;
             imgView.alpha = 1;
         }completion:nil];
     }
+    
+    
 }
+
+
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView{
     return self.imageToZoom;
 }
@@ -387,6 +392,7 @@ CGFloat lastScale;
         }completion:^(BOOL completed){
             [imgView removeFromSuperview];
             [scrollView removeFromSuperview];
+        
         }];
     }
     

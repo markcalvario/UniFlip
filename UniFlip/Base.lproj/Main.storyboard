@@ -1618,8 +1618,10 @@ Cg
                         <outlet property="composeMailButton" destination="ssl-a0-r5E" id="syj-3o-HzS"/>
                         <outlet property="descriptionLabel" destination="lNs-cD-jBU" id="GIT-un-CfY"/>
                         <outlet property="imageOfAuthorButton" destination="hdC-lu-ffu" id="0nA-J2-Lcp"/>
+                        <outlet property="innerView" destination="rFm-RF-ljk" id="Txl-Dt-WvA"/>
                         <outlet property="listingImageTapGesture" destination="0eg-qE-n2C" id="HhW-G7-NDH"/>
                         <outlet property="menuButton" destination="ohF-QF-Od7" id="jFC-Nq-AAX"/>
+                        <outlet property="outerScrollView" destination="cM6-57-0c1" id="jwL-qt-PhJ"/>
                         <outlet property="photoIndicator" destination="Tks-rg-tqt" id="d1n-2m-VeG"/>
                         <outlet property="photosCollectionView" destination="vUp-G8-Odx" id="mlg-VL-M5Y"/>
                         <outlet property="priceLabel" destination="lAR-Rn-RUS" id="0Qc-qd-0yz"/>
