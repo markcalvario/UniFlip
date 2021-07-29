@@ -38,6 +38,7 @@
 @property (strong, nonatomic) NSString *searchText;
 
 @property (strong, nonatomic) NSString *selectedFilter;
+@property (nonatomic) CGFloat categoryLabelHeight;
 @end
 
 @implementation HomeViewController
@@ -227,6 +228,11 @@ BOOL isFiltered;
     [self.listingCategoryTableView reloadData];
     
 }
+- (void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope{
+    NSString *searchBy = [self.searchListingsBar.scopeButtonTitles objectAtIndex:self.searchListingsBar.selectedScopeButtonIndex];
+    self.selectedFilter = searchBy;
+    [self updateSearchResults:self.searchText];
+}
 
 #pragma mark - Table View
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
@@ -248,6 +254,7 @@ BOOL isFiltered;
             category = [self.arrayOfCategories objectAtIndex: indexPath.row];
         }
         [cell populateCategoryCellInHomeWithCategory:category withIndexPath:indexPath];
+        self.categoryLabelHeight = cell.categoryLabel.frame.size.height + cell.categoryLabelTopConstraint.constant + cell.categoryLabelBottomConstraint.constant;
         [cell.viewAllButton addTarget:self action:@selector(didTapViewAll:) forControlEvents:UIControlEventTouchUpInside];
         return cell;
 
@@ -291,15 +298,32 @@ BOOL isFiltered;
         currentCategoryArray = self.categoryToArrayOfPosts[tableViewCategory];
     }
     CGFloat numOfListings = currentCategoryArray.count;
-    CGFloat height = (245 * ceil(numOfListings/2)) + 50;
-    return height;
+    CGFloat numberOfItemsPerRow = 2;
+    CGFloat itemWidth;
+    if (self.view.frame.size.width > 600){
+        CGFloat widthRequirement = 290;
+        BOOL meetsWidthRequirement = TRUE;
+        while (meetsWidthRequirement){
+            itemWidth = (tableView.frame.size.width - 3 *(numberOfItemsPerRow))/numberOfItemsPerRow;
+            if (itemWidth <= widthRequirement){
+                meetsWidthRequirement = FALSE;
+            }
+            numberOfItemsPerRow ++;
+        }
+        itemWidth = (tableView.frame.size.width - 3 *(numberOfItemsPerRow))/numberOfItemsPerRow;
+        CGFloat itemHeight = itemWidth;
+        
+        CGFloat height = (itemHeight * ceil(numOfListings/numberOfItemsPerRow)) + self.categoryLabelHeight + 70;
+        return height;
+    }
+    else{
+        CGFloat numOfListings = currentCategoryArray.count;
+        CGFloat height = (245 * ceil(numOfListings/2)) + 50;
+        return height;
+    }
+
 }
-- (void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope{
-    NSString *searchBy = [self.searchListingsBar.scopeButtonTitles objectAtIndex:self.searchListingsBar.selectedScopeButtonIndex];
-    self.selectedFilter = searchBy;
-    [self updateSearchResults:self.searchText];
-    
-}
+
 
 #pragma mark - Collection View
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
@@ -341,11 +365,25 @@ BOOL isFiltered;
     layout.minimumLineSpacing = 1;
     layout.minimumInteritemSpacing = 3;
     CGFloat numberOfItemsPerRow = 2;
-    CGFloat itemWidth = (collectionView.frame.size.width - layout.minimumInteritemSpacing *(numberOfItemsPerRow))/numberOfItemsPerRow;
+    CGFloat itemWidth;
+    if (self.view.frame.size.width > 600){
+        CGFloat widthRequirement = 290;
+        BOOL meetsWidthRequirement = TRUE;
+        while (meetsWidthRequirement){
+            itemWidth = (collectionView.frame.size.width - layout.minimumInteritemSpacing *(numberOfItemsPerRow))/numberOfItemsPerRow;
+            if (itemWidth <= widthRequirement){
+                meetsWidthRequirement = FALSE;
+            }
+            numberOfItemsPerRow ++;
+        }
+    }
+    itemWidth = (collectionView.frame.size.width - layout.minimumInteritemSpacing *(numberOfItemsPerRow))/numberOfItemsPerRow;
     CGFloat itemHeight = itemWidth *1.25;
     return CGSizeMake(itemWidth, itemHeight);
     
 }
+
+
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     NSString *category;
     Listing *listing;
@@ -363,6 +401,7 @@ BOOL isFiltered;
     
     [self performSegueWithIdentifier:@"HomeToListingDetail" sender:listing];
 }
+    
 
 #pragma mark - Action Handlers
 - (IBAction)didTapLogOut:(id)sender {

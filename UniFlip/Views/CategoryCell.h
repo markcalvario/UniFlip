@@ -15,6 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *listingCollectionViewHeight;
 @property (strong, nonatomic) IBOutlet UIButton *viewAllButton;
 - (void) populateCategoryCellInHomeWithCategory:(NSString *)category withIndexPath:(NSIndexPath *)indexPath;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *categoryLabelTopConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *categoryLabelBottomConstraint;
 
 
 

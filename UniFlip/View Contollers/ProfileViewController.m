@@ -249,14 +249,25 @@ BOOL showUserListings = TRUE;
 }
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
     UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *) collectionViewLayout;
-    layout.minimumLineSpacing = 1;
+    layout.minimumLineSpacing = 2;
     layout.minimumInteritemSpacing = 3;
-
-    
     CGFloat numberOfItemsPerRow = 2;
-    CGFloat itemWidth = (collectionView.frame.size.width - (layout.minimumInteritemSpacing * (numberOfItemsPerRow)) )/numberOfItemsPerRow;
-    CGFloat itemHeight = itemWidth *1.25;
+    CGFloat itemWidth;
+    if (self.view.frame.size.width > 600){
+        CGFloat widthRequirement = 290;
+        BOOL meetsWidthRequirement = TRUE;
+        while (meetsWidthRequirement){
+            itemWidth = (collectionView.frame.size.width - (layout.minimumInteritemSpacing * (numberOfItemsPerRow)) )/numberOfItemsPerRow;
+            if (itemWidth <= widthRequirement){
+                meetsWidthRequirement = FALSE;
+            }
+            numberOfItemsPerRow ++;
+        }
+    }
+    itemWidth = (collectionView.frame.size.width - (layout.minimumInteritemSpacing * (numberOfItemsPerRow)) )/numberOfItemsPerRow;
+    CGFloat itemHeight = itemWidth * 1.25;
     return CGSizeMake(itemWidth, itemHeight);
+    
     
 }
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{

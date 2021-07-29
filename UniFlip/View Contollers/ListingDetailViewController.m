@@ -301,7 +301,7 @@ CGFloat lastScale;
     }];
 }
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
-    return CGSizeMake(collectionView.frame.size.width, collectionView.frame.size.height);
+    return CGSizeMake(collectionView.frame.size.width, collectionView.frame.size.width*1.5);
 }
 
 - (UIImage *)resizeImage:(UIImage *)image withSize:(CGSize)size {

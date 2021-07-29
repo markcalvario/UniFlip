@@ -12,6 +12,7 @@
 
 @interface CategoryViewController ()<UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource>
 @property (strong, nonatomic) IBOutlet UITableView *categoryTableView;
+@property (nonatomic) CGFloat categoryLabelHeight;
 
 @end
 
@@ -23,16 +24,6 @@
     self.categoryTableView.delegate = self;
     self.categoryTableView.dataSource = self;
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     if (indexPath.row == 0){
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"FirstCell" forIndexPath:indexPath];
@@ -52,12 +43,29 @@
         tableViewCell.listingsByCategoryCollectionView.delegate = self;
         tableViewCell.listingsByCategoryCollectionView.dataSource = self;
         [tableViewCell.listingsByCategoryCollectionView reloadData];
+        //self.categoryLabelHeight = tableViewCell.categoryLabe
     }
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.row > 0){
         CGFloat numOfListings = self.listings.count;
-        CGFloat height = (245 * ceil(numOfListings/2)) + 50;
+        CGFloat numberOfItemsPerRow = 2;
+        CGFloat itemWidth;
+        if (self.view.frame.size.width > 600){
+            CGFloat widthRequirement = 290;
+            BOOL meetsWidthRequirement = TRUE;
+            while (meetsWidthRequirement){
+                itemWidth = (tableView.frame.size.width - 3 *(numberOfItemsPerRow))/numberOfItemsPerRow;
+                if (itemWidth <= widthRequirement){
+                    meetsWidthRequirement = FALSE;
+                }
+                numberOfItemsPerRow ++;
+            }
+        }
+        itemWidth = (tableView.frame.size.width - 3 *(numberOfItemsPerRow))/numberOfItemsPerRow;
+        CGFloat itemHeight = itemWidth;
+        
+        CGFloat height = (itemHeight * ceil(numOfListings/numberOfItemsPerRow)) + 100;
         return height;
     }
     return 100;
@@ -84,12 +92,33 @@
     layout.minimumLineSpacing = 1;
     layout.minimumInteritemSpacing = 2;
     CGFloat numberOfItemsPerRow = 2;
-    CGFloat itemWidth = (collectionView.frame.size.width - layout.minimumInteritemSpacing *(numberOfItemsPerRow))/numberOfItemsPerRow;
+    CGFloat itemWidth;
+    if (self.view.frame.size.width > 600){
+        CGFloat widthRequirement = 290;
+        BOOL meetsWidthRequirement = TRUE;
+        while (meetsWidthRequirement){
+            itemWidth = (collectionView.frame.size.width - layout.minimumInteritemSpacing *(numberOfItemsPerRow))/numberOfItemsPerRow;
+            if (itemWidth <= widthRequirement){
+                meetsWidthRequirement = FALSE;
+            }
+            numberOfItemsPerRow ++;
+        }
+    }
+    itemWidth = (collectionView.frame.size.width - layout.minimumInteritemSpacing *(numberOfItemsPerRow))/numberOfItemsPerRow;
     CGFloat itemHeight = itemWidth *1.25;
     return CGSizeMake(itemWidth, itemHeight);
     
 }
 
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
 
 
 @end
