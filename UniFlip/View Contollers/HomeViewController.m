@@ -229,14 +229,19 @@ BOOL isFiltered;
     
 }
 - (void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope{
-    NSString *searchBy = [self.searchListingsBar.scopeButtonTitles objectAtIndex:self.searchListingsBar.selectedScopeButtonIndex];
-    self.selectedFilter = searchBy;
-    [self updateSearchResults:self.searchText];
+    if (self.searchListingsBar.scopeButtonTitles.count > 0){
+        NSString *searchBy = [self.searchListingsBar.scopeButtonTitles objectAtIndex:self.searchListingsBar.selectedScopeButtonIndex];
+        self.selectedFilter = searchBy;
+        [self updateSearchResults:self.searchText];
+    }
 }
 
 #pragma mark - Table View
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    if (isFiltered && ([self.selectedFilter isEqualToString:@"Users"])){
+    /*if (self.arrayOfCategories.count == 0 || self.categoryToArrayOfPosts.count == 0 || self.filteredArrayOfCategories.count == 0 || self.filteredCategoryToArrayOfPosts == 0){
+        return nil;
+    }*/
+    if (isFiltered && ([self.selectedFilter isEqualToString:@"Users"]) && self.filteredUsers.count > 0){
         tableView.allowsSelection = YES;
         ProfileCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ProfileCell"];
         User *user = [self.filteredUsers objectAtIndex:indexPath.row];
@@ -247,11 +252,13 @@ BOOL isFiltered;
         tableView.allowsSelection = NO;
         CategoryCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CategoryCell" forIndexPath:indexPath];
         NSString *category;
-        if (isFiltered){
+        if (isFiltered && self.filteredArrayOfCategories.count > 0){
             category  = [self.filteredArrayOfCategories objectAtIndex:indexPath.row];
         }
         else{
-            category = [self.arrayOfCategories objectAtIndex: indexPath.row];
+            if (self.arrayOfCategories.count > 0){
+                category = [self.arrayOfCategories objectAtIndex: indexPath.row];
+            }
         }
         [cell populateCategoryCellInHomeWithCategory:category withIndexPath:indexPath];
         self.categoryLabelHeight = cell.categoryLabel.frame.size.height + cell.categoryLabelTopConstraint.constant + cell.categoryLabelBottomConstraint.constant;
@@ -278,7 +285,7 @@ BOOL isFiltered;
     }
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    if ( ([self.selectedFilter isEqualToString:@"Users"]) && (isFiltered)){
+    if ( ([self.selectedFilter isEqualToString:@"Users"]) && (isFiltered) && self.filteredUsers.count > 0){
         User *user = [self.filteredUsers objectAtIndex:indexPath.row];
         [self performSegueWithIdentifier:@"HomeToProfile" sender:user];
     }
@@ -465,13 +472,16 @@ BOOL isFiltered;
 -(void) didTapViewAll: (UIButton *)button{
     NSArray *listings;
     NSString *category;
-    if (!isFiltered){
+    
+    if (!isFiltered && (self.arrayOfCategories.count > 0 && self.categoryToArrayOfPosts.count > 0)){
         category = [self.arrayOfCategories objectAtIndex:button.tag];
         listings = self.categoryToArrayOfPosts[category];
     }
     else{
-        category = [self.filteredArrayOfCategories objectAtIndex:button.tag];
-        listings = self.filteredCategoryToArrayOfPosts[category];
+        if (self.filteredArrayOfCategories.count > 0 && self.filteredCategoryToArrayOfPosts > 0){
+            category = [self.filteredArrayOfCategories objectAtIndex:button.tag];
+            listings = self.filteredCategoryToArrayOfPosts[category];
+        }
     }
     [self performSegueWithIdentifier:@"HomeToViewByCategory" sender:listings];
 }
