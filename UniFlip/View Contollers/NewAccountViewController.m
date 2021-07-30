@@ -40,7 +40,6 @@
     self.collegesTableView.delegate = self;
     self.collegesTableView.dataSource = self;
     
-    // Do any additional setup after loading the view.
     self.passwordField.secureTextEntry = YES;
     self.collegesTableView.hidden = YES;
     [self updateListOfAllUSColleges];
@@ -69,11 +68,8 @@
                                                         [self performSegueWithIdentifier:@"SuccessfulRegisterToLogin" sender:nil];
     
                                                      }];
-    // add the OK action to the alert controller
     [successfullyRegisteredAlert addAction:okAction];
-    [self presentViewController:successfullyRegisteredAlert animated:YES completion:^{
-        // optional code for what happens after the alert controller has finished presenting
-    }];
+    [self presentViewController:successfullyRegisteredAlert animated:YES completion:nil];
 }
 
 /// API Requests
@@ -117,8 +113,6 @@
     NSArray *usernameAndDomain = [schoolEmail componentsSeparatedByString:@"@"];
     NSString *schoolEmailDomain = [usernameAndDomain objectAtIndex:1];
     schoolEmailDomain = [schoolEmailDomain lowercaseString];
-    
-    
     if ([self.collegeSelected isEqual:nil]){
         return FALSE;
     }
@@ -128,7 +122,7 @@
             return TRUE;
         }
     }
-    return FALSE; //change back to FALSE
+    return FALSE;
 }
 - (BOOL)validateEmailWithString:(NSString*)checkString{
     BOOL stricterFilter = NO; // Discussion http://blog.logichigh.com/2010/09/02/validating-an-e-mail-address/
@@ -138,11 +132,6 @@
     NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
     return [emailTest evaluateWithObject:checkString];
 }
-
-
-
-
-
 
 #pragma mark - Actions
 - (IBAction)didTapRegister:(id)sender {

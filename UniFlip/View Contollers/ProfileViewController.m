@@ -32,10 +32,9 @@
 @property (strong, nonatomic) IBOutlet UIButton *followButton;
 @property (strong, nonatomic) IBOutlet UIView *backgroundViewForMailIcon;
 
-@property (strong, nonatomic) NSMutableArray *arrayOfListings;
-@property (strong, nonatomic) NSMutableArray *toolbarButtons;
+@property (strong, nonatomic) NSArray *arrayOfListings;
 @property (strong, nonatomic) UIAlertController *photoSelectorAlert;
-@property (strong, nonatomic) User *currentUser;
+@property (strong, nonatomic) User *currentlyLoggedInUser;
 @property (strong, nonatomic) MDCTabBarView *tabBarView;
 @property (readwrite, strong, nonatomic, nullable) UITabBarItem *selectedItem;
 
@@ -49,27 +48,28 @@ BOOL isFollowingUserOfThisProfile = FALSE;
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.currentUser = [User currentUser];
-    if (!self.user){
-        self.user = self.currentUser;
+    self.currentlyLoggedInUser = [User currentUser];
+    if (!self.userOfProfileToView){
+        self.userOfProfileToView = self.currentlyLoggedInUser;
     }
+    self.listingsCollectionView.dataSource = self;
+    self.listingsCollectionView.delegate = self;
     [self displayTabBar];
     [self addAccessibility];
     
 }
 - (void)viewWillAppear:(BOOL)animated{
-    [self setProfileScreen];
+    [self displayProfileScreen];
 }
 
--(void) setProfileScreen{
-    
+-(void) displayProfileScreen{
     if ([self.tabBarView.selectedItem.title isEqualToString:@"Listings"]){
         showUserListings = TRUE;
     }
     else{
         showUserListings = FALSE;
     }
-    if ([self.user.objectId isEqualToString: self.currentUser.objectId]){
+    if ([self.userOfProfileToView.objectId isEqualToString: self.currentlyLoggedInUser.objectId]){
         self.settingsButton.hidden = NO;
         self.followButton.hidden = YES;
         self.composeMailButton.hidden = YES;
@@ -77,40 +77,27 @@ BOOL isFollowingUserOfThisProfile = FALSE;
     }
     else{
         self.settingsButton.hidden = YES;
-        PFRelation *relation = [self.currentUser relationForKey:@"following"];
+        PFRelation *relation = [self.currentlyLoggedInUser relationForKey:@"following"];
         PFQuery *query = [relation query];
-        //__block BOOL followingUser = FALSE;
         [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable arrayOfUsers, NSError * _Nullable error) {
             if (arrayOfUsers){
                 for (User *user in arrayOfUsers){
-                    if ([user.objectId isEqualToString: self.user.objectId]){
+                    if ([user.objectId isEqualToString: self.userOfProfileToView.objectId]){
                         isFollowingUserOfThisProfile = TRUE;
-                        //followingUser = TRUE;
                     }
                 }
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    //isFollowingUserOfThisProfile = followingUser;
                     [self updateFollowButtonUI];
                 });
             }else{
                 NSLog(@"Could not load users");
             }
-            
         }];
     }
     [self updateFollowerandFollowingButtonsUI];
-
-    
-    self.toolbarButtons = [self.navigationItem.rightBarButtonItems mutableCopy];
-    self.arrayOfListings = [NSMutableArray array];
-    self.listingsCollectionView.dataSource = self;
-    self.listingsCollectionView.delegate = self;
-    self.usernameLabel.text = self.user.username;
-    self.userBioLabel.text = self.user.biography;
-    self.profilePicButton.layer.cornerRadius = self.profilePicButton.frame.size.width / 2;
-    self.profilePicButton.clipsToBounds = YES;
-    
-    PFFileObject *userProfilePicture = self.user.profilePicture;
+    self.usernameLabel.text = self.userOfProfileToView.username;
+    self.userBioLabel.text = self.userOfProfileToView.biography;
+    PFFileObject *userProfilePicture = self.userOfProfileToView.profilePicture;
     [userProfilePicture getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
         if (imageData) {
             UIImage *image = [UIImage imageWithData:imageData];
@@ -120,33 +107,33 @@ BOOL isFollowingUserOfThisProfile = FALSE;
             [self.profilePicButton setImage: [UIImage imageNamed:@"default_profile_pic"] forState:UIControlStateNormal];
         }
     }];
+    [self styleProfileAndMailAndFollowButtons];
     showUserListings ? [self updateListingsBasedOnTabBar:TRUE] : [self updateListingsBasedOnTabBar:FALSE];
-   
+}
+-(void) styleProfileAndMailAndFollowButtons{
     CALayer *imageLayer = self.composeMailButton.superview.layer;
     [imageLayer setCornerRadius:15];
     [imageLayer setBorderWidth:2];
     [imageLayer setBorderColor:[[UIColor alloc]initWithRed:0/255.0 green:0/255.0 blue:128/255.0 alpha:1].CGColor];
     [imageLayer setMasksToBounds:YES];
-    
+
     CGFloat widthOfButton = self.followButton.layer.frame.size.height/ 2;
     [[self.followButton layer] setCornerRadius: widthOfButton];
     [self.followButton setClipsToBounds:TRUE];
     
-    
-    
+    self.profilePicButton.layer.cornerRadius = self.profilePicButton.frame.size.width / 2;
+    self.profilePicButton.clipsToBounds = YES;
 }
 
-#pragma mark - If User wants their saved listings
+#pragma mark - TabBar Action Handler
 -(void) updateListingsBasedOnTabBar: (BOOL) getAllUserListings {
-    //dispatch_group_t dispatchGroup = dispatch_group_create();
-    self.arrayOfListings = [NSMutableArray array];
     __block NSMutableArray *usersListings = [NSMutableArray array];
     PFQuery *query = [Listing query];
     [query includeKey:@"savedBy"];
     [query orderByDescending:@"createdAt"];
     [query includeKey:@"author"];
     if (getAllUserListings){
-        [query whereKey:@"author" equalTo:self.user];
+        [query whereKey:@"author" equalTo:self.userOfProfileToView];
     }
     [query findObjectsInBackgroundWithBlock:^(NSArray * listings, NSError * _Nullable error) {
         if (listings){
@@ -162,7 +149,7 @@ BOOL isFollowingUserOfThisProfile = FALSE;
                     savedByUsers = users;
                 }
                 for (User *user in savedByUsers){
-                    if ([user.username isEqualToString:self.user.username]){
+                    if ([user.username isEqualToString:self.userOfProfileToView.username]){
                         isSaved = TRUE;
                         listing.isSaved = TRUE;
                     }
@@ -174,7 +161,7 @@ BOOL isFollowingUserOfThisProfile = FALSE;
                     }
                 }
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    self.arrayOfListings = [NSMutableArray arrayWithArray:usersListings];
+                    self.arrayOfListings = [NSArray arrayWithArray:usersListings];
                     [self.listingsCollectionView reloadData];
                 });
             }];
@@ -195,7 +182,7 @@ BOOL isFollowingUserOfThisProfile = FALSE;
     Listing *listing = self.arrayOfListings[sender.tag];
     if (listing.isSaved){
         NSLog(@"was saved but is now not saved");
-        [Listing postUnsaveListing:listing withUser:self.user completion:^(BOOL succeeded, NSError * _Nullable error) {
+        [Listing postUnsaveListing:listing withUser:self.userOfProfileToView completion:^(BOOL succeeded, NSError * _Nullable error) {
             if (succeeded){
                 listing.isSaved = FALSE;
                 [self updateSaveButtonUI:listing.isSaved withButton: sender];
@@ -206,7 +193,7 @@ BOOL isFollowingUserOfThisProfile = FALSE;
     }
     else{
         NSLog(@"was not saved but now is saved");
-        [Listing postSaveListing:listing withUser:self.user completion:^(BOOL succeeded, NSError * _Nullable error) {
+        [Listing postSaveListing:listing withUser:self.userOfProfileToView completion:^(BOOL succeeded, NSError * _Nullable error) {
             if (succeeded){
                 listing.isSaved = TRUE;
                 [self updateSaveButtonUI:listing.isSaved withButton: sender];
@@ -218,15 +205,15 @@ BOOL isFollowingUserOfThisProfile = FALSE;
     
 }
 - (IBAction)didTapComposeEmail:(id)sender {
-    MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
-    mc.mailComposeDelegate = self;
+    MFMailComposeViewController *mailComposeViewController = [[MFMailComposeViewController alloc] init];
+    mailComposeViewController.mailComposeDelegate = self;
     __block NSString *email;
-    [self.user fetchInBackgroundWithBlock:^(PFObject * _Nullable object, NSError * _Nullable error) {
+    [self.userOfProfileToView fetchInBackgroundWithBlock:^(PFObject * _Nullable object, NSError * _Nullable error) {
         User *user = (User *)object;
         email = user.schoolEmail;
-        [mc setToRecipients:[NSArray arrayWithObjects: email , nil]];
-        if (mc){
-            [self presentViewController:mc animated:true completion:nil];
+        [mailComposeViewController setToRecipients:[NSArray arrayWithObjects: email , nil]];
+        if (mailComposeViewController){
+            [self presentViewController:mailComposeViewController animated:true completion:nil];
         }
     }];
    
@@ -234,41 +221,34 @@ BOOL isFollowingUserOfThisProfile = FALSE;
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(nullable NSError *)error {
     switch (result) {
         case MFMailComposeResultCancelled:
-            NSLog(@"Mail cancelled");
-
             break;
 
         case MFMailComposeResultSaved:
-            NSLog(@"Mail saved");
-
             break;
 
         case MFMailComposeResultSent:
-            NSLog(@"Mail sent");
-
             break;
 
         case MFMailComposeResultFailed:
             NSLog(@"Mail sent failure: %@",error.description);
             break;
     }
-    // Dismiss the mail compose view controller.
     [controller dismissViewControllerAnimated:true completion:nil];
 }
 - (IBAction)didTapFollowButton:(id)sender {
     if (isFollowingUserOfThisProfile){
-        [User postUnfollowingUser:self.user withUnfollowedBy:self.currentUser withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+        [User postUnfollowingUser:self.userOfProfileToView withUnfollowedBy:self.currentlyLoggedInUser withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
             succeeded ? NSLog(@"now not following user") : NSLog(@"error");
         }];
-        [User postUnfollowedUser:self.user withUnfollowedBy:self.currentUser withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+        [User postUnfollowedUser:self.userOfProfileToView withUnfollowedBy:self.currentlyLoggedInUser withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
             succeeded ? NSLog(@"now user viewed has one less follower") : NSLog(@"error");
         }];
     }
     else{
-        [User postFollowingUser:self.user withFollowedBy:self.currentUser withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+        [User postFollowingUser:self.userOfProfileToView withFollowedBy:self.currentlyLoggedInUser withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
             succeeded ? NSLog(@"now following user") : NSLog(@"error");
         }];
-        [User postFollowedUser:self.user withFollowedBy:self.currentUser withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+        [User postFollowedUser:self.userOfProfileToView withFollowedBy:self.currentlyLoggedInUser withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
             succeeded ? NSLog(@"now user viewed has a follower") : NSLog(@"error");
         }];
     }
@@ -292,14 +272,14 @@ BOOL isFollowingUserOfThisProfile = FALSE;
     }
 }
 - (void) updateFollowerandFollowingButtonsUI{
-    if (!self.user){
-        NSString *followingTitle = [[self.currentUser.followingCount stringValue] stringByAppendingString:@" following"];
+    if (!self.userOfProfileToView){
+        NSString *followingTitle = [[self.currentlyLoggedInUser.followingCount stringValue] stringByAppendingString:@" following"];
         //NSString *followersTitle = [[self.user.followerCount stringValue] stringByAppendingString:@" followers"];
         [self.followingButton setTitle:followingTitle forState:UIControlStateNormal];
         //[self.followersButton setTitle:followersTitle forState:UIControlStateNormal];
     }
     else{
-        NSString *followingTitle = [[self.user.followingCount stringValue] stringByAppendingString:@" following"];
+        NSString *followingTitle = [[self.userOfProfileToView.followingCount stringValue] stringByAppendingString:@" following"];
         //NSString *followersTitle = [[self.user.followerCount stringValue] stringByAppendingString:@" followers"];
         [self.followingButton setTitle:followingTitle forState:UIControlStateNormal];
         //[self.followersButton setTitle:followersTitle forState:UIControlStateNormal];
@@ -346,9 +326,11 @@ BOOL isFollowingUserOfThisProfile = FALSE;
 }
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     Listing *listing = self.arrayOfListings[indexPath.row];
-    [User postVisitedListingToCounter:self.currentUser withListing:listing withCompletion:^(BOOL finished) {}];
-    [User postVisitedCategoryToCounter:self.currentUser withListing:listing withCompletion:^(BOOL finished) {}];
+    [User postVisitedListingToCounter:self.currentlyLoggedInUser withListing:listing withCompletion:^(BOOL finished) {}];
+    [User postVisitedCategoryToCounter:self.currentlyLoggedInUser withListing:listing withCompletion:^(BOOL finished) {}];
 }
+
+#pragma mark - TabBar
 - (void)tabBarView:(MDCTabBarView *)tabBarView didSelectItem:(UITabBarItem *)item{
     if ([item.title isEqualToString:@"Listings"]){
         showUserListings = TRUE;
@@ -356,7 +338,7 @@ BOOL isFollowingUserOfThisProfile = FALSE;
     else{
         showUserListings = FALSE;
     }
-    [self setProfileScreen];
+    [self displayProfileScreen];
 }
 
 -(void) displayTabBar{
@@ -367,14 +349,15 @@ BOOL isFollowingUserOfThisProfile = FALSE;
         [[UITabBarItem alloc] initWithTitle:@"Saved" image:nil tag:0],
     ];
     self.tabBarView.preferredLayoutStyle = MDCTabBarViewLayoutStyleFixed;
-    //self.tabBarView.frame = CGRectMake(8, 157.5, 394, 15);
     self.tabBarView.frame = CGRectMake(8, self.followingButton.frame.origin.y+35, self.followingButton.superview.frame.size.width, 15);
     self.tabBarView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.profileView addSubview:self.tabBarView];
     self.tabBarView.tabBarDelegate = self;
     [self.tabBarView setSelectedItem:[self.tabBarView.items objectAtIndex:0]];
     
-    /* Leading space to superview */
+    [self addConstraintsToTabBar];
+}
+-(void) addConstraintsToTabBar{
     NSLayoutConstraint *trailing =[NSLayoutConstraint
                                     constraintWithItem: self.tabBarView
                                     attribute:NSLayoutAttributeTrailing
@@ -391,11 +374,9 @@ BOOL isFollowingUserOfThisProfile = FALSE;
                                        attribute:NSLayoutAttributeLeading
                                        multiplier:1.0
                                        constant:0];
-    /* Top space to superview Y*/
     NSLayoutConstraint *top = [NSLayoutConstraint constraintWithItem:self.tabBarView attribute:NSLayoutAttributeTop
                                                  relatedBy:NSLayoutRelationLessThanOrEqual toItem:self.followingButton attribute:
                                                  NSLayoutAttributeBottom multiplier:1.0 constant:2];
-    /* Bottom space to superview Y*/
     NSLayoutConstraint *bottom = [NSLayoutConstraint constraintWithItem:self.tabBarView attribute:NSLayoutAttributeBottom
                                                  relatedBy:NSLayoutRelationEqual toItem:self.listingsCollectionView attribute:
                                                  NSLayoutAttributeTop multiplier:1.0 constant:0];
@@ -409,7 +390,6 @@ BOOL isFollowingUserOfThisProfile = FALSE;
                                    multiplier:0
                                    constant:35];
     
-    /* 4. Add the constraints to button's superview*/
     [self.profileView addConstraint:leading];
     [self.profileView addConstraint:trailing];
     [self.profileView addConstraint:top];
@@ -417,7 +397,6 @@ BOOL isFollowingUserOfThisProfile = FALSE;
     
     [self.tabBarView addConstraint:height];
 }
-
 -(void) addAccessibility{
     self.profilePicButton.isAccessibilityElement = YES;
     self.usernameLabel.isAccessibilityElement = YES;
@@ -432,21 +411,21 @@ BOOL isFollowingUserOfThisProfile = FALSE;
     for (UITabBarItem *item in self.tabBarView.items){
         item.isAccessibilityElement = YES;
         if ([item.title isEqualToString:@"Listings"]){
-            item.accessibilityValue = [[@"Tap to view " stringByAppendingString:self.user.username] stringByAppendingString:@"'s posted listings"];
+            item.accessibilityValue = [[@"Tap to view " stringByAppendingString:self.userOfProfileToView.username] stringByAppendingString:@"'s posted listings"];
         }
         else{
-            item.accessibilityValue = [[@"Tap to view " stringByAppendingString:self.user.username] stringByAppendingString:@"'s saved listings"];
+            item.accessibilityValue = [[@"Tap to view " stringByAppendingString:self.userOfProfileToView.username] stringByAppendingString:@"'s saved listings"];
         }
     }
     
-    self.profilePicButton.accessibilityValue = [self.user.username stringByAppendingString:@"'s profile picture"];
-    self.usernameLabel.accessibilityValue = [@"User's username is " stringByAppendingString:self.user.username];
-    self.userBioLabel.accessibilityValue = [[self.user.username stringByAppendingString:@"'s bio is "] stringByAppendingString:self.user.biography];
+    self.profilePicButton.accessibilityValue = [self.userOfProfileToView.username stringByAppendingString:@"'s profile picture"];
+    self.usernameLabel.accessibilityValue = [@"User's username is " stringByAppendingString:self.userOfProfileToView.username];
+    self.userBioLabel.accessibilityValue = [[self.userOfProfileToView.username stringByAppendingString:@"'s bio is "] stringByAppendingString:self.userOfProfileToView.biography];
     self.settingsButton.accessibilityValue = @"Tap to change your profile settings";
-    self.composeMailButton.accessibilityValue = [@"Tap to send an e-mail to " stringByAppendingString:self.user.username];
-    self.followButton.accessibilityValue = [@"Tap to follow " stringByAppendingString:self.user.username];
-    self.followingButton.accessibilityValue = [[[self.user.username stringByAppendingString:@" is following "] stringByAppendingString:self.followingButton.titleLabel.text] stringByAppendingString:@" other users"];
-    self.followersButton.accessibilityValue = [[[self.user.username stringByAppendingString:@" has "] stringByAppendingString:self.followersButton.titleLabel.text] stringByAppendingString:@" followers"];
+    self.composeMailButton.accessibilityValue = [@"Tap to send an e-mail to " stringByAppendingString:self.userOfProfileToView.username];
+    self.followButton.accessibilityValue = [@"Tap to follow " stringByAppendingString:self.userOfProfileToView.username];
+    self.followingButton.accessibilityValue = [[[self.userOfProfileToView.username stringByAppendingString:@" is following "] stringByAppendingString:self.followingButton.titleLabel.text] stringByAppendingString:@" other users"];
+    self.followersButton.accessibilityValue = [[[self.userOfProfileToView.username stringByAppendingString:@" has "] stringByAppendingString:self.followersButton.titleLabel.text] stringByAppendingString:@" followers"];
 }
 
 #pragma mark - Navigation

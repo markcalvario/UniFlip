@@ -17,12 +17,12 @@
 @import UITextView_Placeholder;
 
 @interface EditProfileViewController ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate>
-@property (strong,nonatomic) User *user;
 @property (strong, nonatomic) IBOutlet UIButton *profilePicButton;
 @property (strong, nonatomic) IBOutlet UITextView *bioTextView;
-@property (strong, nonatomic) UIAlertController *photoSelectorAlert;
 @property (strong, nonatomic) IBOutlet UIImageView *addPhotoIcon;
 @property (strong, nonatomic) IBOutlet UIButton *saveChangesButton;
+@property (strong,nonatomic) User *user;
+@property (strong, nonatomic) UIAlertController *photoSelectorAlert;
 
 @end
 
@@ -30,7 +30,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     [self displayEditProfile];
     [self addAccessiblity];
 }
@@ -80,7 +79,6 @@
     [self showPhotoAlert];
 }
 - (void)showPhotoAlert {
-    // Add code to be run periodically
      UIImagePickerController *imagePickerVC = [UIImagePickerController new];
      imagePickerVC.delegate = self;
      imagePickerVC.allowsEditing = YES;
@@ -110,10 +108,8 @@
     
 }
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
-    // Get the image captured by the UIImagePickerController
     UIImage *originalImage = info[UIImagePickerControllerOriginalImage];
     [self.profilePicButton setImage:originalImage forState:UIControlStateNormal];
-    // Dismiss UIImagePickerController to go back to your original view controller
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

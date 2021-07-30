@@ -17,7 +17,6 @@
 #import "CategoryViewController.h"
 #import "ProfileCell.h"
 #import "ProfileViewController.h"
-
 #import <SystemConfiguration/SystemConfiguration.h>
 
 
@@ -25,7 +24,7 @@
 @property (weak, nonatomic) IBOutlet UITableView *listingCategoryTableView;
 @property (strong, nonatomic) IBOutlet UISearchBar *searchListingsBar;
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *loadingSpinner;
-@property (strong, nonatomic) NSMutableDictionary *categoryToArrayOfPosts;
+@property (strong, nonatomic) NSMutableDictionary *categoryToArrayOfListings;
 @property (strong, nonatomic) NSMutableArray *arrayOfCategories;
 @property (strong, nonatomic) User *currentUser;
 @property (strong, nonatomic) NSMutableDictionary *filteredCategoryToArrayOfPosts;
@@ -46,7 +45,6 @@ BOOL isFiltered;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     self.searchListingsBar.delegate = self;
     [self.searchListingsBar setUserInteractionEnabled:NO];
     isFiltered = NO;
@@ -89,7 +87,7 @@ BOOL isFiltered;
         [self.view setAlpha:0.75];
 
         
-        self.categoryToArrayOfPosts = [NSMutableDictionary dictionary];
+        self.categoryToArrayOfListings = [NSMutableDictionary dictionary];
         self.arrayOfCategories = [NSMutableArray array];
         self.allListings = [NSMutableArray array];
         
@@ -106,16 +104,16 @@ BOOL isFiltered;
                         __block BOOL isListingSaved = FALSE;
                         //Adding listing to appropiate dictionary key
                         NSString *category = listing.listingCategory;
-                        if ( [self.categoryToArrayOfPosts objectForKey:listing.listingCategory]){
-                            NSMutableArray *arrayOfListingsValue = [self.categoryToArrayOfPosts objectForKey:category];
+                        if ( [self.categoryToArrayOfListings objectForKey:listing.listingCategory]){
+                            NSMutableArray *arrayOfListingsValue = [self.categoryToArrayOfListings objectForKey:category];
                             [arrayOfListingsValue addObject:listing];
-                            [self.categoryToArrayOfPosts setObject:arrayOfListingsValue forKey:category];
+                            [self.categoryToArrayOfListings setObject:arrayOfListingsValue forKey:category];
                         }
                         else{
                             NSMutableArray *arrayOfListingsValue = [[NSMutableArray alloc] init];
                             [arrayOfListingsValue addObject:listing];
                             [self.arrayOfCategories addObject: category];
-                            [self.categoryToArrayOfPosts setObject:arrayOfListingsValue forKey:category];
+                            [self.categoryToArrayOfListings setObject:arrayOfListingsValue forKey:category];
                         }
                         [self.allListings addObject:listing];
                         //checking for saved listings by user
@@ -238,9 +236,6 @@ BOOL isFiltered;
 
 #pragma mark - Table View
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    /*if (self.arrayOfCategories.count == 0 || self.categoryToArrayOfPosts.count == 0 || self.filteredArrayOfCategories.count == 0 || self.filteredCategoryToArrayOfPosts == 0){
-        return nil;
-    }*/
     if (isFiltered && ([self.selectedFilter isEqualToString:@"Users"]) && self.filteredUsers.count > 0){
         tableView.allowsSelection = YES;
         ProfileCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ProfileCell"];
@@ -274,7 +269,7 @@ BOOL isFiltered;
         }
         return [self.filteredArrayOfCategories count];
     }
-    return [self.categoryToArrayOfPosts count];
+    return [self.categoryToArrayOfListings count];
 }
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     if ( ([self.selectedFilter isEqualToString:@"Listings"]) || (!isFiltered)){
@@ -302,7 +297,7 @@ BOOL isFiltered;
     }
     else{
         tableViewCategory = self.arrayOfCategories[indexPath.row];
-        currentCategoryArray = self.categoryToArrayOfPosts[tableViewCategory];
+        currentCategoryArray = self.categoryToArrayOfListings[tableViewCategory];
     }
     CGFloat numOfListings = currentCategoryArray.count;
     CGFloat numberOfItemsPerRow = 2;
@@ -343,7 +338,7 @@ BOOL isFiltered;
     }
     else{
         tableViewCategory = self.arrayOfCategories[tableViewIndex];
-        currentCategoryArray = self.categoryToArrayOfPosts[tableViewCategory];
+        currentCategoryArray = self.categoryToArrayOfListings[tableViewCategory];
     }    
     return currentCategoryArray.count;
 }
@@ -358,7 +353,7 @@ BOOL isFiltered;
     }
     else{
         tableViewCategory = self.arrayOfCategories[tableViewIndex];
-        currentCategoryArray = self.categoryToArrayOfPosts[tableViewCategory];
+        currentCategoryArray = self.categoryToArrayOfListings[tableViewCategory];
     }
     Listing *listing = currentCategoryArray[indexPath.row];
     [listingCell withTitleLabel: listingCell.titleLabel withSaveButton:listingCell.saveButton withPriceLabel:listingCell.priceLabel withListingImage:listingCell.listingImage withListing:listing withCategory:tableViewCategory withIndexPath:indexPath withIsFiltered:isFiltered withSearchText:self.searchText];
@@ -401,7 +396,7 @@ BOOL isFiltered;
     }
     else{
         category = self.arrayOfCategories[collectionView.tag];
-        listing = self.categoryToArrayOfPosts[category][indexPath.row];
+        listing = self.categoryToArrayOfListings[category][indexPath.row];
     }
     [User postVisitedListingToCounter:self.currentUser withListing:listing withCompletion:^(BOOL finished) {}];
     [User postVisitedCategoryToCounter:self.currentUser withListing:listing withCompletion:^(BOOL finished) {}];
@@ -432,7 +427,7 @@ BOOL isFiltered;
             listing = self.filteredCategoryToArrayOfPosts[[sender currentTitle]][sender.tag];
         }
         else{
-            listing = self.categoryToArrayOfPosts[[sender currentTitle]][sender.tag];
+            listing = self.categoryToArrayOfListings[[sender currentTitle]][sender.tag];
         }
         if (listing.isSaved){
             NSLog(@"was saved but is now not saved");
@@ -473,9 +468,9 @@ BOOL isFiltered;
     NSArray *listings;
     NSString *category;
     
-    if (!isFiltered && (self.arrayOfCategories.count > 0 && self.categoryToArrayOfPosts.count > 0)){
+    if (!isFiltered && (self.arrayOfCategories.count > 0 && self.categoryToArrayOfListings.count > 0)){
         category = [self.arrayOfCategories objectAtIndex:button.tag];
-        listings = self.categoryToArrayOfPosts[category];
+        listings = self.categoryToArrayOfListings[category];
     }
     else{
         if (self.filteredArrayOfCategories.count > 0 && self.filteredCategoryToArrayOfPosts > 0){
@@ -587,7 +582,7 @@ BOOL isFiltered;
     }
     if ([[segue identifier] isEqualToString:@"HomeToProfile"]){
         ProfileViewController *profileViewController = [segue destinationViewController];
-        profileViewController.user = sender;
+        profileViewController.userOfProfileToView = sender;
     }
 
 }

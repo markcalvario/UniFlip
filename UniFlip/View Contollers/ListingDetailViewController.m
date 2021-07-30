@@ -34,13 +34,11 @@
 @property (strong, nonatomic) IBOutlet UICollectionView *photosCollectionView;
 @property (strong, nonatomic) IBOutlet UIPageControl *photoIndicator;
 @property (strong, nonatomic) IBOutlet UIButton *composeMailButton;
-@property (strong, nonatomic) IBOutlet UIScrollView *outerScrollView;
+@property (strong, nonatomic) IBOutlet UIView *listingInformationView;
+
 @property (strong, nonatomic) UIImageView *imageToZoom;
 @property (strong, nonatomic) User *currentUser;
 @property (strong, nonatomic) NSArray *photos;
-
-@property (strong, nonatomic) IBOutlet UIView *innerView;
-
 
 @end
 
@@ -73,7 +71,7 @@ CGFloat lastScale;
     if (userProfilePicture){
         [Listing PFFileToUIImage:userProfilePicture completion:^(UIImage * image, NSError * error) {
             if (image){
-                [self.imageOfAuthorButton setImage: [ListingDetailViewController imageWithImage:image scaledToWidth:414] forState:UIControlStateNormal];
+                [self.imageOfAuthorButton setImage: [ListingDetailViewController imageWithImage:image scaledToWidth:self.view.frame.size.width] forState:UIControlStateNormal];
             }
             else{
                 [self.imageOfAuthorButton setImage: [UIImage imageNamed:@"envelope_icon"] forState:UIControlStateNormal];
@@ -101,25 +99,18 @@ CGFloat lastScale;
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(nullable NSError *)error {
     switch (result) {
         case MFMailComposeResultCancelled:
-            NSLog(@"Mail cancelled");
-
             break;
 
         case MFMailComposeResultSaved:
-            NSLog(@"Mail saved");
-
             break;
 
         case MFMailComposeResultSent:
-            NSLog(@"Mail sent");
-
             break;
 
         case MFMailComposeResultFailed:
             NSLog(@"Mail sent failure: %@",error.description);
             break;
     }
-    // Dismiss the mail compose view controller.
     [controller dismissViewControllerAnimated:true completion:nil];
 }
 -(void) updateSaveButtonUI:(BOOL )isSaved withButton:(UIButton *)saveButton{
@@ -134,13 +125,12 @@ CGFloat lastScale;
 }
 
 -(void) openComposeMailViewController{
-    MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
-    mc.mailComposeDelegate = self;
-    [mc setToRecipients:[NSArray arrayWithObjects: self.listing.authorEmail , nil]];
-    if (mc){
-        [self presentViewController:mc animated:true completion:nil];
+    MFMailComposeViewController *mailComposeViewController = [[MFMailComposeViewController alloc] init];
+    mailComposeViewController.mailComposeDelegate = self;
+    [mailComposeViewController setToRecipients:[NSArray arrayWithObjects: self.listing.authorEmail , nil]];
+    if (mailComposeViewController){
+        [self presentViewController:mailComposeViewController animated:true completion:nil];
     }
-    // be a good memory manager and release mc, as you are responsible for it because your alloc/init
 }
 #pragma mark - Action Handlers
 - (IBAction)didTapComposeMail:(id)sender {
@@ -148,7 +138,6 @@ CGFloat lastScale;
 }
 - (IBAction)didTapSaveIcon:(id)sender {
     if (self.listing.isSaved){
-        NSLog(@"was saved but is now not saved");
         [Listing postUnsaveListing:self.listing withUser:self.currentUser completion:^(BOOL succeeded, NSError * _Nullable error) {
             if (succeeded){
                 self.listing.isSaved = FALSE;
@@ -157,7 +146,6 @@ CGFloat lastScale;
         }];
     }
     else{
-        NSLog(@"was not saved but now is saved");
         [Listing postSaveListing:self.listing withUser:self.currentUser completion:^(BOOL succeeded, NSError * _Nullable error) {
             if (succeeded){
                 self.listing.isSaved = TRUE;
@@ -175,7 +163,6 @@ CGFloat lastScale;
 }
 - (IBAction)didTapImageTwice:(id)sender {
     if (self.listing.isSaved){
-        NSLog(@"was saved but is now not saved");
         [Listing postUnsaveListing:self.listing withUser:self.currentUser completion:^(BOOL succeeded, NSError * _Nullable error) {
             if (succeeded){
                 self.listing.isSaved = FALSE;
@@ -185,7 +172,6 @@ CGFloat lastScale;
         }];
     }
     else{
-        NSLog(@"was not saved but now is saved");
         [Listing postSaveListing:self.listing withUser:self.currentUser completion:^(BOOL succeeded, NSError * _Nullable error) {
             if (succeeded){
                 self.listing.isSaved = TRUE;
@@ -295,7 +281,7 @@ CGFloat lastScale;
     PFFileObject *listingImageObject = [self.photos objectAtIndex:indexPath.row];
     [Listing PFFileToUIImage:listingImageObject completion:^(UIImage * image, NSError * error) {
         if (image){
-            [self addImageViewWithImage:image];
+            [self displayScrollViewAndImageViewWithImage:image];
             
         }
     }];
@@ -304,40 +290,8 @@ CGFloat lastScale;
     return CGSizeMake(collectionView.frame.size.width, collectionView.frame.size.width*1.5);
 }
 
-- (UIImage *)resizeImage:(UIImage *)image withSize:(CGSize)size {
-    UIImageView *resizeImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
-    
-    resizeImageView.contentMode = UIViewContentModeScaleAspectFill;
-    resizeImageView.image = image;
-    
-    UIGraphicsBeginImageContext(size);
-    [resizeImageView.layer renderInContext:UIGraphicsGetCurrentContext()];
-    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    return newImage;
-}
-- (UIImage *)scaleImageToSize:(UIImage *)image withSize:(CGSize)size {
-    CGRect scaledImageRect = CGRectZero;
-      
-      CGFloat aspectWidth = size.width / image.size.width;
-      CGFloat aspectHeight = size.height / image.size.height;
-      CGFloat aspectRatio = MAX ( aspectWidth, aspectHeight );
-      
-      scaledImageRect.size.width = image.size.width * aspectRatio;
-      scaledImageRect.size.height = image.size.height * aspectRatio;
-      scaledImageRect.origin.x = (size.width - scaledImageRect.size.width) / 2.0f;
-      scaledImageRect.origin.y = (size.height - scaledImageRect.size.height) / 2.0f;
-      
-      UIGraphicsBeginImageContextWithOptions( size, NO, 0 );
-      [image drawInRect:scaledImageRect];
-      UIImage* scaledImage = UIGraphicsGetImageFromCurrentImageContext();
-      UIGraphicsEndImageContext();
-      
-      return scaledImage;
-}
-
--(void)addImageViewWithImage:(UIImage*)image {
+#pragma mark - Full Image View
+-(void) displayScrollViewAndImageViewWithImage:(UIImage*)image {
     UIImageView *imgView = [[UIImageView alloc] init];
     imgView.frame = CGRectMake(0, self.titleLabel.superview.frame.size.height/4, self.titleLabel.superview.frame.size.width, self.titleLabel.superview.frame.size.height/2);
     
@@ -364,7 +318,7 @@ CGFloat lastScale;
     scrollView.alpha = 0;
     imgView.alpha = 0;
     
-    [self.innerView addSubview:scrollView];
+    [self.listingInformationView addSubview:scrollView];
     [scrollView addSubview:imgView];
     if (scrollView.alpha ==0){
         [UIView animateWithDuration:0.5 delay:0.2 options:UIViewAnimationOptionCurveEaseOut animations:^{
@@ -372,8 +326,6 @@ CGFloat lastScale;
             imgView.alpha = 1;
         }completion:nil];
     }
-    
-    
 }
 
 
@@ -404,6 +356,27 @@ CGFloat lastScale;
     }
 }
 
+
+- (UIImage *)scaleImageToSize:(UIImage *)image withSize:(CGSize)size {
+    CGRect scaledImageRect = CGRectZero;
+      
+      CGFloat aspectWidth = size.width / image.size.width;
+      CGFloat aspectHeight = size.height / image.size.height;
+      CGFloat aspectRatio = MAX ( aspectWidth, aspectHeight );
+      
+      scaledImageRect.size.width = image.size.width * aspectRatio;
+      scaledImageRect.size.height = image.size.height * aspectRatio;
+      scaledImageRect.origin.x = (size.width - scaledImageRect.size.width) / 2.0f;
+      scaledImageRect.origin.y = (size.height - scaledImageRect.size.height) / 2.0f;
+      
+      UIGraphicsBeginImageContextWithOptions( size, NO, 0 );
+      [image drawInRect:scaledImageRect];
+      UIImage* scaledImage = UIGraphicsGetImageFromCurrentImageContext();
+      UIGraphicsEndImageContext();
+      
+      return scaledImage;
+}
+
 - (void) addAccessibility{
     self.photosCollectionView.isAccessibilityElement = YES;
     self.imageOfAuthorButton.isAccessibilityElement = YES;
@@ -427,12 +400,10 @@ CGFloat lastScale;
 }
 
 #pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"ListingDetailToProfile"]){
         ProfileViewController *profileViewController = [segue destinationViewController];
-        profileViewController.user = sender;
+        profileViewController.userOfProfileToView = sender;
     }
     else{
         ReportListingViewController *reportViewController = [segue destinationViewController];

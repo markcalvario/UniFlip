@@ -17,8 +17,6 @@
 @import UITextView_Placeholder;
 
 @interface SellViewController ()<UINavigationControllerDelegate, UIImagePickerControllerDelegate, SelectOptionViewControllerDelege, PlaceAutocompleteDelege, UICollectionViewDelegate, UICollectionViewDataSource>
-@property (strong, nonatomic) UIAlertController *alert;
-@property (strong, nonatomic) UIImage *imagePlaceHolder;
 @property (weak, nonatomic) IBOutlet UITextField *listingTitleField;
 @property (weak, nonatomic) IBOutlet UITextView *listingDescriptionView;
 @property (weak, nonatomic) IBOutlet UIButton *locationButton;
@@ -29,6 +27,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *listingTypeField;
 @property (weak, nonatomic) IBOutlet UITextField *priceField;
 @property (strong, nonatomic) IBOutlet UITapGestureRecognizer *exitKeyboardGesture;
+@property (strong, nonatomic) IBOutlet UICollectionView *photosCollectionView;
 
 @property (strong, nonatomic) NSArray *photosToUpload;
 @property (strong, nonatomic) NSString *listingTitle;
@@ -40,9 +39,10 @@
 @property (strong, nonatomic) NSString *condition;
 @property (strong, nonatomic) NSString *price;
 
-@property (strong, nonatomic) IBOutlet UICollectionView *photosCollectionView;
 @property (strong, nonatomic) NSMutableArray<UIImage *> *photos;
 @property (nonatomic) NSInteger indexOfPhoto;
+@property (strong, nonatomic) UIAlertController *alert;
+@property (strong, nonatomic) UIImage *imagePlaceHolder;
 
 @end
 
@@ -50,7 +50,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     self.photosCollectionView.delegate = self;
     self.photosCollectionView.dataSource = self;
     [self setSellViewControllerStyling];
@@ -65,7 +64,6 @@
     [[self.listingDescriptionView layer] setBorderWidth:1];
     [[self.listingDescriptionView layer] setCornerRadius:10];
     
-    //Location Button styling
     [[self.locationButton layer] setBorderColor:[[UIColor systemGray5Color] CGColor]];
     [[self.locationButton layer] setBorderWidth:1];
     [[self.locationButton layer] setCornerRadius:5];
@@ -74,13 +72,10 @@
     [[self.categoryButton layer] setBorderWidth:1];
     [[self.categoryButton layer] setCornerRadius:5];
     
-  /*  CGFloat widthOfButton = self.postListingButton.layer.frame.size.height/ 2;
-    [[self.postListingButton layer] setCornerRadius: widthOfButton];
-    [self.postListingButton setClipsToBounds:TRUE];*/
 }
 
 
-/// Photo Selection Alert
+
 - (void)showPhotoAlert {
     UIImagePickerController *imagePickerVC = [UIImagePickerController new];
     imagePickerVC.delegate = self;
@@ -106,9 +101,7 @@
         }];
         [actionSheet addAction:selectCameraAction];
     }
-   
-    //CategoryToSelectOption
-    MDCActionSheetAction *selectPhotoGalleryAction =
+       MDCActionSheetAction *selectPhotoGalleryAction =
         [MDCActionSheetAction actionWithTitle:@"Phone Gallery"
                                         image:[UIImage systemImageNamed:@"square.grid.3x3"]
                                       handler:^(MDCActionSheetAction *action){
@@ -123,27 +116,13 @@
     [self presentViewController:actionSheet animated:YES completion:nil];
 }
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
-    // Get the image captured by the UIImagePickerController
     UIImage *originalImage = info[UIImagePickerControllerOriginalImage];
-    //UIImage *editedImage = info[UIImagePickerControllerEditedImage];
     [self.photos insertObject:originalImage atIndex:self.indexOfPhoto];
-    // Do something with the images (based on your use case)
-   
-    // Dismiss UIImagePickerController to go back to your original view controller
     [self dismissViewControllerAnimated:YES completion:nil];
     [self.photosCollectionView reloadData];
 }
 
-
-
-///Getting the option selected
-- (void)addOptionSelectedToViewController:(NSString*)option{
-    //do whatever you want with the data
-    [self.categoryButton setTitle:option forState:UIControlStateNormal];
-    [self.categoryButton setTitleColor:[UIColor colorWithRed:0 green:0.58984375 blue:0.8984375 alpha:1] forState:UIControlStateNormal];
-}
 - (void)addPlaceSelectedToViewController:(NSString*)location withInputType:(NSString *)inputType{
-    NSLog(@"%@ for %@", location, inputType);
     if ([inputType isEqualToString:@"Location"]){
         [self.locationButton setTitle: location forState:UIControlStateNormal];
         [self.locationButton setTitleColor:[UIColor colorWithRed:0 green:0.58984375 blue:0.8984375 alpha:1] forState:UIControlStateNormal];
@@ -220,7 +199,31 @@
 
     }
 }
+#pragma mark - Collection View
+- (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    PhotoCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"PhotoCell" forIndexPath:indexPath];
+    NSInteger lengthOfPhotosArray = self.photos.count;
+    cell.listingPhoto.isAccessibilityElement = YES;
+    if (lengthOfPhotosArray == 0 || (!cell.listingPhoto.image) || (indexPath.row >= lengthOfPhotosArray)){
+        [cell.listingPhoto setImage:[UIImage imageNamed:@"photo_add_icon"]];
+        cell.listingPhoto.accessibilityValue = @"Upload a new photo button";
+    }
+    else{
+        UIImage *photoSelected = [self.photos objectAtIndex:indexPath.row];
+        [cell.listingPhoto setImage:photoSelected];
+        cell.listingPhoto.accessibilityValue = @"Delete or replace your uploaded photo";
 
+    }
+    return cell;
+}
+
+- (NSInteger)collectionView:(nonnull UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return self.photos.count+1;
+}
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+    self.indexOfPhoto = indexPath.row;
+    [self showPhotoAlert];
+}
 
 -(void) resetInputFields{
     self.imagePlaceHolder = [UIImage imageNamed:@"photo_add_icon"];
@@ -257,33 +260,6 @@
     self.priceField.accessibilityValue = @"Enter the price amount of your listing in United States dollar currency";
     self.postListingButton.accessibilityValue = @"Tap to submit your listing";
     self.photosCollectionView.accessibilityValue = @"Select photos of your listing, minimum of 1 photo";
-    
-}
-
-#pragma mark - Collection View
-- (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    PhotoCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"PhotoCell" forIndexPath:indexPath];
-    NSInteger lengthOfPhotosArray = self.photos.count;
-    cell.listingPhoto.isAccessibilityElement = YES;
-    if (lengthOfPhotosArray == 0 || (!cell.listingPhoto.image) || (indexPath.row >= lengthOfPhotosArray)){
-        [cell.listingPhoto setImage:[UIImage imageNamed:@"photo_add_icon"]];
-        cell.listingPhoto.accessibilityValue = @"Upload a new photo button";
-    }
-    else{
-        UIImage *photoSelected = [self.photos objectAtIndex:indexPath.row];
-        [cell.listingPhoto setImage:photoSelected];
-        cell.listingPhoto.accessibilityValue = @"Delete or replace your uploaded photo";
-
-    }
-    return cell;
-}
-
-- (NSInteger)collectionView:(nonnull UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.photos.count+1;
-}
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
-    self.indexOfPhoto = indexPath.row;
-    [self showPhotoAlert];
 }
 
 #pragma mark - Navigation
