@@ -11,6 +11,11 @@ PODS:
     - MaterialComponents/Ripple
     - MaterialComponents/ShadowElevations
     - MaterialComponents/Typography
+  - MaterialComponents/ActivityIndicator (124.2.0):
+    - MaterialComponents/Palettes
+    - MaterialComponents/private/Application
+    - MDFInternationalization
+    - MotionAnimator (~> 4.0)
   - MaterialComponents/AnimationTiming (124.2.0)
   - MaterialComponents/Availability (124.2.0)
   - MaterialComponents/BottomSheet (124.2.0):
@@ -45,6 +50,7 @@ PODS:
   - MaterialComponents/OverlayWindow (124.2.0):
     - MaterialComponents/Availability
     - MaterialComponents/private/Application
+  - MaterialComponents/Palettes (124.2.0)
   - MaterialComponents/private/Application (124.2.0)
   - MaterialComponents/private/Color (124.2.0):
     - MaterialComponents/Availability
@@ -146,6 +152,9 @@ PODS:
     - MDFTextAccessibility
   - MDFInternationalization (3.0.0)
   - MDFTextAccessibility (2.0.1)
+  - MotionAnimator (4.0.1):
+    - MotionInterchange (~> 3.0)
+  - MotionInterchange (3.0.0)
   - Parse (1.19.2):
     - Parse/Core (= 1.19.2)
   - Parse/Core (1.19.2):
@@ -156,6 +165,7 @@ DEPENDENCIES:
   - DateTools
   - GooglePlaces
   - MaterialComponents/ActionSheet
+  - MaterialComponents/ActivityIndicator
   - MaterialComponents/Snackbar
   - "MaterialComponents/Tabs+TabBarView"
   - "MaterialComponents/TextControls+FilledTextAreas"
@@ -173,6 +183,8 @@ SPEC REPOS:
     - MaterialComponents
     - MDFInternationalization
     - MDFTextAccessibility
+    - MotionAnimator
+    - MotionInterchange
     - Parse
     - "UITextView+Placeholder"
 
@@ -183,9 +195,11 @@ SPEC CHECKSUMS:
   MaterialComponents: 1a9b2d9d45b1601ae544de85089adc4c464306d4
   MDFInternationalization: d697c55307816222a55685c4ccb1044ffb030c12
   MDFTextAccessibility: f4bb4cc2194286651b59a215fdeaa0e05dc90ba5
+  MotionAnimator: 5f99d7c9592928c0f28a66283eda9c3b657dc480
+  MotionInterchange: 13adae439b377e31d1674cc165539d50e1d1566a
   Parse: 081fb8755c3000fd11df817eec235def233d0af3
   "UITextView+Placeholder": d7b0c400921f66523f3a85d74f774512e14f6502
 
-PODFILE CHECKSUM: 3f833063b18d2223f821ca49cee396324fcc1285
+PODFILE CHECKSUM: e8286101cd6597174d4c454e30f133c320ec1bb9
 
 COCOAPODS: 1.10.1

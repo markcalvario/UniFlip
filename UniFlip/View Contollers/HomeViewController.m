@@ -18,6 +18,7 @@
 #import "ProfileCell.h"
 #import "ProfileViewController.h"
 #import <SystemConfiguration/SystemConfiguration.h>
+#import "MaterialActivityIndicator.h"
 
 
 @interface HomeViewController ()<UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchBarDelegate>
@@ -35,6 +36,7 @@
 @property (strong, nonatomic) NSArray *allUsersOfUniversity;
 @property (strong, nonatomic) NSMutableArray *filteredUsers;
 @property (strong, nonatomic) NSString *searchText;
+@property (strong, nonatomic) MDCActivityIndicator *activityIndicator;
 
 @property (strong, nonatomic) NSString *selectedFilter;
 @property (nonatomic) CGFloat categoryLabelHeight;
@@ -58,6 +60,10 @@ BOOL isFiltered;
     
     self.tabBarItem.image.isAccessibilityElement = YES;
     self.tabBarItem.image.accessibilityValue = @"Home Tab";
+    
+    self.activityIndicator = [[MDCActivityIndicator alloc] init];
+    self.activityIndicator.frame = self.loadingSpinner.frame;
+    [self.view addSubview:self.activityIndicator];
 }
 -(void) viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -82,9 +88,11 @@ BOOL isFiltered;
         [self displayConnectionErrorAlert];
     }
     else{
-        [self.loadingSpinner startAnimating];
-        self.loadingSpinner.hidden = NO;
+        //[self.loadingSpinner startAnimating];
+        self.loadingSpinner.hidden = YES;
         [self.view setAlpha:0.75];
+        [self.activityIndicator startAnimating];
+        self.activityIndicator.hidden = NO;
 
         
         self.categoryToArrayOfListings = [NSMutableDictionary dictionary];
@@ -133,12 +141,13 @@ BOOL isFiltered;
                                     listing.isSaved = FALSE;
                                 }
                                 dispatch_async(dispatch_get_main_queue(), ^{
-                                    [self.loadingSpinner stopAnimating];
+                                    //[self.loadingSpinner stopAnimating];
                                     self.loadingSpinner.hidden = YES;
                                     [self.view setAlpha:1];
                                     [self.refreshControl endRefreshing];
                                     [self.listingCategoryTableView reloadData];
                                     [self updateSuggestedListings];
+                                    [self.activityIndicator stopAnimating];
                                 });
                             }else{
                                 NSLog(@"Could not load saved listings");
