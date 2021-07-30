@@ -4,7 +4,7 @@
 //
 //  Created by mac2492 on 7/25/21.
 //
-
+#import "ListingDetailViewController.h"
 #import "CategoryViewController.h"
 #import "CategoryCell.h"
 #import "ListingCell.h"
@@ -115,7 +115,13 @@
     return CGSizeMake(itemWidth, itemHeight);
     
 }
-
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+    Listing *listing = [self.listings objectAtIndex:indexPath.row];
+    [User postVisitedListingToCounter:self.currentUser withListing:listing withCompletion:^(BOOL finished) {}];
+    [User postVisitedCategoryToCounter:self.currentUser withListing:listing withCompletion:^(BOOL finished) {}];
+    
+    [self performSegueWithIdentifier:@"ListingsByCategoryToListingDetail" sender:listing];
+}
 
 - (BOOL) isConnectedToInternet{
     Reachability *reach = [Reachability reachabilityForInternetConnection];
@@ -168,15 +174,16 @@
     }
     
 }
-/*
+
 #pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    if ([[segue identifier] isEqualToString:@"ListingsByCategoryToListingDetail"]){
+        ListingDetailViewController *listingDetailViewController = [segue destinationViewController];
+        listingDetailViewController.listing = sender;
+    }
 }
-*/
+
 
 
 @end

@@ -511,11 +511,12 @@
                     <navigationItem key="navigationItem" id="cne-zM-sYB"/>
                     <connections>
                         <outlet property="categoryTableView" destination="5nW-Qx-auQ" id="su3-gv-NEv"/>
+                        <segue destination="Ydr-sh-TIk" kind="show" identifier="ListingsByCategoryToListingDetail" id="Un4-hh-BEu"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iIm-ea-GBQ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="160.86956521739131" y="1629.9107142857142"/>
+            <point key="canvasLocation" x="161" y="1668"/>
         </scene>
         <!--Sell-->
         <scene sceneID="K7y-Ie-smk">
@@ -1682,7 +1683,7 @@ Cg
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="nHl-qN-Fv6"/>
+        <segue reference="Un4-hh-BEu"/>
         <segue reference="4Y7-XG-abQ"/>
         <segue reference="vaY-ad-883"/>
         <segue reference="yJF-wa-pAP"/>
