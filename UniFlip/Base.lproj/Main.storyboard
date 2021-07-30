@@ -456,6 +456,9 @@
                                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fnr-7e-NlO">
                                                                         <rect key="frame" x="141" y="182" width="24" height="24"/>
                                                                         <state key="normal" image="unsaved_icon"/>
+                                                                        <connections>
+                                                                            <action selector="didTapSaveIcon:" destination="jiP-Xl-uJh" eventType="touchUpInside" id="12J-JA-kHa"/>
+                                                                        </connections>
                                                                     </button>
                                                                 </subviews>
                                                                 <constraints>
@@ -1679,7 +1682,7 @@ Cg
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="jy6-i8-Qry"/>
+        <segue reference="nHl-qN-Fv6"/>
         <segue reference="4Y7-XG-abQ"/>
         <segue reference="vaY-ad-883"/>
         <segue reference="yJF-wa-pAP"/>

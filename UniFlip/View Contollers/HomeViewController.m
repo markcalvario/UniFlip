@@ -446,7 +446,7 @@ BOOL isFiltered;
                     [self.view setAlpha:1];
                 }
                 else{
-                    NSLog(@"unsuccessful 1");
+                    NSLog(@"unsuccessful save");
                 }
             }];
         }
@@ -462,7 +462,7 @@ BOOL isFiltered;
                     [self.view setAlpha:1];
                 }
                 else{
-                    NSLog(@"unsuccessful 2");
+                    NSLog(@"unsuccessful save");
                 }
             }];
         }

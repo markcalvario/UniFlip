@@ -9,10 +9,14 @@
 #import "CategoryCell.h"
 #import "ListingCell.h"
 #import "Listing.h"
+#import "Reachability.h"
+#import "User.h"
+
 
 @interface CategoryViewController ()<UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource>
 @property (strong, nonatomic) IBOutlet UITableView *categoryTableView;
 @property (nonatomic) CGFloat categoryLabelHeight;
+@property (strong, nonatomic) User *currentUser;
 
 @end
 
@@ -23,6 +27,7 @@
     // Do any additional setup after loading the view.
     self.categoryTableView.delegate = self;
     self.categoryTableView.dataSource = self;
+    self.currentUser = [User currentUser];
 }
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     if (indexPath.row == 0){
@@ -43,7 +48,6 @@
         tableViewCell.listingsByCategoryCollectionView.delegate = self;
         tableViewCell.listingsByCategoryCollectionView.dataSource = self;
         [tableViewCell.listingsByCategoryCollectionView reloadData];
-        //self.categoryLabelHeight = tableViewCell.categoryLabe
     }
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -81,6 +85,8 @@
     ListingCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ListingByCategory" forIndexPath:indexPath];
     Listing *listing = [self.listings objectAtIndex:indexPath.row];
     [cell withTitleLabel:cell.listingByCategoryTitleLabel withSaveButton:cell.listingByCategorySaveButton withPriceLabel:cell.listingByCategoryPriceLabel withListingImage:cell.listingByCategoryImage withListing:listing withCategory:@"" withIndexPath:indexPath withIsFiltered:NO withSearchText:@""];
+    [self updateSaveButtonUI:listing.isSaved withButton: cell.listingByCategorySaveButton];
+    [cell.listingByCategorySaveButton addTarget:self action:@selector(didTapSaveIcon:) forControlEvents: UIControlEventTouchUpInside];
     return cell;
 }
 
@@ -110,6 +116,58 @@
     
 }
 
+
+- (BOOL) isConnectedToInternet{
+    Reachability *reach = [Reachability reachabilityForInternetConnection];
+    return [reach isReachable];
+}
+-(void) displayConnectionErrorAlert{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Unable to connect to the internet" message:@"Please check your internet connection and try again." preferredStyle:(UIAlertControllerStyleAlert)];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Try again" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {}];
+    [alert addAction:okAction];
+    [self presentViewController:alert animated:YES completion:^{ }];
+}
+-(void) updateSaveButtonUI:(BOOL)isSaved withButton:(UIButton *)saveButton{
+    if (isSaved){
+        [saveButton setImage:[UIImage imageNamed:@"saved_icon"] forState:UIControlStateNormal];
+    }
+    else{
+        [saveButton setImage:[UIImage imageNamed:@"unsaved_icon"] forState:UIControlStateNormal];
+    }
+}
+- (IBAction) didTapSaveIcon:(UIButton *)sender {
+    if (![self isConnectedToInternet]){
+        [self displayConnectionErrorAlert];
+    }
+    else{
+        Listing *listing = self.listings[sender.tag];
+        if (listing.isSaved){
+            [Listing postUnsaveListing:listing withUser:self.currentUser completion:^(BOOL succeeded, NSError * _Nullable error) {
+                if (succeeded){
+                    listing.isSaved = FALSE;
+                    [self updateSaveButtonUI:listing.isSaved withButton: sender];
+                    [self.categoryTableView reloadData];
+                }
+                else{
+                    NSLog(@"unsuccessful save");
+                }
+            }];
+        }
+        else{
+            [Listing postSaveListing:listing withUser:self.currentUser completion:^(BOOL succeeded, NSError * _Nullable error) {
+                if (succeeded){
+                    listing.isSaved = TRUE;
+                    [self updateSaveButtonUI:listing.isSaved withButton: sender];
+                    [self.categoryTableView reloadData];
+                }
+                else{
+                    NSLog(@"unsuccessful save");
+                }
+            }];
+        }
+    }
+    
+}
 /*
 #pragma mark - Navigation
 

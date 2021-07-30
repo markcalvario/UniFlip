@@ -27,7 +27,6 @@
     else{
        titleLabel.text = listing.listingTitle;
     }
-    saveButton.tag = indexPath.row;
     NSString *price = listing.listingPrice;
     priceLabel.text = [@"$" stringByAppendingString: price];
     
@@ -41,6 +40,7 @@
     }];
     [saveButton setTitle: category forState:UIControlStateNormal];
     saveButton.titleLabel.font = [UIFont systemFontOfSize:0];
+    saveButton.tag = indexPath.row;
     titleLabel.accessibilityValue = [@"Listing name: " stringByAppendingString:listing.listingTitle];
     priceLabel.accessibilityValue = [[[[@"The price of " stringByAppendingString:listing.listingTitle] stringByAppendingString:@" is "] stringByAppendingString:listing.listingPrice] stringByAppendingString:@" dollars"];
     listingImage.accessibilityValue = [@"The image of listing, " stringByAppendingString:listing.listingTitle];
