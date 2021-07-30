@@ -16,6 +16,11 @@
 @dynamic biography;
 @dynamic isReported;
 @dynamic profilePicture;
+@dynamic followers;
+@dynamic following;
+@dynamic followerCount;
+@dynamic followingCount;
+
 
 + (void) postUser:(NSString *)username withEmail:(NSString *)schoolEmail withPassword:(NSString *)password withSchoolName:(NSString *)schoolName withCompletion:(PFBooleanResultBlock  _Nullable)completion{
     User *newUser = [User user];
@@ -25,6 +30,9 @@
     newUser.biography = @"";
     newUser.university = schoolName;
     newUser.schoolEmail = schoolEmail;
+    newUser.followers = [NSArray array];
+    newUser.following = [NSArray array];
+    [newUser.ACL setPublicWriteAccess:TRUE];
     [newUser signUpInBackgroundWithBlock: completion];
 }
 
@@ -107,6 +115,43 @@
         }
     }];
 }
++ (void) postFollowingUser: (User *)userToFollow withFollowedBy: (User *) followedByUser withCompletion:(PFBooleanResultBlock  _Nullable)completion{
+    PFRelation *relation = [followedByUser relationForKey:@"following"];
+    [relation addObject:userToFollow];
+    [followedByUser incrementKey:@"followingCount" byAmount:@(1)];
+    [followedByUser saveInBackgroundWithBlock:completion];
+}
++ (void) postFollowedUser: (User *)userToFollow withFollowedBy: (User *) followedByUser withCompletion:(PFBooleanResultBlock  _Nullable)completion{
+    /*NSMutableArray *followedUsers = [NSMutableArray arrayWithArray:userToFollow.followers];
+    [followedUsers addObject:followedByUser];
+    userToFollow.followers = followedUsers;
+    [userToFollow incrementKey:@"followersCount" byAmount:@(1)];
+    [userToFollow saveInBackgroundWithBlock:completion];*/
+    //BFTask<User *> *user = [User becomeInBackground: userToFollow.sessionToken];
+    PFRelation *relation = [userToFollow relationForKey:@"followers"];
+    [relation addObject:followedByUser];
+    [userToFollow incrementKey:@"followerCount" byAmount:@(1)];
+    [userToFollow saveInBackgroundWithBlock:completion];
+}
++ (void) postUnfollowingUser: (User *)userToUnfollow withUnfollowedBy: (User *) unFollowedByUser withCompletion:(PFBooleanResultBlock  _Nullable)completion{
+    [userToUnfollow.ACL setPublicWriteAccess:YES];
+    PFRelation *relation = [unFollowedByUser relationForKey:@"following"];
+    [relation removeObject:userToUnfollow];
+    [unFollowedByUser incrementKey:@"followingCount" byAmount:@(-1)];
+    [unFollowedByUser saveInBackgroundWithBlock:completion];
+}
++ (void) postUnfollowedUser: (User *)userToUnfollow withUnfollowedBy: (User *) unfollowedByUser withCompletion:(PFBooleanResultBlock  _Nullable)completion{
+    /*NSMutableArray *followedUsers = [NSMutableArray arrayWithArray:userToFollow.followers];
+    [followedUsers addObject:followedByUser];
+    userToFollow.followers = followedUsers;
+    [userToFollow incrementKey:@"followersCount" byAmount:@(1)];
+    [userToFollow saveInBackgroundWithBlock:completion];*/
+    PFRelation *relation = [userToUnfollow relationForKey:@"followers"];
+    [relation removeObject:unfollowedByUser];
+    [userToUnfollow incrementKey:@"followerCount" byAmount:@(-1)];
+    [userToUnfollow saveInBackgroundWithBlock:completion];
+}
+
 
 - (UIImage *)resizeImage:(UIImage *)image withSize:(CGSize)size {
     UIImageView *resizeImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];

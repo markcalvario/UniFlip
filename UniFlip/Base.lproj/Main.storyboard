@@ -935,6 +935,7 @@
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="oyy-e4-OwM">
                                                 <rect key="frame" x="76" y="168" width="79" height="15"/>
                                                 <constraints>
+                                                    <constraint firstAttribute="width" constant="79" id="Pu0-A8-Adx"/>
                                                     <constraint firstAttribute="height" constant="15" id="Q0J-vW-poI"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="11"/>
@@ -946,6 +947,7 @@
                                                 <rect key="frame" x="8" y="168" width="60" height="15"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="15" id="8RQ-Fo-EDD"/>
+                                                    <constraint firstAttribute="width" constant="60" id="VRq-eU-fnq"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                 <state key="normal" title="0 Following">
@@ -961,6 +963,9 @@
                                                 <state key="normal" title="Follow">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="didTapFollowButton:" destination="RaW-Wm-Soe" eventType="touchUpInside" id="YGf-yz-mEL"/>
+                                                </connections>
                                             </button>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ws3-T2-d2Q">
                                                 <rect key="frame" x="252" y="38" width="30" height="30"/>
@@ -1048,6 +1053,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="backgroundViewForMailIcon" destination="ws3-T2-d2Q" id="tbi-eQ-nwO"/>
                         <outlet property="composeMailButton" destination="KXv-nT-dYO" id="Cfa-6a-EOQ"/>
                         <outlet property="followButton" destination="oZQ-73-YSw" id="muY-Vj-i6U"/>
                         <outlet property="followersButton" destination="oyy-e4-OwM" id="gvr-9h-84c"/>

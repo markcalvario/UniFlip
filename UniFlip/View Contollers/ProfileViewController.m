@@ -30,6 +30,7 @@
 @property (strong, nonatomic) IBOutlet UIButton *followersButton;
 @property (strong, nonatomic) IBOutlet UIButton *composeMailButton;
 @property (strong, nonatomic) IBOutlet UIButton *followButton;
+@property (strong, nonatomic) IBOutlet UIView *backgroundViewForMailIcon;
 
 @property (strong, nonatomic) NSMutableArray *arrayOfListings;
 @property (strong, nonatomic) NSMutableArray *toolbarButtons;
@@ -43,13 +44,16 @@
 
 @implementation ProfileViewController
 BOOL showUserListings = TRUE;
+BOOL isFollowingUserOfThisProfile = FALSE;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.currentUser = [User currentUser];
+    if (!self.user){
+        self.user = self.currentUser;
+    }
     [self displayTabBar];
-    [self setProfileScreen];
     [self addAccessibility];
     
 }
@@ -65,18 +69,37 @@ BOOL showUserListings = TRUE;
     else{
         showUserListings = FALSE;
     }
-    
-    if (!self.user){
-        self.user = self.currentUser;
-    }
-    //User is viewing themselves
     if ([self.user.objectId isEqualToString: self.currentUser.objectId]){
         self.settingsButton.hidden = NO;
+        self.followButton.hidden = YES;
+        self.composeMailButton.hidden = YES;
+        self.backgroundViewForMailIcon.hidden = YES;
     }
-    //User is viewing a different user
     else{
         self.settingsButton.hidden = YES;
+        PFRelation *relation = [self.currentUser relationForKey:@"following"];
+        PFQuery *query = [relation query];
+        //__block BOOL followingUser = FALSE;
+        [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable arrayOfUsers, NSError * _Nullable error) {
+            if (arrayOfUsers){
+                for (User *user in arrayOfUsers){
+                    if ([user.objectId isEqualToString: self.user.objectId]){
+                        isFollowingUserOfThisProfile = TRUE;
+                        //followingUser = TRUE;
+                    }
+                }
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    //isFollowingUserOfThisProfile = followingUser;
+                    [self updateFollowButtonUI];
+                });
+            }else{
+                NSLog(@"Could not load users");
+            }
+            
+        }];
     }
+    [self updateFollowerandFollowingButtonsUI];
+
     
     self.toolbarButtons = [self.navigationItem.rightBarButtonItems mutableCopy];
     self.arrayOfListings = [NSMutableArray array];
@@ -108,7 +131,8 @@ BOOL showUserListings = TRUE;
     CGFloat widthOfButton = self.followButton.layer.frame.size.height/ 2;
     [[self.followButton layer] setCornerRadius: widthOfButton];
     [self.followButton setClipsToBounds:TRUE];
-    [self.followButton setBackgroundColor:[[UIColor alloc]initWithRed:0/255.0 green:0/255.0 blue:128/255.0 alpha:1]];
+    
+    
     
 }
 
@@ -231,7 +255,57 @@ BOOL showUserListings = TRUE;
     // Dismiss the mail compose view controller.
     [controller dismissViewControllerAnimated:true completion:nil];
 }
+- (IBAction)didTapFollowButton:(id)sender {
+    if (isFollowingUserOfThisProfile){
+        [User postUnfollowingUser:self.user withUnfollowedBy:self.currentUser withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+            succeeded ? NSLog(@"now not following user") : NSLog(@"error");
+        }];
+        [User postUnfollowedUser:self.user withUnfollowedBy:self.currentUser withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+            succeeded ? NSLog(@"now user viewed has one less follower") : NSLog(@"error");
+        }];
+    }
+    else{
+        [User postFollowingUser:self.user withFollowedBy:self.currentUser withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+            succeeded ? NSLog(@"now following user") : NSLog(@"error");
+        }];
+        [User postFollowedUser:self.user withFollowedBy:self.currentUser withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+            succeeded ? NSLog(@"now user viewed has a follower") : NSLog(@"error");
+        }];
+    }
+    isFollowingUserOfThisProfile = !isFollowingUserOfThisProfile;
+    [self updateFollowButtonUI];
+    [self updateFollowerandFollowingButtonsUI];
+}
 
+- (void) updateFollowButtonUI{
+    if (isFollowingUserOfThisProfile){
+        [self.followButton setBackgroundColor:[[UIColor alloc]initWithRed:0/255.0 green:0/255.0 blue:128/255.0 alpha:1]];
+        [self.followButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [self.followButton setTitle:@"Following" forState:UIControlStateNormal];
+    }
+    if (!isFollowingUserOfThisProfile){
+        [self.followButton setBackgroundColor:[UIColor whiteColor]];
+        [self.followButton setTitleColor:[[UIColor alloc]initWithRed:0/255.0 green:0/255.0 blue:128/255.0 alpha:1] forState:UIControlStateNormal];
+        [self.followButton setTitle:@"Follow" forState:UIControlStateNormal];
+        [self.followButton.layer setBorderWidth:2];
+        [self.followButton.layer setBorderColor:[[UIColor alloc]initWithRed:0/255.0 green:0/255.0 blue:128/255.0 alpha:1].CGColor];
+    }
+}
+- (void) updateFollowerandFollowingButtonsUI{
+    if (!self.user){
+        NSString *followingTitle = [[self.currentUser.followingCount stringValue] stringByAppendingString:@" following"];
+        //NSString *followersTitle = [[self.user.followerCount stringValue] stringByAppendingString:@" followers"];
+        [self.followingButton setTitle:followingTitle forState:UIControlStateNormal];
+        //[self.followersButton setTitle:followersTitle forState:UIControlStateNormal];
+    }
+    else{
+        NSString *followingTitle = [[self.user.followingCount stringValue] stringByAppendingString:@" following"];
+        //NSString *followersTitle = [[self.user.followerCount stringValue] stringByAppendingString:@" followers"];
+        [self.followingButton setTitle:followingTitle forState:UIControlStateNormal];
+        //[self.followersButton setTitle:followersTitle forState:UIControlStateNormal];
+    }
+    
+}
 
 #pragma mark - Collection View
 
