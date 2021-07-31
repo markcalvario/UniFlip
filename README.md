@@ -2,9 +2,11 @@
 
 ## Table of Contents
 1. [Overview](#Overview)
-1. [Product Spec](#Product-Spec)
-1. [Wireframes](#Wireframes)
-2. [Schema](#Schema)
+2. [Demo](#Demo)
+3. [Product Spec](#Product-Spec)
+5. [Wireframes](#Wireframes)
+6. [Schema](#Schema)
+7. [API Endpoints](#API-Endpoints)
 
 ## Overview
 ### Description
@@ -18,6 +20,9 @@ College marketplace for a colleges (e.g. only affiliates of a school/university 
 - **Market:** Any university or college student that can verify their status within the university are able to utilize this app. Custom features could be used for monetization such as ads or taking 5-10% of sales. 
 - **Habit:** Students/affiliates are constantly using this app whenever they need a service or buy an item. Sellers can sell or offer services for money while buyers are constantly looking.
 - **Scope:** First we can have a simple marketplace for each university. We can then add machine learning in the future to add a more personal feed.
+
+## Demo
+
 
 ## Product Spec
 
@@ -205,4 +210,17 @@ Report
 |updatedAt| String| timestamp of when this Report object was updated|
 |reason| String| reason for why the listing was reported|
 |listing| Pointer to Listing object |pointer to the listing that was reported|
+
+## API Endpoints
+
+Google SDK for iOS
+https://developers.google.com/maps/documentation/places/ios-sdk/overview
+
+
+Hippo's University Domains and Names API
+http://universities.hipolabs.com/search?country=united+states
+
+
+
+
 
