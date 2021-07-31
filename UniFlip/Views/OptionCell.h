@@ -11,7 +11,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OptionCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UIButton *optionButton;
-@property (strong, nonatomic) IBOutlet UIButton *option2Button;
 
 @end
 

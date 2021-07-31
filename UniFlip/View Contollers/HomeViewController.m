@@ -110,7 +110,6 @@ BOOL isFiltered;
                 for (Listing *listing in allListings){
                     if ([listing.author.university isEqualToString: self.currentUser.university]){
                         __block BOOL isListingSaved = FALSE;
-                        //Adding listing to appropiate dictionary key
                         NSString *category = listing.listingCategory;
                         if ( [self.categoryToArrayOfListings objectForKey:listing.listingCategory]){
                             NSMutableArray *arrayOfListingsValue = [self.categoryToArrayOfListings objectForKey:category];
@@ -124,7 +123,6 @@ BOOL isFiltered;
                             [self.categoryToArrayOfListings setObject:arrayOfListingsValue forKey:category];
                         }
                         [self.allListings addObject:listing];
-                        //checking for saved listings by user
                         PFRelation *relation = [listing relationForKey:@"savedBy"];
                         PFQuery *query = [relation query];
                         __block NSArray *savedByUsers = [NSArray array];
@@ -510,25 +508,25 @@ BOOL isFiltered;
             }
         }
         /// SORTING HERE
-        NSMutableDictionary *categoryToMultiplier = [NSMutableDictionary dictionaryWithDictionary:self.currentUser[@"visitedCategoryToCounter"]];
+        NSMutableDictionary *categoryToPoints = [NSMutableDictionary dictionaryWithDictionary:self.currentUser[@"visitedCategoryToCounter"]];
         NSInteger totalListingsExcludingSelf = (NSInteger) self.allListings.count;
-        for (NSString *category in categoryToMultiplier.allKeys){
-            NSInteger count = [categoryToMultiplier[category] integerValue];
-            float multiplier = count / (float) totalListingsExcludingSelf;
-            [categoryToMultiplier setObject:[NSNumber numberWithFloat:multiplier] forKey:category];
+        for (NSString *category in categoryToPoints.allKeys){
+            NSInteger count = [categoryToPoints[category] integerValue];
+            float points = count / (float) totalListingsExcludingSelf;
+            [categoryToPoints setObject:[NSNumber numberWithFloat:points] forKey:category];
         }
         
-        NSMutableDictionary *profileToMultiplier = [NSMutableDictionary dictionaryWithDictionary:self.currentUser[@"visitedProfileToCounter"]];
-        for (NSString *profileObject in profileToMultiplier.allKeys){
-            NSInteger count = [profileToMultiplier[profileObject] integerValue];
-            float multiplier = count / (float) totalListingsExcludingSelf;
-            [profileToMultiplier setObject:[NSNumber numberWithFloat:multiplier] forKey:profileObject];
+        NSMutableDictionary *profileToPoints = [NSMutableDictionary dictionaryWithDictionary:self.currentUser[@"visitedProfileToCounter"]];
+        for (NSString *profileObject in profileToPoints.allKeys){
+            NSInteger count = [profileToPoints[profileObject] integerValue];
+            float points = count / (float) totalListingsExcludingSelf;
+            [profileToPoints setObject:[NSNumber numberWithFloat:points] forKey:profileObject];
         }
-        NSMutableDictionary *listingToMultiplier = [NSMutableDictionary dictionaryWithDictionary:self.currentUser[@"visitedListingsToCounter"]];
-        for (NSString *listingObject in listingToMultiplier.allKeys){
-            NSInteger count = [listingToMultiplier[listingObject] integerValue];
-            float multiplier = count / (float) totalListingsExcludingSelf;
-            [listingToMultiplier setObject:[NSNumber numberWithFloat:multiplier] forKey:listingObject];
+        NSMutableDictionary *listingToPoints = [NSMutableDictionary dictionaryWithDictionary:self.currentUser[@"visitedListingsToCounter"]];
+        for (NSString *listingObject in listingToPoints.allKeys){
+            NSInteger count = [listingToPoints[listingObject] integerValue];
+            float points = count / (float) totalListingsExcludingSelf;
+            [listingToPoints setObject:[NSNumber numberWithFloat:points] forKey:listingObject];
         }
         
         NSMutableDictionary *listingToRanking = [NSMutableDictionary dictionary];
@@ -537,11 +535,16 @@ BOOL isFiltered;
             NSString *authorObjectId = listing.author.objectId;
             NSString *category = listing.listingCategory;
             
-            float listingMultiplier = [listingToMultiplier[listingObjectId] floatValue];
-            float authorMultiplier = [profileToMultiplier[authorObjectId] floatValue];
-            float categoryMultiplier = [categoryToMultiplier[category] floatValue];
+            float savedPoints = 0.f;
+            if (listing.isSaved){
+                savedPoints =  -1 / (float) totalListingsExcludingSelf;
+            }
             
-            float rankingValue = listingMultiplier + authorMultiplier + categoryMultiplier;
+            float listingPoints = [listingToPoints[listingObjectId] floatValue];
+            float authorPoints = [profileToPoints[authorObjectId] floatValue];
+            float categoryPoints = [categoryToPoints[category] floatValue];
+            
+            float rankingValue = listingPoints + authorPoints + categoryPoints + savedPoints;
             [listingToRanking setObject:[NSNumber numberWithFloat:rankingValue] forKey:listing.objectId];
         }
         NSArray *listingToRankingKeys = [listingToRanking allKeys];

@@ -11,18 +11,14 @@ NS_ASSUME_NONNULL_BEGIN
 @class SelectOptionViewController;
 
 @protocol SelectOptionViewControllerDelege <NSObject>
-//- (void)addOptionViewController:(SelectOptionViewController *)controller didFinishEnteringItem:(NSString *)option;
 @optional
-- (void)addOptionSelectedToViewController:(NSObject*)data;
+- (void)addOptionSelectedToViewController:(NSString *)data withInputType:(NSString *)inputType;
 @end
 
 
 @interface SelectOptionViewController : UIViewController
 @property (strong, nonatomic) NSArray *data;
 @property (nonatomic, weak) id <SelectOptionViewControllerDelege> delegate;
-@property (strong, nonatomic) NSString *optionFor;
-
-
 @end
 
 NS_ASSUME_NONNULL_END

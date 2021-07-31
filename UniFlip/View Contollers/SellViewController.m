@@ -8,7 +8,6 @@
 #import "SellViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "SelectOptionViewController.h"
-#import "PlaceAutocompleteViewController.h"
 #import "Listing.h"
 #import "MaterialSnackbar.h"
 #import "PhotoCell.h"
@@ -16,7 +15,7 @@
 
 @import UITextView_Placeholder;
 
-@interface SellViewController ()<UINavigationControllerDelegate, UIImagePickerControllerDelegate, SelectOptionViewControllerDelege, PlaceAutocompleteDelege, UICollectionViewDelegate, UICollectionViewDataSource>
+@interface SellViewController ()<UINavigationControllerDelegate, UIImagePickerControllerDelegate, SelectOptionViewControllerDelege, UICollectionViewDelegate, UICollectionViewDataSource>
 @property (weak, nonatomic) IBOutlet UITextField *listingTitleField;
 @property (weak, nonatomic) IBOutlet UITextView *listingDescriptionView;
 @property (weak, nonatomic) IBOutlet UIButton *locationButton;
@@ -122,7 +121,7 @@
     [self.photosCollectionView reloadData];
 }
 
-- (void)addPlaceSelectedToViewController:(NSString*)location withInputType:(NSString *)inputType{
+- (void)addOptionSelectedToViewController:(NSString*)location withInputType:(NSString *)inputType{
     if ([inputType isEqualToString:@"Location"]){
         [self.locationButton setTitle: location forState:UIControlStateNormal];
         [self.locationButton setTitleColor:[UIColor colorWithRed:0 green:0.58984375 blue:0.8984375 alpha:1] forState:UIControlStateNormal];
@@ -271,14 +270,14 @@
             @"Garden & Outdoor", @"Grocery & Gourmet Food", @"Handmade", @"Health, Household & Baby Care", @"Home & Kitchen", @"Industrial & Scientific",
            @"Luggage & Travel Gear", @"Movies & TV", @"Musical Instruments", @"Office Products", @"Pet Supplies", @"Sports & Outdoors",
             @"Tools & Home Improvement", @"Toys & Games", @"Video Games"];
-        PlaceAutocompleteViewController *placeAutocompleteViewController = [segue destinationViewController];
-        placeAutocompleteViewController.delegate = self;
-        placeAutocompleteViewController.data = arrayOfCategories;
+        SelectOptionViewController *selectOptionViewController = [segue destinationViewController];
+        selectOptionViewController.delegate = self;
+        selectOptionViewController.data = arrayOfCategories;
     }
     else if ([[segue identifier] isEqualToString: @"LocationToSelectOption"]){
-        PlaceAutocompleteViewController *placeAutocompleteViewController = [segue destinationViewController];
-        placeAutocompleteViewController.delegate = self;
-        placeAutocompleteViewController.data = [NSArray array];
+        SelectOptionViewController *selectOptionViewController = [segue destinationViewController];
+        selectOptionViewController.delegate = self;
+        selectOptionViewController.data = [NSArray array];
     }
 }
 

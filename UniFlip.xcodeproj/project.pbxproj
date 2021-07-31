@@ -24,7 +24,6 @@
 		D0B7A62A269DEE470029D204 /* SellViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B7A629269DEE470029D204 /* SellViewController.m */; };
 		D0B7A631269E8C530029D204 /* SelectOptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B7A630269E8C530029D204 /* SelectOptionViewController.m */; };
 		D0B7A634269E934D0029D204 /* OptionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B7A633269E934D0029D204 /* OptionCell.m */; };
-		D0B7A638269F4A760029D204 /* PlaceAutocompleteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B7A637269F4A760029D204 /* PlaceAutocompleteViewController.m */; };
 		D0B7A63E269FB3E30029D204 /* Listing.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B7A63D269FB3E30029D204 /* Listing.m */; };
 		D0B7A641269FD5710029D204 /* CategoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B7A640269FD5710029D204 /* CategoryCell.m */; };
 		D0B7A644269FDA730029D204 /* ListingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B7A643269FDA730029D204 /* ListingCell.m */; };
@@ -101,8 +100,6 @@
 		D0B7A630269E8C530029D204 /* SelectOptionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SelectOptionViewController.m; sourceTree = "<group>"; };
 		D0B7A632269E934D0029D204 /* OptionCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OptionCell.h; sourceTree = "<group>"; };
 		D0B7A633269E934D0029D204 /* OptionCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OptionCell.m; sourceTree = "<group>"; };
-		D0B7A636269F4A760029D204 /* PlaceAutocompleteViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlaceAutocompleteViewController.h; sourceTree = "<group>"; };
-		D0B7A637269F4A760029D204 /* PlaceAutocompleteViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlaceAutocompleteViewController.m; sourceTree = "<group>"; };
 		D0B7A63C269FB3E30029D204 /* Listing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Listing.h; sourceTree = "<group>"; };
 		D0B7A63D269FB3E30029D204 /* Listing.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Listing.m; sourceTree = "<group>"; };
 		D0B7A63F269FD5710029D204 /* CategoryCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CategoryCell.h; sourceTree = "<group>"; };
@@ -259,8 +256,6 @@
 				D0B7A629269DEE470029D204 /* SellViewController.m */,
 				D0B7A62F269E8C530029D204 /* SelectOptionViewController.h */,
 				D0B7A630269E8C530029D204 /* SelectOptionViewController.m */,
-				D0B7A636269F4A760029D204 /* PlaceAutocompleteViewController.h */,
-				D0B7A637269F4A760029D204 /* PlaceAutocompleteViewController.m */,
 				D0B7A64826A13F790029D204 /* ProfileViewController.h */,
 				D0B7A64926A13F790029D204 /* ProfileViewController.m */,
 				D0B7A65126A4DEBF0029D204 /* ListingDetailViewController.h */,
@@ -612,7 +607,6 @@
 				D0B7A62A269DEE470029D204 /* SellViewController.m in Sources */,
 				D0B7A65626A6A9540029D204 /* EditProfileViewController.m in Sources */,
 				D09FFDE5269CDE66008B33B5 /* CollegeCell.m in Sources */,
-				D0B7A638269F4A760029D204 /* PlaceAutocompleteViewController.m in Sources */,
 				D0B7A631269E8C530029D204 /* SelectOptionViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

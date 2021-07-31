@@ -749,10 +749,10 @@
             </objects>
             <point key="canvasLocation" x="1885.5072463768117" y="906.69642857142856"/>
         </scene>
-        <!--Place Autocomplete View Controller-->
+        <!--Select Option View Controller-->
         <scene sceneID="XC9-uK-fp9">
             <objects>
-                <viewController id="Wr9-bP-ib7" customClass="PlaceAutocompleteViewController" sceneMemberID="viewController">
+                <viewController id="Wr9-bP-ib7" customClass="SelectOptionViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="uNc-vP-T0n">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -761,7 +761,7 @@
                                 <rect key="frame" x="0.0" y="88" width="414" height="51"/>
                                 <textInputTraits key="textInputTraits"/>
                             </searchBar>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="T9E-Jw-gf2">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="59" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="T9E-Jw-gf2">
                                 <rect key="frame" x="0.0" y="139" width="414" height="674"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
@@ -772,7 +772,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="59"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wsi-Ty-EIR">
+                                                <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wsi-Ty-EIR">
                                                     <rect key="frame" x="20" y="0.0" width="374" height="59"/>
                                                     <state key="normal" title="Button"/>
                                                 </button>
@@ -785,7 +785,7 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="option2Button" destination="Wsi-Ty-EIR" id="VEe-eu-uHy"/>
+                                            <outlet property="optionButton" destination="Wsi-Ty-EIR" id="zrU-kY-SEs"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -805,8 +805,8 @@
                     </view>
                     <navigationItem key="navigationItem" id="gRu-Fw-fVF"/>
                     <connections>
-                        <outlet property="resultsSearchTableView" destination="T9E-Jw-gf2" id="nCs-cW-MqN"/>
-                        <outlet property="searchOptionsBar" destination="9VY-a1-mcV" id="eWq-jO-c98"/>
+                        <outlet property="optionsTableView" destination="T9E-Jw-gf2" id="kKI-fR-2aN"/>
+                        <outlet property="searchOptionsBar" destination="9VY-a1-mcV" id="QZR-0V-Yh5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ai5-50-uvj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
