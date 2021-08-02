@@ -30,11 +30,11 @@
 @property (strong, nonatomic) User *currentUser;
 @property (strong, nonatomic) NSMutableDictionary *filteredCategoryToArrayOfPosts;
 @property (strong, nonatomic) NSMutableArray *filteredArrayOfCategories;
-@property (strong, nonatomic) NSMutableArray *allListings;
+@property (strong, nonatomic) NSArray *allListings;
 @property (strong, nonatomic) UIRefreshControl *refreshControl;
 @property (strong, nonatomic) NSArray *suggestedListings;
 @property (strong, nonatomic) NSArray *allUsersOfUniversity;
-@property (strong, nonatomic) NSMutableArray *filteredUsers;
+@property (strong, nonatomic) NSArray *filteredUsers;
 @property (strong, nonatomic) NSString *searchText;
 @property (strong, nonatomic) MDCActivityIndicator *activityIndicator;
 
@@ -99,7 +99,7 @@ BOOL isFiltered;
         self.arrayOfCategories = [NSMutableArray array];
         self.allListings = [NSMutableArray array];
         
-        __block NSMutableArray *allListings = [NSMutableArray array];
+        __block NSArray *allListings = [NSArray array];
         PFQuery *query = [Listing query];
         [query includeKey:@"savedBy"];
         [query orderByDescending:@"createdAt"];
@@ -107,6 +107,7 @@ BOOL isFiltered;
         [query findObjectsInBackgroundWithBlock:^(NSArray<Listing *> * _Nullable listings, NSError * _Nullable error) {
             if (listings) {
                 allListings = [NSMutableArray arrayWithArray:listings];
+                self.allListings = allListings;
                 for (Listing *listing in allListings){
                     if ([listing.author.university isEqualToString: self.currentUser.university]){
                         __block BOOL isListingSaved = FALSE;
@@ -122,7 +123,6 @@ BOOL isFiltered;
                             [self.arrayOfCategories addObject: category];
                             [self.categoryToArrayOfListings setObject:arrayOfListingsValue forKey:category];
                         }
-                        [self.allListings addObject:listing];
                         PFRelation *relation = [listing relationForKey:@"savedBy"];
                         PFQuery *query = [relation query];
                         __block NSArray *savedByUsers = [NSArray array];
@@ -191,7 +191,7 @@ BOOL isFiltered;
 - (void) updateSearchResults:(NSString *)searchText{
     self.filteredCategoryToArrayOfPosts = [NSMutableDictionary dictionary];
     self.filteredArrayOfCategories = [NSMutableArray array];
-    self.filteredUsers = [NSMutableArray array];
+    NSMutableArray *filteredUsers = [NSMutableArray array];
     isFiltered = YES;
     self.searchText = searchText;
     NSString *searchBy = [self.searchListingsBar.scopeButtonTitles objectAtIndex:self.searchListingsBar.selectedScopeButtonIndex];
@@ -226,10 +226,11 @@ BOOL isFiltered;
         for (User *user in self.allUsersOfUniversity){
             NSRange usernameRange = [user.username rangeOfString:searchText options:NSCaseInsensitiveSearch];
             if (usernameRange.location != NSNotFound){
-                [self.filteredUsers addObject:user];
+                [filteredUsers addObject:user];
             }
         }
     }
+    self.filteredUsers = [NSArray arrayWithArray:filteredUsers];
     [self.listingCategoryTableView reloadData];
     
 }

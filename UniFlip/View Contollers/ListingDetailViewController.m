@@ -51,14 +51,11 @@ CGFloat lastScale;
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.currentUser = [User currentUser];
-    self.listingImageTapGesture.numberOfTapsRequired = 2;
     self.photosCollectionView.delegate = self;
     self.photosCollectionView.dataSource = self;
-    self.photos = self.listing.photos;
-    self.photoIndicator.numberOfPages = self.photos.count;
+    self.googleMapsView.delegate = self;
+    self.photoIndicator.layer.zPosition = 1;
     [self addAccessibility];
-    
-    
     
 }
 -(void) viewWillAppear:(BOOL)animated{
@@ -67,6 +64,10 @@ CGFloat lastScale;
 }
 
 -(void) loadListingScreenDetais{
+    self.listingImageTapGesture.numberOfTapsRequired = 2;
+    self.photos = self.listing.photos;
+    self.photoIndicator.numberOfPages = self.listing.photos.count;
+
     self.titleLabel.text = self.listing.listingTitle;
     self.categoryLabel.text = self.listing.listingCategory;
     self.descriptionLabel.text = self.listing.listingDescription;
@@ -88,7 +89,6 @@ CGFloat lastScale;
     
     GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:self.listing.locationCoordinates.latitude longitude:self.listing.locationCoordinates.longitude zoom:14];
     self.googleMapsView.camera = camera;
-    self.googleMapsView.delegate = self;
     
     CLLocationCoordinate2D mapCenter = CLLocationCoordinate2DMake(self.googleMapsView.camera.target.latitude, self.googleMapsView.camera.target.longitude);
       GMSMarker *marker = [GMSMarker markerWithPosition:mapCenter];
@@ -307,6 +307,7 @@ CGFloat lastScale;
 
 #pragma mark - Full Image View
 -(void) displayScrollViewAndImageViewWithImage:(UIImage*)image {
+    self.photoIndicator.layer.zPosition = 0;
     UIImageView *imgView = [[UIImageView alloc] init];
     imgView.frame = CGRectMake(0, self.titleLabel.superview.frame.size.height/4, self.titleLabel.superview.frame.size.width, self.titleLabel.superview.frame.size.height/2);
     
@@ -345,6 +346,7 @@ CGFloat lastScale;
 
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView{
+    
     return self.imageToZoom;
 }
 -(void)removeImage {
@@ -355,6 +357,8 @@ CGFloat lastScale;
         [UIView animateWithDuration:0.75 delay:0.2 options:UIViewAnimationOptionCurveEaseOut animations:^{
             imgView.alpha = 0;
             scrollView.alpha = 0;
+            self.photoIndicator.layer.zPosition = 1;
+
             
         }completion:^(BOOL completed){
             [imgView removeFromSuperview];
