@@ -44,6 +44,7 @@
 
 @implementation HomeViewController
 BOOL isFiltered;
+BOOL isDarkMode;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -67,6 +68,12 @@ BOOL isFiltered;
 }
 -(void) viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    if (self.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark){
+        isDarkMode = TRUE;
+    }
+    else{
+        isDarkMode = FALSE;
+    }
     [self displayHomeScreen];
 }
 -(void) displayHomeScreen{

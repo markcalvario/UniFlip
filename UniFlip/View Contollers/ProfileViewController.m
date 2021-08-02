@@ -60,6 +60,13 @@ BOOL isFollowingUserOfThisProfile = FALSE;
 }
 - (void)viewWillAppear:(BOOL)animated{
     [self displayProfileScreen];
+    [self.tabBarView setBackgroundColor:[UIColor systemBackgroundColor]];
+    if (self.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark){
+        [self darkModeStyle];
+    }
+}
+-(void) darkModeStyle{
+    [self.tabBarView setSelectionIndicatorStrokeColor:[UIColor whiteColor]];
 }
 
 -(void) displayProfileScreen{

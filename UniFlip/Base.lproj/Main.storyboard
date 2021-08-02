@@ -1471,10 +1471,10 @@ Cg
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="725"/>
                                         <subviews>
                                             <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="Tks-rg-tqt">
-                                                <rect key="frame" x="146" y="258.5" width="122" height="28"/>
+                                                <rect key="frame" x="146" y="261" width="122" height="28"/>
                                             </pageControl>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hdC-lu-ffu">
-                                                <rect key="frame" x="8" y="311.5" width="72" height="72"/>
+                                                <rect key="frame" x="8" y="314" width="72" height="72"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="72" id="iyS-Ov-89J"/>
                                                     <constraint firstAttribute="width" constant="72" id="oCG-72-fai"/>
@@ -1485,7 +1485,7 @@ Cg
                                                 </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title Of Listing" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ilc-zu-VZy">
-                                                <rect key="frame" x="88" y="311.5" width="247" height="21.5"/>
+                                                <rect key="frame" x="88" y="314" width="247" height="21.5"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="247" id="b0D-yW-WC1"/>
                                                 </constraints>
@@ -1494,20 +1494,20 @@ Cg
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Category" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o7R-pQ-1vG">
-                                                <rect key="frame" x="88" y="363.5" width="265" height="14.5"/>
+                                                <rect key="frame" x="88" y="366" width="265" height="14.5"/>
                                                 <fontDescription key="fontDescription" type="system" weight="thin" pointSize="12"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ssl-a0-r5E">
-                                                <rect key="frame" x="371" y="311.5" width="24" height="24"/>
+                                                <rect key="frame" x="371" y="314" width="24" height="24"/>
                                                 <state key="normal" image="envelope_icon"/>
                                                 <connections>
                                                     <action selector="didTapComposeMail:" destination="Ydr-sh-TIk" eventType="touchUpInside" id="hLT-03-BtR"/>
                                                 </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$1000" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lAR-Rn-RUS">
-                                                <rect key="frame" x="88" y="340.5" width="37" height="15"/>
+                                                <rect key="frame" x="88" y="343" width="37" height="15"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="lessThanOrEqual" constant="247" id="HQU-Y7-xQb"/>
                                                     <constraint firstAttribute="height" constant="15" id="y4H-aU-jsd"/>
@@ -1517,7 +1517,7 @@ Cg
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="vUp-G8-Odx">
-                                                <rect key="frame" x="0.0" y="0.0" width="414" height="286.5"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="414" height="289"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="280" id="06z-yN-5mU"/>
@@ -1530,7 +1530,7 @@ Cg
                                                 </collectionViewFlowLayout>
                                                 <cells>
                                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="SlidePhotoCell" id="ypa-07-PVE" customClass="PhotoCell">
-                                                        <rect key="frame" x="0.0" y="3.5" width="414" height="280"/>
+                                                        <rect key="frame" x="0.0" y="4.5" width="414" height="280"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="vg8-uR-JSD">
                                                             <rect key="frame" x="0.0" y="0.0" width="414" height="280"/>
@@ -1559,8 +1559,8 @@ Cg
                                                 </connections>
                                             </collectionView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lorem" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lNs-cD-jBU">
-                                                <rect key="frame" x="8" y="404.5" width="387" height="19.5"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                <rect key="frame" x="8" y="407" width="387" height="17"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
