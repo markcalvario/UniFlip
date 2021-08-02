@@ -2,9 +2,11 @@
 
 ## Table of Contents
 1. [Overview](#Overview)
-1. [Product Spec](#Product-Spec)
-1. [Wireframes](#Wireframes)
-2. [Schema](#Schema)
+2. [Demo](#Demo)
+3. [Product Spec](#Product-Spec)
+5. [Wireframes](#Wireframes)
+6. [Schema](#Schema)
+7. [API Endpoints](#API-Endpoints)
 
 ## Overview
 ### Description
@@ -19,6 +21,9 @@ College marketplace for a colleges (e.g. only affiliates of a school/university 
 - **Habit:** Students/affiliates are constantly using this app whenever they need a service or buy an item. Sellers can sell or offer services for money while buyers are constantly looking.
 - **Scope:** First we can have a simple marketplace for each university. We can then add machine learning in the future to add a more personal feed.
 
+## Demo
+
+
 ## Product Spec
 
 ### 1. User Stories (Required and Optional)
@@ -26,11 +31,9 @@ College marketplace for a colleges (e.g. only affiliates of a school/university 
 **Required Must-have Stories**
 
 * User can login with their username and password
-* User can see an alert if they failed to login
 * User can sign up with their school email, a username, and password
 * User can see a list of universities to select their current school
 * User can see an alert upon a successful registration
-* User is redirected to the default mail app to verify their email upon successfully registering
 * User can switch between the home, sell, and profile screens through the tabs at the bottom
 * User can see all the listings by category that were uploaded to their university in the home screen
 * User can tap the save icon to save or unsave a listing depending on whether they already saved it or not 
@@ -38,7 +41,7 @@ College marketplace for a colleges (e.g. only affiliates of a school/university 
 * User can tap the search bar to search for listings
 * User can tap the save button in the listings results of a search to save or unsave a listing
 * User can tap a listing to see more details of that listing
-* User can upload more one photo of a listing 
+* User can upload one photo of a listing 
 * User can type in the title, category, description, price, location, type, brand, and condition of listing
 * User can tap the location field to fill out the location of where their location is at by using Google's Autocomplete API and a tableview is used display the location search
 * User can tap the category field to be redirected to another view so that the user can select the appropiate category of their listing
@@ -47,7 +50,7 @@ College marketplace for a colleges (e.g. only affiliates of a school/university 
 * User can tap the listing image in the listing details screen to see a fade in/fade out transition into the full image of the listing image tapped
 * User can zoom into the listing image by pinching
 * User can tap the save button on the top right to save or unsave a listing in the listing details screen
-* User can tap the 3-horizontal dots (menu) to view more options such as reporting an inappropiate listing, emailing the author of the listing, and delete the listing if they are the author of the listing
+* User can tap the 3-horizontal dots (menu) to view more options such as reporting an inappropiate listing, emailing the author of the listing, and deleting the listing if they are the author of the listing
 * User can tap the report button to open a report model view controller where they can write a reason for the report 
 * User can tap "report" to submit the report
 * User can tap the mail icon in the listing detail screen to email the author of the listing
@@ -57,11 +60,11 @@ College marketplace for a colleges (e.g. only affiliates of a school/university 
 * User can tap the checkmark button in the top right of the settings screen to save any changes to their profile
 * User can select from either camera or camera roll to upload a picture
 * User can see a list of suggested listings based on their clicking of profiles, listings, and categories
-* User can see a successful registration acount alert where they are redirected to the mail app
 * User can logout
 * User can stay logged in if their app restarts
 
 **Optional Features**
+* User can see Google's Sheets design to select an option such as choosing a source for an image
 * User can search by users
 * User can follow or unfollow other users
 * User can send an email to another user through their profile
@@ -84,6 +87,8 @@ College marketplace for a colleges (e.g. only affiliates of a school/university 
 * User can see a Page Control to see what image they are viewing
 * User can refresh their feed by sliding up in the home screen
 * User can see Google's activity indicator to show that the data is loading
+* User is redirected to the default mail app to verify their email upon successfully registering
+
 
 ### 2. Screen Archetypes
 * Login Screen
@@ -205,4 +210,17 @@ Report
 |updatedAt| String| timestamp of when this Report object was updated|
 |reason| String| reason for why the listing was reported|
 |listing| Pointer to Listing object |pointer to the listing that was reported|
+
+## API Endpoints
+
+Google SDK for iOS
+https://developers.google.com/maps/documentation/places/ios-sdk/overview
+
+
+Hippo's University Domains and Names API
+http://universities.hipolabs.com/search?country=united+states
+
+
+
+
 
