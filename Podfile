@@ -9,6 +9,7 @@ target 'UniFlip' do
   pod "Parse"
   pod "DateTools"
   pod 'GooglePlaces'
+  pod 'GoogleMaps'
   pod 'UITextView+Placeholder'
 
   pod 'MaterialComponents/TextControls+FilledTextAreas'

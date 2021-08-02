@@ -6,13 +6,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <PFGeoPoint.h>
 
 NS_ASSUME_NONNULL_BEGIN
 @class SelectOptionViewController;
 
 @protocol SelectOptionViewControllerDelege <NSObject>
 @optional
-- (void)addOptionSelectedToViewController:(NSString *)data withInputType:(NSString *)inputType;
+- (void)addOptionSelectedToViewController:(NSString *)data withInputType:(NSString *)inputType withCoordinates:(PFGeoPoint * _Nullable )coordinates;
+
 @end
 
 

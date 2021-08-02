@@ -8,6 +8,9 @@
 #import "AppDelegate.h"
 #import "Parse/Parse.h"
 @import GooglePlaces;
+@import GoogleMaps;
+#import "Listing.h"
+
 
 @interface AppDelegate ()
 
@@ -38,7 +41,7 @@
     //Google Maps API
     NSString *googleMapsAPIKey = [dict objectForKey: @"google_maps_api_key"];
     [GMSPlacesClient provideAPIKey:googleMapsAPIKey];
-
+    [GMSServices provideAPIKey:googleMapsAPIKey];
     return YES;
 }
 

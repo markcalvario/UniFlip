@@ -29,10 +29,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSNumber *saveCount;
 @property (nonatomic) BOOL isSaved;
 @property (nonatomic, strong) NSString *authorEmail;
+@property (nonatomic, strong) PFGeoPoint *locationCoordinates;
 
 
-///Methods
-+ (void) postUserListing:(NSArray<UIImage *>*)images withTitle:(NSString * _Nullable)title withType:(NSString * _Nullable)type withDescription:(NSString * _Nullable)description withLocation:(NSString * _Nullable)location withCategory:(NSString * _Nullable)category withBrand:(NSString * _Nullable)brand withCondition:(NSString * _Nullable)condition withPrice:(NSString * _Nullable)price withCompletion: (PFBooleanResultBlock  _Nullable)completion;
++ (void) postUserListing:(NSArray<UIImage *>*)images withTitle:(NSString * _Nullable)title withType:(NSString * _Nullable)type withDescription:(NSString * _Nullable)description withLocation:(NSString * _Nullable)location withCategory:(NSString * _Nullable)category withBrand:(NSString * _Nullable)brand withCondition:(NSString * _Nullable)condition withPrice:(NSString * _Nullable)price withCoordinates:(PFGeoPoint *)coordinates withCompletion: (PFBooleanResultBlock  _Nullable)completion;
 + (void) postSaveListing: (Listing *)listing withUser: (PFUser *)user completion:(void(^)(BOOL , NSError *))completion;
 + (void) postUnsaveListing: (Listing *)listing withUser: (PFUser *)user completion:(void(^)(BOOL , NSError *))completion;
 + (void) PFFileToUIImage: (PFFileObject *)imageFile completion:(void(^)(UIImage *, NSError *))completion;

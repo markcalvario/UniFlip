@@ -37,6 +37,7 @@
 @property (strong, nonatomic) NSString *brand;
 @property (strong, nonatomic) NSString *condition;
 @property (strong, nonatomic) NSString *price;
+@property (strong, nonatomic) PFGeoPoint *locationCoordinates;
 
 @property (strong, nonatomic) NSMutableArray<UIImage *> *photos;
 @property (nonatomic) NSInteger indexOfPhoto;
@@ -121,8 +122,9 @@
     [self.photosCollectionView reloadData];
 }
 
-- (void)addOptionSelectedToViewController:(NSString*)location withInputType:(NSString *)inputType{
+- (void)addOptionSelectedToViewController:(NSString*)location withInputType:(NSString *)inputType withCoordinates:(PFGeoPoint * _Nullable)coordinates{
     if ([inputType isEqualToString:@"Location"]){
+        self.locationCoordinates = coordinates;
         [self.locationButton setTitle: location forState:UIControlStateNormal];
         [self.locationButton setTitleColor:[UIColor colorWithRed:0 green:0.58984375 blue:0.8984375 alpha:1] forState:UIControlStateNormal];
     }
@@ -150,7 +152,7 @@
     
     [self areFieldsValid:^(BOOL isValid, NSString *errorMessage){
         if (isValid){
-            [Listing postUserListing:self.photosToUpload withTitle:self.listingTitle withType:self.type withDescription:self.listingDescription withLocation:self.location withCategory:self.category withBrand:self.brand withCondition:self.condition withPrice:self.price withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+            [Listing postUserListing:self.photosToUpload withTitle:self.listingTitle withType:self.type withDescription:self.listingDescription withLocation:self.location withCategory:self.category withBrand:self.brand withCondition:self.condition withPrice:self.price withCoordinates:self.locationCoordinates withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
                 if (error == nil){
                     NSLog(@"Listing is posted");
                     [self resetInputFields];

@@ -51,11 +51,12 @@
 }
 
 - (void)tableDataSource:(GMSAutocompleteTableDataSource *)tableDataSource didAutocompleteWithPlace:(GMSPlace *)place {
-    CLLocationDegrees longitude = place.coordinate.longitude;
-    CLLocationDegrees latitude = place.coordinate.latitude;
+    double longitude = place.coordinate.longitude;
+    double latitude = place.coordinate.latitude;
+    PFGeoPoint *coordinates = [PFGeoPoint geoPointWithLatitude:latitude longitude:longitude];
     self.searchOptionsBar.text = place.formattedAddress;
-    if(_delegate && [_delegate respondsToSelector:@selector(addOptionSelectedToViewController: withInputType:)]){
-        [_delegate addOptionSelectedToViewController:place.formattedAddress withInputType:@"Location"];
+    if(_delegate && [_delegate respondsToSelector:@selector(addOptionSelectedToViewController: withInputType: withCoordinates:)]){
+        [_delegate addOptionSelectedToViewController:place.formattedAddress withInputType:@"Location" withCoordinates:coordinates];
     }
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -94,8 +95,8 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     NSString *option = self.data[indexPath.row];
     //[self performSegueWithIdentifier:@"OptionSelectedToSell" sender:option];
-    if(_delegate && [_delegate respondsToSelector:@selector(addOptionSelectedToViewController: withInputType:)]){
-        [_delegate addOptionSelectedToViewController:option withInputType:@"Category"];
+    if(_delegate && [_delegate respondsToSelector:@selector(addOptionSelectedToViewController: withInputType: withCoordinates:)]){
+        [_delegate addOptionSelectedToViewController:option withInputType:@"Category" withCoordinates:nil];
     }
     [self.navigationController popViewControllerAnimated:YES];
 }

@@ -21,8 +21,9 @@
 #import "MDCSnackbarMessageView.h"
 #import "PhotoCell.h"
 
+@import GoogleMaps;
 
-@interface ListingDetailViewController ()<MFMailComposeViewControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIScrollViewDelegate>
+@interface ListingDetailViewController ()<MFMailComposeViewControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIScrollViewDelegate, GMSMapViewDelegate>
 @property (weak, nonatomic) IBOutlet UIButton *imageOfAuthorButton;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *categoryLabel;
@@ -35,6 +36,7 @@
 @property (strong, nonatomic) IBOutlet UIPageControl *photoIndicator;
 @property (strong, nonatomic) IBOutlet UIButton *composeMailButton;
 @property (strong, nonatomic) IBOutlet UIView *listingInformationView;
+@property (strong, nonatomic) IBOutlet GMSMapView *googleMapsView;
 
 @property (strong, nonatomic) UIImageView *imageToZoom;
 @property (strong, nonatomic) User *currentUser;
@@ -54,8 +56,10 @@ CGFloat lastScale;
     self.photosCollectionView.dataSource = self;
     self.photos = self.listing.photos;
     self.photoIndicator.numberOfPages = self.photos.count;
-    [self loadListingScreenDetais];
     [self addAccessibility];
+    
+    
+    
 }
 -(void) viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -81,6 +85,17 @@ CGFloat lastScale;
     self.imageOfAuthorButton.layer.cornerRadius = self.imageOfAuthorButton.frame.size.width / 2;
     self.imageOfAuthorButton.clipsToBounds = YES;
     [self updateSaveButtonUI:self.listing.isSaved withButton:self.saveButton];
+    
+    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:self.listing.locationCoordinates.latitude longitude:self.listing.locationCoordinates.longitude zoom:14];
+    self.googleMapsView.camera = camera;
+    self.googleMapsView.delegate = self;
+    
+    CLLocationCoordinate2D mapCenter = CLLocationCoordinate2DMake(self.googleMapsView.camera.target.latitude, self.googleMapsView.camera.target.longitude);
+      GMSMarker *marker = [GMSMarker markerWithPosition:mapCenter];
+      marker.icon = [UIImage imageNamed:@"default_marker.png"];
+      marker.map = self.googleMapsView;
+    self.googleMapsView.settings.scrollGestures = YES;
+    self.googleMapsView.settings.zoomGestures = YES;
 }
 
 +(UIImage*)imageWithImage: (UIImage*) sourceImage scaledToWidth: (float) i_width{

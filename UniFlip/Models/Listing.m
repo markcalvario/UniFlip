@@ -26,26 +26,27 @@
 @dynamic saveCount;
 @dynamic isSaved;
 @dynamic authorEmail;
+@dynamic locationCoordinates;
 
 
 + (nonnull NSString *)parseClassName {
     return @"Listing";
 }
 
-+ (void) postUserListing:(NSArray<UIImage *>*)images withTitle:(NSString * _Nullable)title withType:(NSString * _Nullable)type withDescription:(NSString * _Nullable)description withLocation:(NSString * _Nullable)location withCategory:(NSString * _Nullable)category withBrand:(NSString * _Nullable)brand withCondition:(NSString * _Nullable)condition withPrice:(NSString * _Nullable)price withCompletion: (PFBooleanResultBlock  _Nullable)completion {
++ (void) postUserListing:(NSArray<UIImage *>*)images withTitle:(NSString * _Nullable)title withType:(NSString * _Nullable)type withDescription:(NSString * _Nullable)description withLocation:(NSString * _Nullable)location withCategory:(NSString * _Nullable)category withBrand:(NSString * _Nullable)brand withCondition:(NSString * _Nullable)condition withPrice:(NSString * _Nullable)price withCoordinates:(PFGeoPoint *)coordinates withCompletion: (PFBooleanResultBlock  _Nullable)completion {
     
     Listing *newListing = [Listing new];
     newListing.author = [User currentUser];
     NSMutableArray *mutableImages = [NSMutableArray array];
     for (UIImage *image in images){
-        //[mutableImages addObject:[self getPFFileFromImage: [newListing resizeImage: image withSize: CGSizeMake(300, 300)]]];
-        [mutableImages addObject:[self getPFFileFromImage: image]];
+        [mutableImages addObject:[self getPFFileFromImage: [newListing resizeImage: image withSize: CGSizeMake(450, 450)]]];
     }
     newListing.photos = [NSArray arrayWithArray:mutableImages];
     newListing.listingTitle = title;
     newListing.typeOfListing = type;
     newListing.listingDescription = description;
     newListing.listingLocation = location;
+    newListing.locationCoordinates = coordinates;
     newListing.listingCategory = category;
     newListing.listingBrand = brand;
     newListing.listingCondition = condition;
@@ -55,8 +56,6 @@
     newListing.isSaved = FALSE;
     newListing.authorEmail = newListing.author.email;
     [newListing saveInBackgroundWithBlock:completion];
-    
-    
 }
 + (void) postSaveListing: (Listing *)listing withUser: (PFUser *)user completion:(void(^)(BOOL , NSError *))completion{
     PFRelation *relation = [listing relationForKey:@"savedBy"];

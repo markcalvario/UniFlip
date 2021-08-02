@@ -89,7 +89,6 @@
         categoriesVisitedToClick = [NSMutableDictionary dictionary];
     }
     if ([categoriesVisitedToClick objectForKey:listing.listingCategory]){
-        //increment
         NSNumber *clicks = [categoriesVisitedToClick valueForKey:listing.listingCategory];
         int value = [clicks intValue];
         clicks = [NSNumber numberWithInt:value + 1];
