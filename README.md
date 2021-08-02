@@ -70,7 +70,8 @@ College marketplace for a colleges (e.g. only affiliates of a school/university 
 * User can send an email to another user through their profile
 * User can delete a listing if they are the author and sold their item
 * User can add multiple images when they post a listing
-* User can view the multiple images that were posted to a listing
+* User can view the multiple images that were posted to a listing by swiping to the left in the listing detail view controller
+* User can see a Google Map centered around where the listing is located with the pinpoint of the exact location provided by the author of the listing
 * User can see an unsuccessful login alert
 * User can use UniFlip in other devices that have different screen sizes without the design being messed up 
 * User can see their following count
