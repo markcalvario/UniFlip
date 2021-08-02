@@ -121,16 +121,25 @@
     [followedByUser saveInBackgroundWithBlock:completion];
 }
 + (void) postFollowedUser: (User *)userToFollow withFollowedBy: (User *) followedByUser withCompletion:(PFBooleanResultBlock  _Nullable)completion{
-    /*NSMutableArray *followedUsers = [NSMutableArray arrayWithArray:userToFollow.followers];
-    [followedUsers addObject:followedByUser];
-    userToFollow.followers = followedUsers;
-    [userToFollow incrementKey:@"followersCount" byAmount:@(1)];
-    [userToFollow saveInBackgroundWithBlock:completion];*/
-    //BFTask<User *> *user = [User becomeInBackground: userToFollow.sessionToken];
-    PFRelation *relation = [userToFollow relationForKey:@"followers"];
-    [relation addObject:followedByUser];
-    [userToFollow incrementKey:@"followerCount" byAmount:@(1)];
-    [userToFollow saveInBackgroundWithBlock:completion];
+    
+    PFQuery *query = [PFQuery queryWithClassName:@"Followers"];
+    [query whereKey:@"userFollowed" equalTo:userToFollow.objectId];
+    [query getFirstObjectInBackgroundWithBlock:^(PFObject * _Nullable followers, NSError * _Nullable error) {
+        if (!followers){
+            PFObject *newFollower = [PFObject objectWithClassName:@"Followers"];
+            newFollower[@"userFollowed"] = userToFollow.objectId;
+            PFRelation *relation = [newFollower relationForKey:@"followedByUser"];
+            [relation addObject:followedByUser];
+            [followers incrementKey:@"followersCount" byAmount:@(1)];
+            [newFollower saveInBackgroundWithBlock:completion];
+        }
+        else if (followers){
+            PFRelation *relation = [followers relationForKey:@"followedByUser"];
+            [relation addObject:followedByUser];
+            [followers incrementKey:@"followersCount" byAmount:@(1)];
+            [followers saveInBackgroundWithBlock:completion];
+        }
+    }];
 }
 + (void) postUnfollowingUser: (User *)userToUnfollow withUnfollowedBy: (User *) unFollowedByUser withCompletion:(PFBooleanResultBlock  _Nullable)completion{
     [userToUnfollow.ACL setPublicWriteAccess:YES];
@@ -140,15 +149,18 @@
     [unFollowedByUser saveInBackgroundWithBlock:completion];
 }
 + (void) postUnfollowedUser: (User *)userToUnfollow withUnfollowedBy: (User *) unfollowedByUser withCompletion:(PFBooleanResultBlock  _Nullable)completion{
-    /*NSMutableArray *followedUsers = [NSMutableArray arrayWithArray:userToFollow.followers];
-    [followedUsers addObject:followedByUser];
-    userToFollow.followers = followedUsers;
-    [userToFollow incrementKey:@"followersCount" byAmount:@(1)];
-    [userToFollow saveInBackgroundWithBlock:completion];*/
-    PFRelation *relation = [userToUnfollow relationForKey:@"followers"];
-    [relation removeObject:unfollowedByUser];
-    [userToUnfollow incrementKey:@"followerCount" byAmount:@(-1)];
-    [userToUnfollow saveInBackgroundWithBlock:completion];
+    
+    PFQuery *query = [PFQuery queryWithClassName:@"Followers"];
+    [query whereKey:@"userFollowed" equalTo:userToUnfollow.objectId];
+    [query getFirstObjectInBackgroundWithBlock:^(PFObject * _Nullable followers, NSError * _Nullable error) {
+        if (followers){
+            PFRelation *relation = [followers relationForKey:@"followedByUser"];
+            [relation removeObject:unfollowedByUser];
+            [followers incrementKey:@"followersCount" byAmount:@(-1)];
+            [followers saveInBackgroundWithBlock:completion];
+        }
+    }];
+    
 }
 
 

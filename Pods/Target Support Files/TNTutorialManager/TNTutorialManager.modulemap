@@ -1,0 +1,6 @@
+framework module TNTutorialManager {
+  umbrella header "TNTutorialManager-umbrella.h"
+
+  export *
+  module * { export * }
+}

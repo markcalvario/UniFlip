@@ -24,6 +24,8 @@ target 'UniFlip' do
   pod 'MaterialComponents/Tabs+TabBarView'
 
   pod 'MaterialComponents/ActivityIndicator'
+  pod 'TNTutorialManager'
+
 
   target 'UniFlipTests' do
     inherit! :search_paths

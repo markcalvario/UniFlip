@@ -37,7 +37,7 @@
 @property (strong, nonatomic) User *currentlyLoggedInUser;
 @property (strong, nonatomic) MDCTabBarView *tabBarView;
 @property (readwrite, strong, nonatomic, nullable) UITabBarItem *selectedItem;
-
+@property (strong, nonatomic) NSNumber *followersCount;
 
 @end
 
@@ -84,24 +84,9 @@ BOOL isFollowingUserOfThisProfile = FALSE;
     }
     else{
         self.settingsButton.hidden = YES;
-        PFRelation *relation = [self.currentlyLoggedInUser relationForKey:@"following"];
-        PFQuery *query = [relation query];
-        [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable arrayOfUsers, NSError * _Nullable error) {
-            if (arrayOfUsers){
-                for (User *user in arrayOfUsers){
-                    if ([user.objectId isEqualToString: self.userOfProfileToView.objectId]){
-                        isFollowingUserOfThisProfile = TRUE;
-                    }
-                }
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self updateFollowButtonUI];
-                });
-            }else{
-                NSLog(@"Could not load users");
-            }
-        }];
     }
-    [self updateFollowerandFollowingButtonsUI];
+    [self updateFollowerAndFollowingCount];
+    
     self.usernameLabel.text = self.userOfProfileToView.username;
     self.userBioLabel.text = self.userOfProfileToView.biography;
     PFFileObject *userProfilePicture = self.userOfProfileToView.profilePicture;
@@ -116,6 +101,39 @@ BOOL isFollowingUserOfThisProfile = FALSE;
     }];
     [self styleProfileAndMailAndFollowButtons];
     showUserListings ? [self updateListingsBasedOnTabBar:TRUE] : [self updateListingsBasedOnTabBar:FALSE];
+}
+-(void) updateFollowerAndFollowingCount{
+    PFRelation *relation = [self.userOfProfileToView relationForKey:@"following"];
+    PFQuery *query = [relation query];
+    [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable arrayOfUsers, NSError * _Nullable error) {
+        if (arrayOfUsers){
+            for (User *user in arrayOfUsers){
+                if ([user.objectId isEqualToString: self.userOfProfileToView.objectId]){
+                    isFollowingUserOfThisProfile = TRUE;
+                }
+            }
+            if (!isFollowingUserOfThisProfile){
+                isFollowingUserOfThisProfile = FALSE;
+            }
+            PFQuery *query = [PFQuery queryWithClassName:@"Followers"];
+            [query whereKey:@"userFollowed" equalTo:self.userOfProfileToView.objectId];
+            [query getFirstObjectInBackgroundWithBlock:^(PFObject * _Nullable followers, NSError * _Nullable error) {
+                if (followers){
+                    self.followersCount = followers[@"followersCount"];
+                }
+                if (!followers){
+                    self.followersCount = @(0);
+                }
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self updateFollowButtonUI: isFollowingUserOfThisProfile];
+                    [self updateFollowerandFollowingButtonsUI];
+                });
+            }];
+            
+        }else{
+            NSLog(@"Could not load users");
+        }
+    }];
 }
 -(void) styleProfileAndMailAndFollowButtons{
     CALayer *imageLayer = self.composeMailButton.superview.layer;
@@ -250,6 +268,7 @@ BOOL isFollowingUserOfThisProfile = FALSE;
         [User postUnfollowedUser:self.userOfProfileToView withUnfollowedBy:self.currentlyLoggedInUser withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
             succeeded ? NSLog(@"now user viewed has one less follower") : NSLog(@"error");
         }];
+        self.followersCount = @([self.followersCount integerValue] - 1);
     }
     else{
         [User postFollowingUser:self.userOfProfileToView withFollowedBy:self.currentlyLoggedInUser withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
@@ -258,19 +277,20 @@ BOOL isFollowingUserOfThisProfile = FALSE;
         [User postFollowedUser:self.userOfProfileToView withFollowedBy:self.currentlyLoggedInUser withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
             succeeded ? NSLog(@"now user viewed has a follower") : NSLog(@"error");
         }];
+        self.followersCount = @([self.followersCount integerValue] + 1);
     }
     isFollowingUserOfThisProfile = !isFollowingUserOfThisProfile;
-    [self updateFollowButtonUI];
+    [self updateFollowButtonUI: isFollowingUserOfThisProfile];
     [self updateFollowerandFollowingButtonsUI];
 }
 
-- (void) updateFollowButtonUI{
-    if (isFollowingUserOfThisProfile){
+- (void) updateFollowButtonUI:(BOOL) isFollowing{
+    if (isFollowing){
         [self.followButton setBackgroundColor:[[UIColor alloc]initWithRed:0/255.0 green:0/255.0 blue:128/255.0 alpha:1]];
         [self.followButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [self.followButton setTitle:@"Following" forState:UIControlStateNormal];
     }
-    if (!isFollowingUserOfThisProfile){
+    if (!isFollowing){
         [self.followButton setBackgroundColor:[UIColor whiteColor]];
         [self.followButton setTitleColor:[[UIColor alloc]initWithRed:0/255.0 green:0/255.0 blue:128/255.0 alpha:1] forState:UIControlStateNormal];
         [self.followButton setTitle:@"Follow" forState:UIControlStateNormal];
@@ -281,15 +301,15 @@ BOOL isFollowingUserOfThisProfile = FALSE;
 - (void) updateFollowerandFollowingButtonsUI{
     if (!self.userOfProfileToView){
         NSString *followingTitle = [[self.currentlyLoggedInUser.followingCount stringValue] stringByAppendingString:@" following"];
-        //NSString *followersTitle = [[self.user.followerCount stringValue] stringByAppendingString:@" followers"];
+        NSString *followersTitle = [[self.followersCount stringValue] stringByAppendingString:@" followers"];
         [self.followingButton setTitle:followingTitle forState:UIControlStateNormal];
-        //[self.followersButton setTitle:followersTitle forState:UIControlStateNormal];
+        [self.followersButton setTitle:followersTitle forState:UIControlStateNormal];
     }
     else{
         NSString *followingTitle = [[self.userOfProfileToView.followingCount stringValue] stringByAppendingString:@" following"];
-        //NSString *followersTitle = [[self.user.followerCount stringValue] stringByAppendingString:@" followers"];
+        NSString *followersTitle = [[self.followersCount stringValue] stringByAppendingString:@" followers"];
         [self.followingButton setTitle:followingTitle forState:UIControlStateNormal];
-        //[self.followersButton setTitle:followersTitle forState:UIControlStateNormal];
+        [self.followersButton setTitle:followersTitle forState:UIControlStateNormal];
     }
     
 }
