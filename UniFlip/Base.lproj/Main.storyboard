@@ -199,20 +199,20 @@
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <subviews>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B3f-A3-IVG">
-                                                                        <rect key="frame" x="39" y="186" width="98" height="15"/>
+                                                                        <rect key="frame" x="45" y="186" width="92" height="15"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="15" id="MrO-xS-diO"/>
-                                                                            <constraint firstAttribute="width" priority="750" constant="98" id="odG-4s-YCo"/>
+                                                                            <constraint firstAttribute="width" priority="750" constant="92" id="odG-4s-YCo"/>
                                                                         </constraints>
                                                                         <fontDescription key="fontDescription" name="Galvji" family="Galvji" pointSize="12"/>
                                                                         <nil key="textColor"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1000" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h9j-0Q-DWM">
-                                                                        <rect key="frame" x="5" y="186" width="26" height="12"/>
+                                                                        <rect key="frame" x="5" y="186" width="35" height="12"/>
                                                                         <constraints>
-                                                                            <constraint firstAttribute="height" constant="12" id="5hx-nd-g8R"/>
-                                                                            <constraint firstAttribute="width" constant="26" id="Jja-EV-kp7"/>
+                                                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="12" id="5hx-nd-g8R"/>
+                                                                            <constraint firstAttribute="width" constant="35" id="Jja-EV-kp7"/>
                                                                         </constraints>
                                                                         <fontDescription key="fontDescription" name="Galvji-Bold" family="Galvji" pointSize="10"/>
                                                                         <nil key="textColor"/>
@@ -236,7 +236,7 @@
                                                                 </subviews>
                                                                 <constraints>
                                                                     <constraint firstItem="0tF-Bq-fQ3" firstAttribute="top" secondItem="dAD-i9-W5k" secondAttribute="top" constant="4" id="2ae-RQ-4Il"/>
-                                                                    <constraint firstItem="B3f-A3-IVG" firstAttribute="leading" secondItem="h9j-0Q-DWM" secondAttribute="trailing" constant="8" id="3Gg-Sv-35w"/>
+                                                                    <constraint firstItem="B3f-A3-IVG" firstAttribute="leading" secondItem="h9j-0Q-DWM" secondAttribute="trailing" constant="5" id="3Gg-Sv-35w"/>
                                                                     <constraint firstItem="B3f-A3-IVG" firstAttribute="top" secondItem="h9j-0Q-DWM" secondAttribute="top" id="4Bz-IS-f3C"/>
                                                                     <constraint firstItem="0tF-Bq-fQ3" firstAttribute="leading" secondItem="dAD-i9-W5k" secondAttribute="leading" constant="5" id="E4B-LL-DQV"/>
                                                                     <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="B3f-A3-IVG" secondAttribute="bottom" constant="2" id="H2l-UU-NTC"/>
@@ -936,18 +936,18 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="oyy-e4-OwM">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="system" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="oyy-e4-OwM">
                                                 <rect key="frame" x="76" y="168" width="79" height="15"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="79" id="Pu0-A8-Adx"/>
                                                     <constraint firstAttribute="height" constant="15" id="Q0J-vW-poI"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                                <state key="normal" title="1000 Followers">
+                                                <state key="normal" title="0 Followers">
                                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="Pem-pF-6hB">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="system" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="Pem-pF-6hB">
                                                 <rect key="frame" x="8" y="168" width="60" height="15"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="15" id="8RQ-Fo-EDD"/>
@@ -1697,8 +1697,8 @@ Cg
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="nHl-qN-Fv6"/>
-        <segue reference="1cV-ZD-tXO"/>
+        <segue reference="jy6-i8-Qry"/>
+        <segue reference="4Y7-XG-abQ"/>
         <segue reference="vaY-ad-883"/>
         <segue reference="yJF-wa-pAP"/>
     </inferredMetricsTieBreakers>

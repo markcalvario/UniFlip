@@ -19,9 +19,9 @@
 #import "ProfileViewController.h"
 #import <SystemConfiguration/SystemConfiguration.h>
 #import "MaterialActivityIndicator.h"
+#import <TNTutorialManager.h>
 
-
-@interface HomeViewController ()<UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchBarDelegate>
+@interface HomeViewController ()<UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchBarDelegate, TNTutorialManagerDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *listingCategoryTableView;
 @property (strong, nonatomic) IBOutlet UISearchBar *searchListingsBar;
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *loadingSpinner;
@@ -607,5 +607,18 @@ BOOL isDarkMode;
 
 }
 
+- (UIView *)tutorialMasterView{
+    return self.view;
+}
+- (NSInteger)tutorialMaxIndex{
+    return 1;
+}
+- (void)tutorialWrapUp{
+    
+}
+
+- (BOOL)tutorialShouldCoverStatusBar{
+    return FALSE;
+}
 
 @end

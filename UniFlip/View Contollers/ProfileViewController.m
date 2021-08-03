@@ -103,17 +103,15 @@ BOOL isFollowingUserOfThisProfile = FALSE;
     showUserListings ? [self updateListingsBasedOnTabBar:TRUE] : [self updateListingsBasedOnTabBar:FALSE];
 }
 -(void) updateFollowerAndFollowingCount{
-    PFRelation *relation = [self.userOfProfileToView relationForKey:@"following"];
+    PFRelation *relation = [self.currentlyLoggedInUser relationForKey:@"following"];
     PFQuery *query = [relation query];
+    isFollowingUserOfThisProfile = FALSE;
     [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable arrayOfUsers, NSError * _Nullable error) {
         if (arrayOfUsers){
             for (User *user in arrayOfUsers){
                 if ([user.objectId isEqualToString: self.userOfProfileToView.objectId]){
                     isFollowingUserOfThisProfile = TRUE;
                 }
-            }
-            if (!isFollowingUserOfThisProfile){
-                isFollowingUserOfThisProfile = FALSE;
             }
             PFQuery *query = [PFQuery queryWithClassName:@"Followers"];
             [query whereKey:@"userFollowed" equalTo:self.userOfProfileToView.objectId];
@@ -290,7 +288,7 @@ BOOL isFollowingUserOfThisProfile = FALSE;
         [self.followButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [self.followButton setTitle:@"Following" forState:UIControlStateNormal];
     }
-    if (!isFollowing){
+    else{
         [self.followButton setBackgroundColor:[UIColor whiteColor]];
         [self.followButton setTitleColor:[[UIColor alloc]initWithRed:0/255.0 green:0/255.0 blue:128/255.0 alpha:1] forState:UIControlStateNormal];
         [self.followButton setTitle:@"Follow" forState:UIControlStateNormal];
