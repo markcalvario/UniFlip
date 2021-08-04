@@ -306,20 +306,10 @@ BOOL isFollowingUserOfThisProfile = FALSE;
     }
 }
 - (void) updateFollowerandFollowingButtonsUI{
-    /*if (!self.userOfProfileToView){
-        NSString *followingTitle = [[self.currentlyLoggedInUser.followingCount stringValue] stringByAppendingString:@" following"];
-        NSString *followersTitle = [[self.followersCount stringValue] stringByAppendingString:@" followers"];
-        [self.followingButton setTitle:followingTitle forState:UIControlStateNormal];
-        [self.followersButton setTitle:followersTitle forState:UIControlStateNormal];
-    }
-    else{*/
-    NSLog(@"number of following %ld", (long) self.currentlyLoggedInUser.followingCount );
-        NSString *followingTitle = [[self.userOfProfileToView[@"followingCount"] stringValue] stringByAppendingString:@" following"];
-        NSString *followersTitle = [[self.followersCount stringValue] stringByAppendingString:@" followers"];
-        [self.followingButton setTitle:followingTitle forState:UIControlStateNormal];
-        [self.followersButton setTitle:followersTitle forState:UIControlStateNormal];
-    //}
-    
+    NSString *followingTitle = [[self.userOfProfileToView[@"followingCount"] stringValue] stringByAppendingString:@" following"];
+    NSString *followersTitle = [[self.followersCount stringValue] stringByAppendingString:@" followers"];
+    [self.followingButton setTitle:followingTitle forState:UIControlStateNormal];
+    [self.followersButton setTitle:followersTitle forState:UIControlStateNormal];
 }
 
 #pragma mark - Collection View
