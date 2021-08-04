@@ -94,10 +94,8 @@
         MDCActionSheetAction *selectCameraAction = [MDCActionSheetAction actionWithTitle:@"Camera"
                                             image:[UIImage systemImageNamed:@"camera"]
                                             handler:^(MDCActionSheetAction *action){
-            [self dismissViewControllerAnimated:TRUE completion:^{
                 imagePickerVC.sourceType = UIImagePickerControllerSourceTypeCamera;
                 [self presentViewController:imagePickerVC animated:YES completion:nil];
-            }];
         }];
         [actionSheet addAction:selectCameraAction];
     }

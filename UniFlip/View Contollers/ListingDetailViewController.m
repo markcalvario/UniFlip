@@ -42,6 +42,12 @@
 @property (strong, nonatomic) User *currentUser;
 @property (strong, nonatomic) NSArray *photos;
 
+
+@property (strong, nonatomic) NSLayoutConstraint *top;
+@property (strong, nonatomic) NSLayoutConstraint *bottom;
+@property (strong, nonatomic) NSLayoutConstraint *trailing;
+@property (strong, nonatomic) NSLayoutConstraint *leading;
+
 @end
 
 @implementation ListingDetailViewController
@@ -309,7 +315,7 @@ CGFloat lastScale;
 -(void) displayScrollViewAndImageViewWithImage:(UIImage*)image {
     self.photoIndicator.layer.zPosition = 0;
     UIImageView *imgView = [[UIImageView alloc] init];
-    imgView.frame = CGRectMake(0, self.titleLabel.superview.frame.size.height/4, self.titleLabel.superview.frame.size.width, self.titleLabel.superview.frame.size.height/2);
+    imgView.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height/4, self.titleLabel.superview.frame.size.width, self.titleLabel.superview.frame.size.height/2);
     
     imgView.contentMode = UIViewContentModeScaleAspectFit;
     imgView.backgroundColor = [UIColor blackColor];
@@ -336,6 +342,66 @@ CGFloat lastScale;
     
     [self.listingInformationView addSubview:scrollView];
     [scrollView addSubview:imgView];
+    
+    self.trailing =[NSLayoutConstraint
+                                        constraintWithItem: scrollView
+                                        attribute:NSLayoutAttributeTrailing
+                                        relatedBy:NSLayoutRelationEqual
+                                        toItem: self.titleLabel.superview
+                                        attribute:NSLayoutAttributeTrailing
+                                        multiplier:1.0
+                                        constant:0];
+    self.leading = [NSLayoutConstraint
+                                       constraintWithItem:scrollView
+                                       attribute:NSLayoutAttributeLeading
+                                       relatedBy:NSLayoutRelationEqual
+                                       toItem: self.titleLabel.superview
+                                       attribute:NSLayoutAttributeLeading
+                                       multiplier:1.0
+                                       constant:0];
+    self.top = [NSLayoutConstraint constraintWithItem:scrollView attribute:NSLayoutAttributeTop
+                                                 relatedBy:NSLayoutRelationEqual toItem:self.titleLabel.superview attribute:
+                                                 NSLayoutAttributeTop multiplier:1.0 constant:0];
+    self.bottom = [NSLayoutConstraint constraintWithItem:scrollView attribute:NSLayoutAttributeBottom
+                                                 relatedBy:NSLayoutRelationEqual toItem:self.titleLabel.superview attribute:
+                                                 NSLayoutAttributeBottom multiplier:1.0 constant:0];
+    
+   
+    
+    [self.listingInformationView addConstraint:self.leading];
+    [self.listingInformationView addConstraint:self.trailing];
+    [self.listingInformationView addConstraint:self.top];
+    [self.listingInformationView addConstraint:self.bottom];
+    
+    NSLayoutConstraint *trailing =[NSLayoutConstraint
+                                    constraintWithItem: imgView
+                                    attribute:NSLayoutAttributeTrailing
+                                    relatedBy:NSLayoutRelationEqual
+                                    toItem: scrollView
+                                    attribute:NSLayoutAttributeTrailing
+                                    multiplier:1.0
+                                    constant:0];
+    NSLayoutConstraint *leading = [NSLayoutConstraint
+                                       constraintWithItem:imgView
+                                       attribute:NSLayoutAttributeLeading
+                                       relatedBy:NSLayoutRelationEqual
+                                       toItem: scrollView
+                                       attribute:NSLayoutAttributeLeading
+                                       multiplier:1.0
+                                       constant:0];
+    NSLayoutConstraint *top = [NSLayoutConstraint constraintWithItem:imgView attribute:NSLayoutAttributeTop
+                                                 relatedBy:NSLayoutRelationEqual toItem:scrollView attribute:
+                                                 NSLayoutAttributeTop multiplier:1.0 constant:0];
+    NSLayoutConstraint *bottom = [NSLayoutConstraint constraintWithItem:imgView attribute:NSLayoutAttributeBottom
+                                                 relatedBy:NSLayoutRelationEqual toItem:scrollView attribute:
+                                                 NSLayoutAttributeBottom multiplier:1.0 constant:0];
+    
+    [scrollView addConstraint:leading];
+    [scrollView addConstraint:trailing];
+    [scrollView addConstraint:top];
+    [scrollView addConstraint:bottom];
+    
+   
     if (scrollView.alpha ==0){
         [UIView animateWithDuration:0.5 delay:0.2 options:UIViewAnimationOptionCurveEaseOut animations:^{
             scrollView.alpha = 1;
@@ -363,7 +429,7 @@ CGFloat lastScale;
         }completion:^(BOOL completed){
             [imgView removeFromSuperview];
             [scrollView removeFromSuperview];
-        
+
         }];
     }
     

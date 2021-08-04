@@ -49,6 +49,9 @@ BOOL isFollowingUserOfThisProfile = FALSE;
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.currentlyLoggedInUser = [User currentUser];
+    PFQuery *query = [User query];
+    [query whereKey:@"email" equalTo:self.currentlyLoggedInUser.email];
+    self.currentlyLoggedInUser = [query getFirstObject];
     if (!self.userOfProfileToView){
         self.userOfProfileToView = self.currentlyLoggedInUser;
     }
@@ -59,6 +62,12 @@ BOOL isFollowingUserOfThisProfile = FALSE;
     
 }
 - (void)viewWillAppear:(BOOL)animated{
+    PFQuery *query = [User query];
+    [query whereKey:@"email" equalTo:self.currentlyLoggedInUser.email];
+    self.currentlyLoggedInUser = [query getFirstObject];
+    if (self.userOfProfileToView == nil){
+        self.userOfProfileToView = self.currentlyLoggedInUser;
+    }
     [self displayProfileScreen];
     [self.tabBarView setBackgroundColor:[UIColor systemBackgroundColor]];
     if (self.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark){
@@ -297,18 +306,19 @@ BOOL isFollowingUserOfThisProfile = FALSE;
     }
 }
 - (void) updateFollowerandFollowingButtonsUI{
-    if (!self.userOfProfileToView){
+    /*if (!self.userOfProfileToView){
         NSString *followingTitle = [[self.currentlyLoggedInUser.followingCount stringValue] stringByAppendingString:@" following"];
         NSString *followersTitle = [[self.followersCount stringValue] stringByAppendingString:@" followers"];
         [self.followingButton setTitle:followingTitle forState:UIControlStateNormal];
         [self.followersButton setTitle:followersTitle forState:UIControlStateNormal];
     }
-    else{
-        NSString *followingTitle = [[self.userOfProfileToView.followingCount stringValue] stringByAppendingString:@" following"];
+    else{*/
+    NSLog(@"number of following %ld", (long) self.currentlyLoggedInUser.followingCount );
+        NSString *followingTitle = [[self.userOfProfileToView[@"followingCount"] stringValue] stringByAppendingString:@" following"];
         NSString *followersTitle = [[self.followersCount stringValue] stringByAppendingString:@" followers"];
         [self.followingButton setTitle:followingTitle forState:UIControlStateNormal];
         [self.followersButton setTitle:followersTitle forState:UIControlStateNormal];
-    }
+    //}
     
 }
 

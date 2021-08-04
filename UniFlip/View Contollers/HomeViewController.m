@@ -201,7 +201,10 @@ BOOL isDarkMode;
     NSMutableArray *filteredUsers = [NSMutableArray array];
     isFiltered = YES;
     self.searchText = searchText;
-    NSString *searchBy = [self.searchListingsBar.scopeButtonTitles objectAtIndex:self.searchListingsBar.selectedScopeButtonIndex];
+    NSString *searchBy;
+    if (self.searchListingsBar.scopeButtonTitles.count > 0){
+        searchBy = [self.searchListingsBar.scopeButtonTitles objectAtIndex:self.searchListingsBar.selectedScopeButtonIndex];
+    }
     if ([searchBy isEqualToString:@"Listings"]){
         if (searchText.length == 0){
             self.filteredCategoryToArrayOfPosts[@"Suggested Listings"] = self.suggestedListings;
@@ -483,7 +486,7 @@ BOOL isDarkMode;
     NSArray *listings;
     NSString *category;
     
-    if (!isFiltered && (self.arrayOfCategories.count > 0 && self.categoryToArrayOfListings.count > 0)){
+    if (!isFiltered && (self.arrayOfCategories.count > 0) && (self.categoryToArrayOfListings.count > 0)){
         category = [self.arrayOfCategories objectAtIndex:button.tag];
         listings = self.categoryToArrayOfListings[category];
     }

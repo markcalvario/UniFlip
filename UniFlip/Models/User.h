@@ -19,9 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *biography;
 @property (nonatomic) BOOL isReported;
 @property (nonatomic, strong) PFFileObject *profilePicture;
-@property (nonatomic, strong) NSArray *followers;
-@property (nonatomic, strong) NSArray *following;
-@property (nonatomic, strong) NSNumber *followerCount;
+@property (nonatomic, strong) PFRelation *following;
 @property (nonatomic, strong) NSNumber *followingCount;
 
 

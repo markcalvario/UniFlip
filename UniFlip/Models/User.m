@@ -16,9 +16,7 @@
 @dynamic biography;
 @dynamic isReported;
 @dynamic profilePicture;
-@dynamic followers;
 @dynamic following;
-@dynamic followerCount;
 @dynamic followingCount;
 
 
@@ -30,9 +28,6 @@
     newUser.biography = @"";
     newUser.university = schoolName;
     newUser.schoolEmail = schoolEmail;
-    newUser.followers = [NSArray array];
-    newUser.following = [NSArray array];
-    [newUser.ACL setPublicWriteAccess:TRUE];
     [newUser signUpInBackgroundWithBlock: completion];
 }
 
