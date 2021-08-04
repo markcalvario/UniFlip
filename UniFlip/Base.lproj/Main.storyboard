@@ -87,6 +87,9 @@
                                     <constraint firstAttribute="height" constant="30" id="4ul-hN-1wj"/>
                                 </constraints>
                                 <state key="normal" title="Forgot Password?"/>
+                                <connections>
+                                    <action selector="didTapForgotPassword:" destination="BYZ-38-t0r" eventType="touchUpInside" id="zw3-hp-xTv"/>
+                                </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="250" text="OR" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6O0-kV-Jbc">
                                 <rect key="frame" x="184.5" y="752" width="45" height="18"/>

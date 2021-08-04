@@ -7,6 +7,7 @@
 
 #import "LoginViewController.h"
 #import "Parse/Parse.h"
+#import "User.h"
 
 @interface LoginViewController ()
 @property (weak, nonatomic) IBOutlet UITextField *usernameOrEmailLabel;
@@ -53,6 +54,46 @@
                 }];
             }
     }];
+}
+- (IBAction)didTapForgotPassword:(id)sender {
+    UIAlertController * alertController = [UIAlertController alertControllerWithTitle: @"Reset Password"
+                                                                                  message: @"Enter the email you signed up with to reset your password."
+                                                                              preferredStyle:UIAlertControllerStyleAlert];
+    [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+        textField.placeholder = @"Email";
+        textField.textColor = [UIColor blackColor];
+        textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+        textField.borderStyle = UITextBorderStyleRoundedRect;
+    }];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        NSArray * textfields = alertController.textFields;
+        UITextField * emailField = textfields[0];
+        if ([self validateEmailWithString:emailField.text]){
+            PFQuery *query = [User query];
+            [query whereKey:@"email" equalTo:emailField.text];
+            [query getFirstObjectInBackgroundWithBlock:^(PFObject * _Nullable object, NSError * _Nullable error) {
+                            if (object){
+                                [PFUser requestPasswordResetForEmailInBackground:emailField.text block:^(BOOL succeeded, NSError * _Nullable error) {
+                                    succeeded ? NSLog(@"successful") : NSLog(@"%@", error);
+                                }];
+                            }
+                            else{
+                                NSLog(@"error no email found for this account");
+                            }
+            }];
+            
+        }
+        
+    }];
+    UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDefault
+       handler:^(UIAlertAction * action) {
+       NSLog(@"cancel btn");
+       [alertController dismissViewControllerAnimated:YES completion:nil];
+    }];
+    
+    [alertController addAction:okAction];
+    [alertController addAction:cancelAction];
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 - (BOOL)validateEmailWithString:(NSString*)checkString{
     BOOL stricterFilter = NO;
