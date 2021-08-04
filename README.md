@@ -23,6 +23,19 @@ College marketplace for a colleges (e.g. only affiliates of a school/university 
 
 ## Demo
 
+*AutoLayout Gifs*
+
+**iPhone SE**
+
+<img src="https://user-images.githubusercontent.com/58496944/128128384-b8f7d079-d881-4deb-9707-3b9fad2c17c3.gif" width=300>
+
+**iPhone 12**
+
+<img src="https://user-images.githubusercontent.com/58496944/128128410-164696f9-1df2-4395-af4b-4343070068e0.gif" width=300>
+
+**iPad 5th Generation (12.9-inch)**
+
+<img src="https://user-images.githubusercontent.com/58496944/128128458-8fa97d2e-6f1c-48c0-a15c-66c857eb21db.gif" width=300>
 
 ## Product Spec
 
