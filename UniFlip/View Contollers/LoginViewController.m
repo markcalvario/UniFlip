@@ -87,7 +87,6 @@
     }];
     UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDefault
        handler:^(UIAlertAction * action) {
-       NSLog(@"cancel btn");
        [alertController dismissViewControllerAnimated:YES completion:nil];
     }];
     

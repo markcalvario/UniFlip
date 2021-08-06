@@ -15,7 +15,7 @@
 #import <objc/runtime.h>
 #import <MaterialComponents/MaterialTabs+TabBarView.h>
 #import <MessageUI/MessageUI.h>
-
+#import "FollowingFollowersViewController.h"
 
 @interface ProfileViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UINavigationControllerDelegate, MDCTabBarViewDelegate, MFMailComposeViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIButton *profilePicButton;
@@ -38,6 +38,7 @@
 @property (strong, nonatomic) MDCTabBarView *tabBarView;
 @property (readwrite, strong, nonatomic, nullable) UITabBarItem *selectedItem;
 @property (strong, nonatomic) NSNumber *followersCount;
+@property (strong, nonatomic) NSArray *following;
 
 @end
 
@@ -311,6 +312,9 @@ BOOL isFollowingUserOfThisProfile = FALSE;
     [self.followingButton setTitle:followingTitle forState:UIControlStateNormal];
     [self.followersButton setTitle:followersTitle forState:UIControlStateNormal];
 }
+- (IBAction)didTapFollowing:(id)sender {
+    [self performSegueWithIdentifier:@"ProfileToFollowingFollowers" sender:FALSE];
+}
 
 #pragma mark - Collection View
 
@@ -462,6 +466,12 @@ BOOL isFollowingUserOfThisProfile = FALSE;
         ListingDetailViewController *listingDetailViewController = [segue destinationViewController];
         listingDetailViewController.listing = listing;
     }
+    if ([[segue identifier] isEqualToString:@"ProfileToFollowingFollowers"]){
+        FollowingFollowersViewController *followingFollowersViewController = [segue destinationViewController];
+        followingFollowersViewController.userOfProfileToView = self.userOfProfileToView;
+        followingFollowersViewController.isInitialiallyViewingFollowers = sender;
+    }
+    
 }
 
 @end

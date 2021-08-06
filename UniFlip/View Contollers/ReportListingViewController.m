@@ -27,14 +27,9 @@
 }
 - (IBAction)didTapReport:(id)sender {
     NSString *reason = self.reportTextView.text;
-    
     [Report postReport:self.currentUser withListing:self.listing withReason:reason withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
-            if (succeeded){
-                [self dismissViewControllerAnimated:TRUE completion:nil];
-            }
-            else{
-                NSLog(@"Could not report");
-            }
+            succeeded ? [self dismissViewControllerAnimated:TRUE completion:nil]:NSLog(@"Could not report");
+            
     }];
 }
 -(void) addAccessibility{

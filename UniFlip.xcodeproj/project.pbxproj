@@ -38,6 +38,8 @@
 		D0B7A66826AA94860029D204 /* PhotoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B7A66726AA94860029D204 /* PhotoCell.m */; };
 		D0B7A66B26AD45580029D204 /* CategoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B7A66A26AD45580029D204 /* CategoryViewController.m */; };
 		D0B7A66E26B06BD70029D204 /* ProfileCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B7A66D26B06BD70029D204 /* ProfileCell.m */; };
+		D0B7A67126BB464A0029D204 /* FollowingFollowersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B7A67026BB464A0029D204 /* FollowingFollowersViewController.m */; };
+		D0B7A67426BC94FA0029D204 /* UserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B7A67326BC94FA0029D204 /* UserCell.m */; };
 		D56325CDB651DCF1D6E74995 /* Pods_UniFlip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 896002A9551245D6FC5C1603 /* Pods_UniFlip.framework */; };
 		EEF5230230B5B4982AA7A2F1 /* Pods_UniFlipTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E75917EC6DEA44684821653 /* Pods_UniFlipTests.framework */; };
 /* End PBXBuildFile section */
@@ -127,6 +129,10 @@
 		D0B7A66A26AD45580029D204 /* CategoryViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CategoryViewController.m; sourceTree = "<group>"; };
 		D0B7A66C26B06BD70029D204 /* ProfileCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ProfileCell.h; sourceTree = "<group>"; };
 		D0B7A66D26B06BD70029D204 /* ProfileCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ProfileCell.m; sourceTree = "<group>"; };
+		D0B7A66F26BB464A0029D204 /* FollowingFollowersViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FollowingFollowersViewController.h; sourceTree = "<group>"; };
+		D0B7A67026BB464A0029D204 /* FollowingFollowersViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FollowingFollowersViewController.m; sourceTree = "<group>"; };
+		D0B7A67226BC94F90029D204 /* UserCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserCell.h; sourceTree = "<group>"; };
+		D0B7A67326BC94FA0029D204 /* UserCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -266,6 +272,8 @@
 				D0B7A66126A898AC0029D204 /* ReportListingViewController.m */,
 				D0B7A66926AD45580029D204 /* CategoryViewController.h */,
 				D0B7A66A26AD45580029D204 /* CategoryViewController.m */,
+				D0B7A66F26BB464A0029D204 /* FollowingFollowersViewController.h */,
+				D0B7A67026BB464A0029D204 /* FollowingFollowersViewController.m */,
 			);
 			path = "View Contollers";
 			sourceTree = "<group>";
@@ -285,6 +293,8 @@
 				D0B7A66726AA94860029D204 /* PhotoCell.m */,
 				D0B7A66C26B06BD70029D204 /* ProfileCell.h */,
 				D0B7A66D26B06BD70029D204 /* ProfileCell.m */,
+				D0B7A67226BC94F90029D204 /* UserCell.h */,
+				D0B7A67326BC94FA0029D204 /* UserCell.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -588,6 +598,7 @@
 				D0B7A66826AA94860029D204 /* PhotoCell.m in Sources */,
 				D0B7A66E26B06BD70029D204 /* ProfileCell.m in Sources */,
 				D0B7A65026A144A70029D204 /* User.m in Sources */,
+				D0B7A67426BC94FA0029D204 /* UserCell.m in Sources */,
 				D0B7A644269FDA730029D204 /* ListingCell.m in Sources */,
 				D09FFDE1269CAF50008B33B5 /* NewAccountViewController.m in Sources */,
 				D09FFDDB269C2322008B33B5 /* LoginViewController.m in Sources */,
@@ -603,6 +614,7 @@
 				D0B7A63E269FB3E30029D204 /* Listing.m in Sources */,
 				D0B7A66B26AD45580029D204 /* CategoryViewController.m in Sources */,
 				D0B7A627269D5A6D0029D204 /* HomeViewController.m in Sources */,
+				D0B7A67126BB464A0029D204 /* FollowingFollowersViewController.m in Sources */,
 				D0B7A66526A89FD30029D204 /* Report.m in Sources */,
 				D0B7A62A269DEE470029D204 /* SellViewController.m in Sources */,
 				D0B7A65626A6A9540029D204 /* EditProfileViewController.m in Sources */,
