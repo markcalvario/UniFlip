@@ -39,6 +39,7 @@
 @property (readwrite, strong, nonatomic, nullable) UITabBarItem *selectedItem;
 @property (strong, nonatomic) NSNumber *followersCount;
 @property (strong, nonatomic) NSArray *following;
+@property NSNumber *followingCount;
 
 @end
 
@@ -60,15 +61,21 @@ BOOL isFollowingUserOfThisProfile = FALSE;
     self.listingsCollectionView.delegate = self;
     [self displayTabBar];
     [self addAccessibility];
+    [self displayProfileScreen];
     
 }
+
 - (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    self.currentlyLoggedInUser = [User currentUser];
     PFQuery *query = [User query];
+    [query includeKeys:@[@"profilePicture", @"biography"]];
     [query whereKey:@"email" equalTo:self.currentlyLoggedInUser.email];
     self.currentlyLoggedInUser = [query getFirstObject];
-    if (self.userOfProfileToView == nil){
+    if (!self.userOfProfileToView){
         self.userOfProfileToView = self.currentlyLoggedInUser;
     }
+    self.followingCount = self.userOfProfileToView.followingCount;
     [self displayProfileScreen];
     [self.tabBarView setBackgroundColor:[UIColor systemBackgroundColor]];
     if (self.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark){
@@ -99,7 +106,13 @@ BOOL isFollowingUserOfThisProfile = FALSE;
     
     self.usernameLabel.text = self.userOfProfileToView.username;
     self.userBioLabel.text = self.userOfProfileToView.biography;
-    PFFileObject *userProfilePicture = self.userOfProfileToView.profilePicture;
+    PFFileObject *userProfilePicture;
+    if ([self.currentlyLoggedInUser.objectId isEqualToString: self.userOfProfileToView.objectId]){
+        userProfilePicture = self.currentlyLoggedInUser.profilePicture;
+    }
+    else{
+        userProfilePicture = self.userOfProfileToView.profilePicture;
+    }
     [userProfilePicture getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
         if (imageData) {
             UIImage *image = [UIImage imageWithData:imageData];
@@ -123,6 +136,7 @@ BOOL isFollowingUserOfThisProfile = FALSE;
                     isFollowingUserOfThisProfile = TRUE;
                 }
             }
+            //self.followingCount = self.userOfProfileToView.followingCount;
             PFQuery *query = [PFQuery queryWithClassName:@"Followers"];
             [query whereKey:@"userFollowed" equalTo:self.userOfProfileToView.objectId];
             [query getFirstObjectInBackgroundWithBlock:^(PFObject * _Nullable followers, NSError * _Nullable error) {
@@ -143,6 +157,7 @@ BOOL isFollowingUserOfThisProfile = FALSE;
         }
     }];
 }
+
 -(void) styleProfileAndMailAndFollowButtons{
     CALayer *imageLayer = self.composeMailButton.superview.layer;
     [imageLayer setCornerRadius:15];
@@ -307,13 +322,25 @@ BOOL isFollowingUserOfThisProfile = FALSE;
     }
 }
 - (void) updateFollowerandFollowingButtonsUI{
-    NSString *followingTitle = [[self.userOfProfileToView[@"followingCount"] stringValue] stringByAppendingString:@" following"];
-    NSString *followersTitle = [[self.followersCount stringValue] stringByAppendingString:@" followers"];
-    [self.followingButton setTitle:followingTitle forState:UIControlStateNormal];
-    [self.followersButton setTitle:followersTitle forState:UIControlStateNormal];
+    if ([self.currentlyLoggedInUser.objectId isEqualToString: self.userOfProfileToView.objectId]){
+        NSString *followingTitle = [[self.currentlyLoggedInUser[@"followingCount"] stringValue] stringByAppendingString:@" following"];
+        NSString *followersTitle = [[self.followersCount stringValue] stringByAppendingString:@" followers"];
+        [self.followingButton setTitle:followingTitle forState:UIControlStateNormal];
+        [self.followersButton setTitle:followersTitle forState:UIControlStateNormal];
+    }
+    else{
+        NSString *followingTitle = [[self.userOfProfileToView[@"followingCount"] stringValue] stringByAppendingString:@" following"];
+        NSString *followersTitle = [[self.followersCount stringValue] stringByAppendingString:@" followers"];
+        [self.followingButton setTitle:followingTitle forState:UIControlStateNormal];
+        [self.followersButton setTitle:followersTitle forState:UIControlStateNormal];
+    }
+    
 }
 - (IBAction)didTapFollowing:(id)sender {
-    [self performSegueWithIdentifier:@"ProfileToFollowingFollowers" sender:FALSE];
+    [self performSegueWithIdentifier:@"ProfileToFollowingFollowers" sender:@"following"];
+}
+- (IBAction)didTapFollowers:(id)sender {
+    [self performSegueWithIdentifier:@"ProfileToFollowingFollowers" sender:@"followers"];
 }
 
 #pragma mark - Collection View
@@ -469,7 +496,12 @@ BOOL isFollowingUserOfThisProfile = FALSE;
     if ([[segue identifier] isEqualToString:@"ProfileToFollowingFollowers"]){
         FollowingFollowersViewController *followingFollowersViewController = [segue destinationViewController];
         followingFollowersViewController.userOfProfileToView = self.userOfProfileToView;
-        followingFollowersViewController.isInitialiallyViewingFollowers = sender;
+        if ([sender isEqualToString:@"following"]){
+            followingFollowersViewController.isInitialiallyViewingFollowers = FALSE;
+        }
+        else{
+            followingFollowersViewController.isInitialiallyViewingFollowers = TRUE;
+        }
     }
     
 }

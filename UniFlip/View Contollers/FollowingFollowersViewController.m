@@ -13,7 +13,10 @@
 @interface FollowingFollowersViewController ()<MDCTabBarViewDelegate, UITableViewDelegate, UITableViewDataSource>
 @property (strong, nonatomic) MDCTabBarView *tabBarView;
 @property (strong, nonatomic) IBOutlet UITableView *usersTableView;
-@property (strong, nonatomic) NSArray *arrayOfUsers;
+@property (strong, nonatomic) NSArray *arrayOfUsersFollowing;
+@property (strong, nonatomic) NSArray *arrayOfFollowers;
+@property (strong, nonatomic) User *currentlyLoggedInUser;
+
 
 @end
 
@@ -24,26 +27,57 @@
     [super viewDidLoad];
     self.usersTableView.delegate = self;
     self.usersTableView.dataSource = self;
+    self.currentlyLoggedInUser = [User currentUser];
+    [self updateArrayOfUsersFollowing];
+    [self updateArrayOfFollowers];
     [self displayFollowingFollowers];
-
 }
 -(void) displayFollowingFollowers{
-    self.arrayOfUsers = [NSArray array];
+    [self displayTabBar];
+}
+-(void) updateArrayOfUsersFollowing{
+    self.arrayOfUsersFollowing = [NSArray array];
     PFRelation *relation = [self.userOfProfileToView relationForKey:@"following"];
     PFQuery *query = [relation query];
     [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable users, NSError * _Nullable error) {
         if (users){
-            self.arrayOfUsers = users;
-            [self.usersTableView reloadData];
+            self.arrayOfUsersFollowing = users;
+            self.isInitialiallyViewingFollowers ? : [self.usersTableView reloadData];
         }
     }];
-    [self displayTabBar];
 }
+-(void) updateArrayOfFollowers{
+    self.arrayOfFollowers = [NSArray array];
+    PFQuery *query = [PFQuery queryWithClassName:@"Followers"];
+    [query whereKey:@"userFollowed" equalTo:self.userOfProfileToView.objectId];
+    [query getFirstObjectInBackgroundWithBlock:^(PFObject * _Nullable object, NSError * _Nullable error) {
+        if (object){
+            PFRelation *relation = [object relationForKey:@"followedByUser"];
+            PFQuery *relationQuery = [relation query];
+            [relationQuery findObjectsInBackgroundWithBlock:^(NSArray * _Nullable users, NSError * _Nullable error) {
+                if (users){
+                    self.arrayOfFollowers = users;
+                    !self.isInitialiallyViewingFollowers ? : [self.usersTableView reloadData];
+                }
+            }];
+        }
+    }];
+}
+- (void) didTapFollowButton:(UIButton *)sender {
+    
+}
+
 #pragma mark - Table View
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     UserCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UserCell" forIndexPath:indexPath];
-    User *user = [self.arrayOfUsers objectAtIndex:indexPath.row];
+    User *user;
+    if (self.isInitialiallyViewingFollowers){
+        user = [self.arrayOfFollowers objectAtIndex:indexPath.row];
+    }
+    else{
+        user = [self.arrayOfUsersFollowing objectAtIndex:indexPath.row];
+    }
     
     cell.usernameLabel.text = user.username;
     cell.bioLabel.text = user.biography;
@@ -53,12 +87,64 @@
             image ? [cell.profilePicture setImage:image] : [cell.profilePicture setImage: [UIImage imageNamed:@"envelope_icon"]];
         }];
     }
+    if ([user.objectId isEqualToString:self.currentlyLoggedInUser.objectId]){
+        cell.followButton.hidden = YES;
+    }
+    else{
+        cell.followButton.hidden = NO;
+        PFRelation *relation = [self.currentlyLoggedInUser relationForKey:@"following"];
+        PFQuery *query = [relation query];
+        [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable arrayOfUsers, NSError * _Nullable error) {
+            if (arrayOfUsers){
+                BOOL isFollowing = FALSE;
+                for (User *userFollowing in arrayOfUsers){
+                    if ([userFollowing.objectId isEqualToString:user.objectId]){
+                        [cell.followButton setBackgroundColor:[[UIColor alloc]initWithRed:0/255.0 green:0/255.0 blue:128/255.0 alpha:1]];
+                        [cell.followButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+                        [cell.followButton setTitle:@"Following" forState:UIControlStateNormal];
+                        isFollowing = TRUE;
+                    }
+                }
+                if(!isFollowing){
+                    [cell.followButton setBackgroundColor:[UIColor whiteColor]];
+                    [cell.followButton  setTitleColor:[[UIColor alloc]initWithRed:0/255.0 green:0/255.0 blue:128/255.0 alpha:1] forState:UIControlStateNormal];
+                    [cell.followButton setTitle:@"Follow" forState:UIControlStateNormal];
+                    [cell.followButton.layer  setBorderWidth:2];
+                    [cell.followButton.layer setBorderColor:[[UIColor alloc]initWithRed:0/255.0 green:0/255.0 blue:128/255.0 alpha:1].CGColor];
+                }
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+            });
+            
+        }];
+    }
+    
+    cell.followButton.tag = indexPath.row;
+    [cell.followButton addTarget:self action:@selector(didTapFollowButton:) forControlEvents:UIControlEventTouchUpInside];
     return cell;
-}
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return self.arrayOfUsers.count;
+    
+    
+    
 }
 
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    if (self.isInitialiallyViewingFollowers){
+        return self.arrayOfFollowers.count;
+    }
+    return self.arrayOfUsersFollowing.count;
+}
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    User *user;
+    if (self.isInitialiallyViewingFollowers){
+        user = [self.arrayOfFollowers objectAtIndex:indexPath.row];
+    }else{
+        user = [self.arrayOfUsersFollowing objectAtIndex:indexPath.row];
+    }
+    NSLog(@"%@", user.username);
+    //[self performSegueWithIdentifier:@"FollowingFollowersToProfile" sender:user];
+}
+#pragma mark - TabBar
 -(void) displayTabBar{
     CGFloat topbarHeight = (self.view.window.windowScene.statusBarManager.statusBarFrame.size.height +
            self.navigationController.navigationBar.frame.size.height);
@@ -116,6 +202,15 @@
     [self.view addConstraint:bottom];
     
     [self.tabBarView addConstraint:height];
+}
+- (void)tabBarView:(MDCTabBarView *)tabBarView didSelectItem:(UITabBarItem *)item{
+    if ([item.title isEqualToString:@"Following"]){
+        self.isInitialiallyViewingFollowers = FALSE;
+    }
+    else{
+        self.isInitialiallyViewingFollowers = TRUE;
+    }
+    [self.usersTableView reloadData];
 }
 
 /*

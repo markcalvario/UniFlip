@@ -34,6 +34,7 @@
     [self addAccessiblity];
 }
 - (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     [self displayEditProfile];
 }
 -(void) displayEditProfile{

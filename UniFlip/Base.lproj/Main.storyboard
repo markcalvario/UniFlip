@@ -819,7 +819,7 @@
         <!--Following Followers View Controller-->
         <scene sceneID="g6o-zl-sYM">
             <objects>
-                <viewController id="kFo-Ea-QSY" customClass="FollowingFollowersViewController" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="fullScreen" id="kFo-Ea-QSY" customClass="FollowingFollowersViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="bZB-da-dbL">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -874,6 +874,7 @@
                                                 <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="fgO-hy-40T" secondAttribute="bottom" constant="2" id="KG3-NZ-Vh2"/>
                                                 <constraint firstItem="sR7-yy-bwo" firstAttribute="leading" secondItem="53x-zE-gna" secondAttribute="trailing" constant="8" symbolic="YES" id="QAs-XE-MBx"/>
                                                 <constraint firstItem="fgO-hy-40T" firstAttribute="leading" secondItem="kiX-BZ-PnW" secondAttribute="trailing" constant="7" id="Y6T-uG-vny"/>
+                                                <constraint firstItem="fgO-hy-40T" firstAttribute="trailing" secondItem="6Q1-Ki-KYv" secondAttribute="trailingMargin" id="ZvF-h7-Rd3"/>
                                                 <constraint firstItem="kiX-BZ-PnW" firstAttribute="leading" secondItem="6Q1-Ki-KYv" secondAttribute="leadingMargin" id="lFY-nk-NHh"/>
                                                 <constraint firstItem="53x-zE-gna" firstAttribute="leading" secondItem="kiX-BZ-PnW" secondAttribute="trailing" constant="7" id="lhq-sL-KVN"/>
                                                 <constraint firstItem="kiX-BZ-PnW" firstAttribute="top" secondItem="6Q1-Ki-KYv" secondAttribute="topMargin" id="mDa-Zz-tgU"/>
@@ -907,7 +908,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="N72-cj-DnH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3940.579710144928" y="1666.7410714285713"/>
+            <point key="canvasLocation" x="3941" y="1759"/>
         </scene>
         <!--Profile View Controller-->
         <scene sceneID="RnB-kT-ldm">
@@ -1042,6 +1043,9 @@
                                                 <state key="normal" title="0 Followers">
                                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="didTapFollowers:" destination="RaW-Wm-Soe" eventType="touchUpInside" id="8ar-ey-WB6"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="system" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="Pem-pF-6hB">
                                                 <rect key="frame" x="8" y="168" width="60" height="15"/>
@@ -1174,7 +1178,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7yj-uN-cU0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3942" y="907"/>
+            <point key="canvasLocation" x="3940.579710144928" y="906.69642857142856"/>
         </scene>
         <!--Edit Profile View Controller-->
         <scene sceneID="MfU-8b-Uuf">
@@ -1481,7 +1485,7 @@ Cg
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" modalPresentationStyle="fullScreen" id="SMr-gz-7XW" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="" image="sell_icon" id="6zX-Te-mob">
-                        <inset key="imageInsets" minX="0.0" minY="5" maxX="0.0" maxY="0.0"/>
+                        <inset key="imageInsets" minX="0.0" minY="65" maxX="0.0" maxY="65"/>
                     </tabBarItem>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="t7j-Cd-87s"/>
@@ -1812,7 +1816,7 @@ Cg
         <image name="photo_add_icon" width="24" height="24"/>
         <image name="profile_settings_icon" width="24" height="24"/>
         <image name="profile_tab" width="25" height="25"/>
-        <image name="sell_icon" width="42.666667938232422" height="42.666667938232422"/>
+        <image name="sell_icon" width="170.66667175292969" height="170.66667175292969"/>
         <image name="unsaved_icon" width="24" height="24"/>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
